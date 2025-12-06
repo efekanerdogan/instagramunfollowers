@@ -11,8 +11,8 @@ Instagram'da sizi geri takip etmeyenleri (unfollowers) bulmanızı ve yönetmeni
 
 ## 📸 Ekran Görüntüsü
 
-screenshots/giris.png
-
+<img width="642" height="771" alt="uygulama" src="https://github.com/user-attachments/assets/83f0e230-7c97-4530-8ffb-7c500144f730" />
+<img width="1918" height="918" alt="giriş" src="https://github.com/user-attachments/assets/6d17cb41-f6a1-410e-92e2-236a0edd4afd" />
 
 ---
 
