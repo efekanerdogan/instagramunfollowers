@@ -53,5 +53,12 @@ Bu proje yalnızca **eğitim ve kişisel analiz amaçlıdır**.
 ---
 
 ## 📄 Lisans
+## 📄 Lisans
 
-[MIT](LICENSE) - Açık kaynaklıdır, geliştirip kullanabilirsiniz.
+Bu proje **MIT Lisansı** altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.
+
+**Özetle:**
+* ✅ **Kullanım:** Bu projeyi ücretsiz olarak indirebilir ve kullanabilirsiniz.
+* ✅ **Değiştirme:** Kodları istediğiniz gibi düzenleyebilir ve değiştirebilirsiniz.
+* ✅ **Dağıtım:** Projeyi (değiştirilmiş veya orijinal haliyle) paylaşabilirsiniz.
+* ⚠️ **Şart:** Projenin kopyalarında telif hakkı bildirimini (Copyright) korumanız gerekir.
