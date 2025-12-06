@@ -537,7 +537,7 @@
             try { await fetch('https://www.instagram.com/web/friendships/' + user.id + '/unfollow/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-csrftoken': token } }); STATE.selectedIds.delete(user.id); } 
             catch(e) { console.error(e); }
             processed++; UI.progress.style.width = (processed / total * 100) + '%';
-            if(processed < total) await sleep(Math.floor(Math.random() * 15000) + 10000);
+            if(processed < total) await sleep(Math.floor(Math.random() * 2000) + 1500);
         }
         STATE.users = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id) || !usersToUn.find(function(x) { return x.id === u.id && !STATE.selectedIds.has(x.id); }); }); 
         UI.btnProcess.style.background = ""; UI.status.innerText = "Tamamlandı."; filterAndRender();
