@@ -1,23 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦊UNFOLLOWERS</title>
+    <title>🦊 UNFOLLOWERS - Instagram Analiz & Hızlı Çıkarma Aracı</title>
     <link rel="icon" type="image/png" href="https://efekanerdogan.com/images/favicon_custom.png">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@500&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff6b00;
+            --primary-light: #ff8533;
             --primary-dark: #cc5500;
-            --bg: #0f0c0a;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 107, 0, 0.2);
+            --primary-glow: rgba(255, 107, 0, 0.35);
+            --bg: #090706;
+            --card-bg: rgba(20, 16, 14, 0.65);
+            --border: rgba(255, 107, 0, 0.22);
+            --border-light: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-dim: #888;
+            --text-dim: #99938e;
+            --success: #10b981;
+            --turbo: #f59e0b;
         }
 
         * {
@@ -29,60 +34,137 @@
         body {
             background-color: var(--bg);
             background-image:
-                radial-gradient(circle at 10% 20%, rgba(255, 107, 0, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 40%);
+                radial-gradient(ellipse at 15% 15%, rgba(255, 107, 0, 0.14) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 85%, rgba(255, 140, 0, 0.09) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(25, 18, 14, 0.8) 0%, transparent 100%);
             color: var(--text-main);
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient floating lights */
+        .ambient-light {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+            animation: pulseLight 8s ease-in-out infinite alternate;
+        }
+
+        .ambient-1 {
+            top: -100px;
+            left: 10%;
+            background: var(--primary);
+        }
+
+        .ambient-2 {
+            bottom: -100px;
+            right: 10%;
+            background: #ff3b00;
+            animation-delay: -4s;
+        }
+
+        @keyframes pulseLight {
+            0% { transform: scale(0.9) translateY(0); opacity: 0.35; }
+            100% { transform: scale(1.15) translateY(-20px); opacity: 0.55; }
         }
 
         .container {
             width: 100%;
-            max-width: 900px;
-            padding: 40px 20px;
+            max-width: 920px;
+            padding: 50px 24px;
             text-align: center;
             position: relative;
             z-index: 1;
         }
 
+        /* BADGE */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(255, 107, 0, 0.12);
+            border: 1px solid rgba(255, 107, 0, 0.35);
+            border-radius: 50px;
+            color: var(--primary-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.15);
+            animation: floatBadge 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBadge {
+            from { transform: translateY(0); }
+            to { transform: translateY(-4px); }
+        }
+
+        .hero-badge span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
         /* HEADER & LOGO */
         .logo {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
 
         .logo img {
-            height: 100px;
-            /* Logo boyutu buradan ayarlanabilir */
+            height: 95px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.3));
+            filter: drop-shadow(0 10px 25px rgba(255, 107, 0, 0.35));
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .logo img:hover {
+            transform: scale(1.05) rotate(-2deg);
         }
 
         .description {
             color: var(--text-dim);
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            max-width: 600px;
+            font-size: 1.15rem;
+            margin-bottom: 36px;
+            max-width: 620px;
             margin-left: auto;
             margin-right: auto;
-            line-height: 1.6;
+            line-height: 1.65;
+        }
+
+        .description strong {
+            color: #fff;
+            font-weight: 600;
         }
 
         /* CARD MAIN */
         .main-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border-radius: 28px;
+            padding: 44px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
             position: relative;
             overflow: hidden;
         }
@@ -91,11 +173,39 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.5;
+            opacity: 0.8;
+        }
+
+        /* FEATURES PILLS */
+        .features-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .feature-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #d1cbc7;
+            font-weight: 500;
+        }
+
+        .feature-pill svg {
+            color: var(--primary);
+            width: 16px;
+            height: 16px;
         }
 
         /* BUTTON */
@@ -103,119 +213,137 @@
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 18px 40px;
-            font-size: 1.1rem;
+            padding: 16px 36px;
+            font-size: 1.05rem;
             font-weight: 700;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+            box-shadow: 0 12px 30px rgba(255, 107, 0, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
         }
 
         .copy-btn:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(255, 107, 0, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(255, 107, 0, 0.5);
         }
 
         .copy-btn svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        /* BOOKMARK SECTION */
-        .bookmark-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 20px;
+            height: 20px;
         }
 
         .divider {
-            color: #444;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+            color: #716b66;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 18px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
+        }
+
+        /* BOOKMARK SECTION */
+        .bookmark-box {
+            background: rgba(255, 107, 0, 0.04);
+            border: 1px solid rgba(255, 107, 0, 0.18);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 36px;
+            transition: 0.3s;
+        }
+
+        .bookmark-box:hover {
+            background: rgba(255, 107, 0, 0.07);
+            border-color: rgba(255, 107, 0, 0.35);
         }
 
         .bookmark-link {
-            display: inline-block;
-            background: #222;
-            border: 2px dashed #444;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(145deg, #1f1814, #14100c);
+            border: 2px dashed rgba(255, 107, 0, 0.6);
             color: #fff;
-            padding: 15px 30px;
+            padding: 16px 36px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: 0.2s;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.25s ease;
             cursor: move;
-            /* Drag cursor */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
         .bookmark-link:hover {
             border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(255, 107, 0, 0.05);
+            color: var(--primary-light);
+            background: rgba(255, 107, 0, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 107, 0, 0.25);
         }
 
         .bookmark-instruction {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #888;
+            margin-top: 14px;
+            font-size: 0.92rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .bookmark-instruction b {
+            color: #fff;
         }
 
         /* STEPS */
         .manual-section {
-            margin-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 30px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .steps {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 20px;
+            gap: 18px;
+            margin-top: 24px;
             text-align: left;
         }
 
         .step-item {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.025);
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             transition: 0.3s;
         }
 
         .step-item:hover {
             border-color: var(--border);
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .step-num {
-            background: rgba(255, 107, 0, 0.1);
-            color: var(--primary);
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
+            background: rgba(255, 107, 0, 0.14);
+            color: var(--primary-light);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            margin-bottom: 10px;
-            font-family: 'JetBrains Mono';
+            margin-bottom: 12px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
         }
 
         .step-text {
-            font-size: 0.85rem;
-            color: #ccc;
+            font-size: 0.88rem;
+            color: #bebaa;
+            line-height: 1.45;
         }
 
         .step-text b {
@@ -224,12 +352,12 @@
 
         /* SUCCESS MESSAGE */
         #success-msg {
-            color: #4caf50;
-            margin-top: 15px;
+            color: var(--success);
+            margin-top: 14px;
             font-weight: 600;
             opacity: 0;
             height: 20px;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             transition: 0.3s;
         }
 
@@ -245,12 +373,12 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 20px 15px;
+                padding: 30px 16px;
             }
 
             .main-card {
-                padding: 25px 20px;
-                border-radius: 16px;
+                padding: 28px 20px;
+                border-radius: 20px;
             }
 
             .steps {
@@ -258,170 +386,172 @@
             }
 
             .logo img {
-                height: 80px;
+                height: 75px;
             }
 
             .copy-btn {
                 width: 100%;
                 justify-content: center;
-                padding: 16px;
-                font-size: 1rem;
             }
 
             .bookmark-link {
                 width: 100%;
-                padding: 15px;
+                padding: 14px 20px;
                 box-sizing: border-box;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo img {
-                height: 60px;
-            }
-
-            .description {
-                font-size: 1rem;
-            }
-
-            .step-item {
-                padding: 12px;
+                justify-content: center;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="ambient-light ambient-1"></div>
+    <div class="ambient-light ambient-2"></div>
 
     <div class="container">
+        <div class="hero-badge">
+            <span></span> YENİ: 10X TURBO & HIZLI UNFOLLOW MODU EKLENDİ
+        </div>
 
         <div class="logo">
             <img src="https://efekanerdogan.com/images/logo.png" alt="EE Logo">
         </div>
 
         <p class="description">
-            Instagram'da takipçi analizi.<br>
-            İki farklı yöntemle kolayca kullanın.
+            Instagram'da sizi geri takip etmeyenleri saniyeler içinde analiz edin.<br>
+            <strong>Turbo & Hızlı Takipten Çıkarma</strong> seçenekleriyle zaman kaybetmeden yönetin.
         </p>
 
         <div class="main-card">
+            <div class="features-row">
+                <div class="feature-pill">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    3 Farklı Hız Modu (Turbo / Hızlı / Güvenli)
+                </div>
+                <div class="feature-pill">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    100% İstemci Taraflı & Güvenli
+                </div>
+                <div class="feature-pill">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    Onaylı & Gizli Hesap Filtreleme
+                </div>
+            </div>
 
-            <div>
+            <div class="bookmark-box">
                 <div class="divider">KOLAY YÖNTEM (ÖNERİLEN)</div>
                 <a id="bookmark-btn" class="bookmark-link" href="#" title="Beni Yer İmleri Çubuğuna Sürükle!">
-                    🦊Unfollowers
+                    <span>🦊 Unfollowers</span>
                 </a>
                 <p class="bookmark-instruction">
-                    Yukarıdaki butonu tarayıcınızın <b>Yer İmleri Çubuğuna</b> sürükleyip bırakın.<br>
-                    Sonra Instagram'dayken bu butona tıklayın.
+                    Yukarıdaki butonu tarayıcınızın <b>Yer İmleri Çubuğuna (Bookmarks Bar)</b> sürükleyip bırakın.<br>
+                    Ardından Instagram.com üzerinde oturum açıp bu yer işaretine tıklayın.
                 </p>
             </div>
 
             <div class="manual-section">
-                <div class="divider">VEYA MANUEL KURULUM</div>
+                <div class="divider">VEYA MANUEL KURULUM (KONSOL)</div>
 
                 <button class="copy-btn" id="copyBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                     </svg>
                     Kodu Kopyala
                 </button>
-                <div id="success-msg">KOD KOPYALANDI!</div>
+                <div id="success-msg">⚡ KOD BAŞARIYLA KOPYALANDI!</div>
 
                 <div class="steps">
                     <div class="step-item">
                         <div class="step-num">1</div>
-                        <div class="step-text"><b>Kodu Kopyala</b>'ya basın.</div>
+                        <div class="step-text"><b>Kodu Kopyala</b> butonuna tıklayarak kodu alın.</div>
                     </div>
                     <div class="step-item">
                         <div class="step-num">2</div>
-                        <div class="step-text">Instagram'da <b>F12</b> ile konsolu açın.</div>
+                        <div class="step-text">Instagram.com üzerinde <b>F12</b> ile Geliştirici Konsolunu açın.</div>
                     </div>
                     <div class="step-item">
                         <div class="step-num">3</div>
-                        <div class="step-text">Yapıştırıp (CTRL+V) <b>Enter</b>'a basın.</div>
+                        <div class="step-text">Kodu yapıştırıp (CTRL+V) <b>Enter</b> tuşuna basın.</div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <textarea id="code-area">
 (function(){
-    var css = ":root{--primary:#ff6b00;--primary-dark:#cc5500;--bg-glass:rgba(15,12,10,0.95);--border:rgba(255,107,0,0.15);--text-main:#ffffff;--text-dim:#888888}" +
-    "#ee-tool{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:95%;max-width:700px;height:90%;max-height:95vh;background:var(--bg-glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,0.9),0 0 0 1px var(--border);z-index:2147483647;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column;opacity:0;animation:slideIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;color:var(--text-main);overflow:hidden}" +
+    var css = ":root{--primary:#ff6b00;--primary-dark:#cc5500;--bg-glass:rgba(15,12,10,0.96);--border:rgba(255,107,0,0.22);--text-main:#ffffff;--text-dim:#999999}" +
+    "#ee-tool{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:95%;max-width:720px;height:90%;max-height:92vh;background:var(--bg-glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:20px;box-shadow:0 40px 100px rgba(0,0,0,0.92),0 0 0 1px var(--border);z-index:2147483647;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column;opacity:0;animation:slideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;color:var(--text-main);overflow:hidden}" +
     "#ee-tool.dragging{transition:none!important;animation:none!important;opacity:1}" +
     "@keyframes slideIn{from{opacity:0;transform:translate(-50%,-45%)}to{opacity:1;transform:translate(-50%,-50%)}}" +
-    ".ee-header{padding:10px 15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(255,107,0,0.05) 0%,transparent 100%);flex-shrink:0;cursor:move;user-select:none}" +
+    ".ee-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(255,107,0,0.08) 0%,transparent 100%);flex-shrink:0;cursor:move;user-select:none}" +
     ".ee-header-btns{display:flex;align-items:center;gap:8px}" +
-    ".ee-header-btn{cursor:pointer;color:var(--text-dim);font-size:16px;transition:0.2s;padding:5px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.05)}" +
-    ".ee-header-btn:hover{color:#fff;background:rgba(255,255,255,0.1)}" +
-    ".ee-header-btn.ee-close:hover{background:rgba(239,68,68,0.2);color:#ef4444}" +
+    ".ee-header-btn{cursor:pointer;color:var(--text-dim);font-size:16px;transition:0.2s;padding:5px;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.05)}" +
+    ".ee-header-btn:hover{color:#fff;background:rgba(255,255,255,0.12)}" +
+    ".ee-header-btn.ee-close:hover{background:rgba(239,68,68,0.25);color:#ef4444}" +
     "#ee-tool.fullscreen{top:0!important;left:0!important;transform:none!important;width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0}" +
     "#ee-tool.fullscreen .ee-header{cursor:default}" +
     "#ee-tool.fullscreen .ee-fullscreen{display:none}" +
     "#ee-tool.fullscreen .ee-restore{display:flex}" +
     ".ee-restore{display:none}" +
-    ".ee-brand{display:flex;align-items:center}" +
-    ".ee-brand-text{font-family:inherit;font-size:14px;font-weight:600;letter-spacing:0;color:#ddd}" +
-    ".ee-close{cursor:pointer;color:var(--text-dim);font-size:20px;transition:0.2s;padding:5px}.ee-close:hover{color:#fff;transform:rotate(90deg)}" +
-    ".ee-toolbar{padding:8px 12px;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0}" +
-    ".filter-chip{padding:4px 10px;border-radius:15px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-dim);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;user-select:none;white-space:nowrap}" +
-    ".filter-chip.active{background:rgba(255,107,0,0.15);border-color:var(--primary);color:var(--primary)}" +
+    ".ee-brand{display:flex;align-items:center;gap:8px}" +
+    ".ee-brand-text{font-family:inherit;font-size:14px;font-weight:700;letter-spacing:0.5px;color:#fff}" +
+    ".ee-toolbar{padding:10px 14px;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;background:rgba(255,255,255,0.01)}" +
+    ".filter-chip{padding:5px 11px;border-radius:15px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-dim);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;user-select:none;white-space:nowrap}" +
+    ".filter-chip.active{background:rgba(255,107,0,0.18);border-color:var(--primary);color:#ff8533}" +
     ".filter-chip:hover{background:rgba(255,255,255,0.1)}" +
-    ".ee-search{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;color:#fff;font-family:inherit;font-size:12px;padding:6px 12px;flex:1;min-width:120px;transition:0.3s}" +
+    ".speed-chip{padding:5px 10px;border-radius:15px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-dim);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;user-select:none;white-space:nowrap}" +
+    ".speed-chip.active{background:rgba(245,158,11,0.2);border-color:#f59e0b;color:#fbbf24}" +
+    ".speed-chip:hover{background:rgba(255,255,255,0.12)}" +
+    ".ee-search{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:20px;color:#fff;font-family:inherit;font-size:12px;padding:6px 12px;flex:1;min-width:110px;transition:0.3s}" +
     ".ee-search:focus{outline:none;border-color:var(--primary)}" +
     ".ee-search::placeholder{color:#666}" +
-    ".select-toggle{font-size:10px;color:var(--primary);cursor:pointer;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;user-select:none;white-space:nowrap;padding:4px 8px;border:1px solid var(--primary);border-radius:12px;transition:0.2s}" +
-    ".select-toggle:hover{background:rgba(255,107,0,0.1)}" +
-    ".ee-list{flex:1;overflow-y:auto;padding:8px 10px;min-height:0}.ee-list::-webkit-scrollbar{width:4px}.ee-list::-webkit-scrollbar-thumb{background:#333;border-radius:2px}" +
-    ".user-card{display:flex;align-items:center;padding:8px 10px;border-radius:10px;margin-bottom:4px;transition:0.1s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);cursor:pointer;transform:scale(1)}" +
-    ".user-card:active{transform:scale(0.98)}.user-card:hover{background:rgba(255,255,255,0.05)}" +
-    ".user-card.selected{background:rgba(255,107,0,0.12);border-color:rgba(255,107,0,0.4)}" +
-    ".u-avatar-box{position:relative;margin-right:10px}.u-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#222}" +
-    ".u-info{flex:1;min-width:0}.u-name{font-weight:600;font-size:13px;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.u-sub{font-size:11px;color:#666;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
+    ".select-toggle{font-size:10px;color:var(--primary);cursor:pointer;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;user-select:none;white-space:nowrap;padding:5px 10px;border:1px solid var(--primary);border-radius:12px;transition:0.2s}" +
+    ".select-toggle:hover{background:rgba(255,107,0,0.15)}" +
+    ".ee-list{flex:1;overflow-y:auto;padding:10px;min-height:0}.ee-list::-webkit-scrollbar{width:5px}.ee-list::-webkit-scrollbar-thumb{background:#333;border-radius:3px}" +
+    ".user-card{display:flex;align-items:center;padding:9px 12px;border-radius:12px;margin-bottom:5px;transition:0.15s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);cursor:pointer;transform:scale(1)}" +
+    ".user-card:active{transform:scale(0.985)}.user-card:hover{background:rgba(255,255,255,0.06)}" +
+    ".user-card.selected{background:rgba(255,107,0,0.14);border-color:rgba(255,107,0,0.45)}" +
+    ".u-avatar-box{position:relative;margin-right:12px}.u-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#222}" +
+    ".u-info{flex:1;min-width:0}.u-name{font-weight:600;font-size:13px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.u-sub{font-size:11px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
     ".u-select-btn{width:20px;height:20px;border-radius:50%;border:2px solid #555;display:flex;align-items:center;justify-content:center;transition:0.2s;margin-left:8px;flex-shrink:0}" +
     ".user-card.selected .u-select-btn{background:var(--primary);border-color:var(--primary);box-shadow:0 0 10px rgba(255,107,0,0.5);animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275)}" +
     ".u-select-btn::after{content:'';width:4px;height:8px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg);display:none;margin-bottom:2px}" +
     ".user-card.selected .u-select-btn::after{display:block}" +
     "@keyframes popIn{from{transform:scale(0.5)}to{transform:scale(1)}}" +
-    ".badge{display:inline-flex;width:13px;height:13px;flex-shrink:0}.badge-verified{color:#0095f6}.badge-private{color:#aaa}" +
-    ".ee-footer{padding:10px 12px;border-top:1px solid var(--border);background:rgba(0,0,0,0.3);flex-shrink:0}" +
-    ".ee-footer-row{display:flex;align-items:center;gap:10px}" +
-    ".stat-inline{display:flex;align-items:center;gap:15px;flex-shrink:0}" +
-    ".stat-inline .stat-item{display:flex;align-items:center;gap:4px}" +
-    ".stat-inline .stat-item h4{font-size:14px;margin:0;color:#fff;font-weight:700}" +
-    ".stat-inline .stat-item span{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:0.5px}" +
+    ".badge{display:inline-flex;width:14px;height:14px;flex-shrink:0}.badge-verified{color:#0095f6}.badge-private{color:#aaa}" +
+    ".ee-footer{padding:12px 16px;border-top:1px solid var(--border);background:rgba(0,0,0,0.4);flex-shrink:0}" +
+    ".ee-footer-row{display:flex;align-items:center;gap:12px}" +
+    ".stat-inline{display:flex;align-items:center;gap:16px;flex-shrink:0}" +
+    ".stat-inline .stat-item{display:flex;align-items:center;gap:5px}" +
+    ".stat-inline .stat-item h4{font-size:15px;margin:0;color:#fff;font-weight:700}" +
+    ".stat-inline .stat-item span{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:0.5px}" +
     ".stat-inline .stat-item.selected h4{color:var(--primary)}" +
-    ".main-btn{flex:1;padding:10px 15px;border-radius:10px;border:none;font-weight:600;font-size:12px;cursor:pointer;transition:0.3s;letter-spacing:0.5px}" +
-    ".btn-orange{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;box-shadow:0 4px 15px rgba(255,107,0,0.2)}" +
-    ".btn-orange:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,0,0.3)}.btn-orange:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:grayscale(1)}" +
+    ".main-btn{flex:1;padding:11px 16px;border-radius:12px;border:none;font-weight:700;font-size:12px;cursor:pointer;transition:0.3s;letter-spacing:0.5px}" +
+    ".btn-orange{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;box-shadow:0 4px 15px rgba(255,107,0,0.25)}" +
+    ".btn-orange:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,0,0.4)}.btn-orange:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:grayscale(1)}" +
     ".btn-danger{background:linear-gradient(135deg,#d32f2f 0%,#b71c1c 100%);color:#fff;display:none}" +
-    ".btn-danger:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(211,47,47,0.4)}" +
-    ".progress-wrap{flex:1;display:flex;flex-direction:column;gap:4px}" +
-    ".progress-line{width:100%;height:3px;background:#333;border-radius:2px;overflow:hidden}" +
-    ".progress-fill{width:0%;height:100%;background:var(--primary);transition:width 0.3s;box-shadow:0 0 10px var(--primary)}" +
-    ".status-txt{font-size:10px;color:#666;font-family:monospace}" +
-    ".ee-confirm-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:2147483648;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeIn 0.2s forwards}" +
+    ".btn-danger:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(211,47,47,0.45)}" +
+    ".progress-wrap{flex:1;display:flex;flex-direction:column;gap:5px}" +
+    ".progress-line{width:100%;height:4px;background:#25201c;border-radius:2px;overflow:hidden}" +
+    ".progress-fill{width:0%;height:100%;background:var(--primary);transition:width 0.25s;box-shadow:0 0 10px var(--primary)}" +
+    ".status-txt{font-size:11px;color:#999;font-family:monospace}" +
+    ".ee-confirm-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:2147483648;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeIn 0.2s forwards}" +
     "@keyframes fadeIn{to{opacity:1}}" +
-    ".ee-confirm-box{background:linear-gradient(145deg,#1a1714 0%,#0f0c0a 100%);border:1px solid var(--border);border-radius:16px;padding:25px;max-width:380px;width:90%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.8);transform:scale(0.9);animation:popUp 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards}" +
+    ".ee-confirm-box{background:linear-gradient(145deg,#1c1815 0%,#100d0a 100%);border:1px solid var(--border);border-radius:20px;padding:28px;max-width:400px;width:90%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.9);transform:scale(0.9);animation:popUp 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards}" +
     "@keyframes popUp{to{transform:scale(1)}}" +
-    ".ee-confirm-icon{width:50px;height:50px;margin:0 auto 15px;background:rgba(255,107,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center}" +
-    ".ee-confirm-icon svg{width:28px;height:28px;color:var(--primary)}" +
+    ".ee-confirm-icon{width:54px;height:54px;margin:0 auto 16px;background:rgba(255,107,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center}" +
+    ".ee-confirm-icon svg{width:30px;height:30px;color:var(--primary)}" +
     ".ee-confirm-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px}" +
-    ".ee-confirm-msg{font-size:14px;color:#888;margin-bottom:20px;line-height:1.5}" +
+    ".ee-confirm-msg{font-size:13px;color:#999;margin-bottom:22px;line-height:1.55}" +
     ".ee-confirm-msg b{color:var(--primary);font-weight:600}" +
     ".ee-confirm-btns{display:flex;gap:10px}" +
-    ".ee-confirm-btn{flex:1;padding:12px 20px;border-radius:10px;border:none;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.2s}" +
-    ".ee-confirm-btn.cancel{background:rgba(255,255,255,0.1);color:#aaa}.ee-confirm-btn.cancel:hover{background:rgba(255,255,255,0.15);color:#fff}" +
-    ".ee-confirm-btn.confirm{background:linear-gradient(135deg,#d32f2f 0%,#b71c1c 100%);color:#fff}.ee-confirm-btn.confirm:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(211,47,47,0.4)}";
-
+    ".ee-confirm-btn{flex:1;padding:12px 20px;border-radius:12px;border:none;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.2s}" +
+    ".ee-confirm-btn.cancel{background:rgba(255,255,255,0.08);color:#bbb}.ee-confirm-btn.cancel:hover{background:rgba(255,255,255,0.15);color:#fff}" +
     ".ee-confirm-btn.confirm{background:linear-gradient(135deg,#d32f2f 0%,#b71c1c 100%);color:#fff}.ee-confirm-btn.confirm:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(211,47,47,0.4)}";
 
     var style = document.createElement('style');
@@ -445,10 +575,16 @@
         return;
     }
 
-    var html = '<div class="ee-header"><div class="ee-brand"><span class="ee-brand-text">UNFOLLOWERS</span></div><div class="ee-header-btns"><div class="ee-header-btn ee-fullscreen" title="Tam Ekran"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></div><div class="ee-header-btn ee-restore" title="Küçült"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg></div><div class="ee-header-btn ee-close" title="Kapat">×</div></div></div>' +
-    '<div class="ee-toolbar"><div class="filter-chip active" data-filter="verified"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41L7.7 10.5l-1.41 1.41 4.29 4.29 10-10-1.41-1.41z"/></svg>Onaylı</div><div class="filter-chip active" data-filter="private"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>Gizli</div><div class="filter-chip active" data-filter="public"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.41z"/></svg>Açık</div><input type="text" class="ee-search" placeholder="Ara..." disabled><div class="select-toggle">TÜMÜNÜ SEÇ</div></div>' +
-    '<div class="ee-list"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#555;text-align:center;"><svg style="margin-bottom:12px;opacity:0.5;" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><div style="font-size:13px;">Bekleniyor...<br><span style="font-size:11px;color:#444;">Analiz tuşuna basın</span></div></div></div>' +
-    '<div class="ee-footer"><div class="ee-footer-row"><div class="stat-inline"><div class="stat-item"><h4 id="stat-found">0</h4><span>BULUNAN</span></div><div class="stat-item selected"><h4 id="stat-selected">0</h4><span>SEÇİLEN</span></div></div><button class="main-btn btn-orange" id="btn-scan">ANALİZİ BAŞLAT</button><button class="main-btn btn-danger" id="btn-process">SEÇİLENLERİ ÇIKAR</button></div><div class="ee-footer-row" style="margin-top:8px;"><div class="progress-wrap"><div class="progress-line"><div class="progress-fill"></div></div><div class="status-txt">Sistem Hazır</div></div></div></div>';
+    var html = '<div class="ee-header"><div class="ee-brand"><span class="ee-brand-text">🦊 UNFOLLOWERS</span></div><div class="ee-header-btns"><div class="ee-header-btn ee-fullscreen" title="Tam Ekran"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></div><div class="ee-header-btn ee-restore" title="Küçült"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg></div><div class="ee-header-btn ee-close" title="Kapat">×</div></div></div>' +
+    '<div class="ee-toolbar">' +
+    '<div class="filter-chip active" data-filter="verified">Onaylı</div><div class="filter-chip active" data-filter="private">Gizli</div><div class="filter-chip active" data-filter="public">Açık</div>' +
+    '<div style="width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 2px;"></div>' +
+    '<div class="speed-chip" data-speed="turbo" title="150-300ms Süper Hızlı">⚡ Turbo</div>' +
+    '<div class="speed-chip active" data-speed="fast" title="300-600ms Hızlı ve Dengeli">🚀 Hızlı</div>' +
+    '<div class="speed-chip" data-speed="safe" title="1000-1500ms Klasik Güvenli Mod">🛡️ Güvenli</div>' +
+    '<input type="text" class="ee-search" placeholder="Ara..." disabled><div class="select-toggle">TÜMÜNÜ SEÇ</div></div>' +
+    '<div class="ee-list"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#666;text-align:center;"><svg style="margin-bottom:12px;opacity:0.4;" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><div style="font-size:13px;font-weight:500;">Hazır Bekleniyor...<br><span style="font-size:11px;color:#555;">Takipten çıkmayanları bulmak için analizi başlatın</span></div></div></div>' +
+    '<div class="ee-footer"><div class="ee-footer-row"><div class="stat-inline"><div class="stat-item"><h4 id="stat-found">0</h4><span>BULUNAN</span></div><div class="stat-item selected"><h4 id="stat-selected">0</h4><span>SEÇİLEN</span></div></div><button class="main-btn btn-orange" id="btn-scan">ANALİZİ BAŞLAT</button><button class="main-btn btn-danger" id="btn-process">SEÇİLENLERİ ÇIKAR</button></div><div class="ee-footer-row" style="margin-top:10px;"><div class="progress-wrap"><div class="progress-line"><div class="progress-fill"></div></div><div class="status-txt">🚀 Hız Modu: Hızlı (Önerilen) • Sistem Hazır</div></div></div></div>';
     
     var container = document.createElement('div');
     container.id = 'ee-tool';
@@ -458,6 +594,7 @@
     var UI = {
         close: container.querySelector('.ee-close'),
         filters: container.querySelectorAll('.filter-chip'),
+        speedChips: container.querySelectorAll('.speed-chip'),
         search: container.querySelector('.ee-search'),
         selectToggle: container.querySelector('.select-toggle'),
         list: container.querySelector('.ee-list'),
@@ -472,14 +609,12 @@
         btnRestore: container.querySelector('.ee-restore')
     };
 
-    // Fullscreen toggle
     var toggleFullscreen = function() {
         container.classList.toggle('fullscreen');
     };
     UI.btnFullscreen.onclick = toggleFullscreen;
     UI.btnRestore.onclick = toggleFullscreen;
 
-    // Draggable functionality
     var dragState = { isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 };
     
     UI.header.addEventListener('mousedown', function(e) {
@@ -513,27 +648,50 @@
         }
     });
 
-    var STATE = { users: [], selectedIds: new Set(), filters: { verified: true, private: true, public: true }, isScanning: false, stopRequested: false };
+    var STATE = {
+        users: [],
+        selectedIds: new Set(),
+        filters: { verified: true, private: true, public: true },
+        speedMode: 'fast',
+        isScanning: false,
+        stopRequested: false
+    };
     
     var ICONS = {
         verified: '<svg class="badge badge-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 12.17l7.59-7.59L19 6l-9 11z"/></svg>',
         private: '<svg class="badge badge-private" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H8.9V6z"/></svg>'
     };
 
+    var getSpeedDelay = function() {
+        if (STATE.speedMode === 'turbo') {
+            return Math.floor(Math.random() * 150) + 150;
+        } else if (STATE.speedMode === 'fast') {
+            return Math.floor(Math.random() * 300) + 300;
+        } else {
+            return Math.floor(Math.random() * 500) + 1000;
+        }
+    };
+
+    var getSpeedLabel = function() {
+        if (STATE.speedMode === 'turbo') return '⚡ Turbo (Çok Hızlı)';
+        if (STATE.speedMode === 'fast') return '🚀 Hızlı (Önerilen)';
+        return '🛡️ Güvenli Mod';
+    };
+
     var sleep = function(ms) { return new Promise(function(r) { setTimeout(r, ms) }); };
     var getCookie = function(n) { var m = ('; ' + document.cookie).split('; ' + n + '='); if(m.length == 2) return m.pop().split(';').shift(); return null; };
 
-    var customConfirm = function(message, count) {
+    var customConfirm = function(message) {
         return new Promise(function(resolve) {
             var overlay = document.createElement('div');
             overlay.className = 'ee-confirm-overlay';
             overlay.innerHTML = '<div class="ee-confirm-box">' +
                 '<div class="ee-confirm-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>' +
-                '<div class="ee-confirm-title">Emin misiniz?</div>' +
+                '<div class="ee-confirm-title">Onaylıyor musunuz?</div>' +
                 '<div class="ee-confirm-msg">' + message + '</div>' +
                 '<div class="ee-confirm-btns">' +
                 '<button class="ee-confirm-btn cancel">Vazgeç</button>' +
-                '<button class="ee-confirm-btn confirm">Onayla</button>' +
+                '<button class="ee-confirm-btn confirm">Onayla ve Çıkar</button>' +
                 '</div></div>';
             document.body.appendChild(overlay);
 
@@ -569,7 +727,7 @@
     var filterAndRender = function() {
         var filtered = getVisibleUsers();
         UI.list.innerHTML = "";
-        if(filtered.length === 0 && !STATE.isScanning) { UI.list.innerHTML = '<div style="text-align:center;margin-top:30px;color:#555;">Kriterlere uygun kullanıcı bulunamadı.</div>'; return; }
+        if(filtered.length === 0 && !STATE.isScanning) { UI.list.innerHTML = '<div style="text-align:center;margin-top:35px;color:#666;">Kriterlere uygun kullanıcı bulunamadı.</div>'; return; }
         filtered.forEach(function(u) {
             var el = document.createElement('div');
             var isSel = STATE.selectedIds.has(u.id);
@@ -602,6 +760,15 @@
         };
     });
 
+    UI.speedChips.forEach(function(btn) {
+        btn.onclick = function() {
+            UI.speedChips.forEach(function(c){ c.classList.remove('active'); });
+            btn.classList.add('active');
+            STATE.speedMode = btn.dataset.speed;
+            UI.status.innerText = getSpeedLabel() + " seçildi • Hazır";
+        };
+    });
+
     UI.search.oninput = filterAndRender;
     UI.selectToggle.onclick = function() {
         var visibleUsers = getVisibleUsers();
@@ -614,7 +781,7 @@
 
     UI.btnScan.onclick = async function() {
         STATE.isScanning = true; UI.btnScan.disabled = true; UI.search.disabled = true; STATE.users = []; STATE.selectedIds.clear();
-        UI.status.innerText = "Veri çekiliyor...";
+        UI.status.innerText = "Veriler hızlıca taranıyor...";
         try {
             var userId = getCookie('ds_user_id'); if(!userId) throw new Error("Giriş yapın.");
             var hasNext = true, cursor = null, count = 0; var queryHash = '3dec7e2c57367ef3da3d987d89f9dbc8';
@@ -624,28 +791,34 @@
                 var data = res.data.user.edge_follow;
                 hasNext = data.page_info.has_next_page; cursor = data.page_info.end_cursor;
                 data.edges.forEach(function(item) { if(!item.node.follows_viewer) STATE.users.push(item.node); });
-                count += data.edges.length; UI.status.innerText = count + " kişi..."; UI.progress.style.width = '50%';
-                await sleep(Math.random() * 400 + 400);
+                count += data.edges.length; UI.status.innerText = count + " kişi kontrol edildi..."; UI.progress.style.width = '50%';
+                await sleep(Math.random() * 180 + 120);
             }
-            UI.progress.style.width = '100%'; UI.status.innerText = "Bitti."; UI.search.disabled = false; filterAndRender();
+            UI.progress.style.width = '100%'; UI.status.innerText = "Tarama Tamamlandı."; UI.search.disabled = false; filterAndRender();
         } catch(e) { console.error(e); UI.status.innerText = e.message; } 
         finally { STATE.isScanning = false; UI.btnScan.disabled = false; }
     };
 
     UI.btnProcess.onclick = async function() {
         var total = STATE.selectedIds.size;
-        var confirmed = await customConfirm('Seçili <b>' + total + '</b> kullanıcı takipten çıkarılacak.<br>Bu işlem geri alınamaz.');
+        var speedDesc = getSpeedLabel();
+        var confirmed = await customConfirm('Seçili <b>' + total + '</b> kullanıcı <b>' + speedDesc + '</b> ile takipten çıkarılacak.');
         if(!confirmed) return;
-        STATE.stopRequested = false; UI.btnProcess.innerText = "DURDUR"; UI.btnProcess.style.background = "#333"; UI.btnProcess.onclick = function() { STATE.stopRequested = true; };
+        STATE.stopRequested = false; UI.btnProcess.innerText = "DURDUR"; UI.btnProcess.style.background = "#2a2420"; UI.btnProcess.onclick = function() { STATE.stopRequested = true; };
         var processed = 0; var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); }); var token = getCookie('csrftoken');
         for(var i=0; i<usersToUn.length; i++) {
             var user = usersToUn[i];
-            if(STATE.stopRequested) { UI.status.innerText = "Durduruldu."; break; }
-            UI.status.innerText = "Siliniyor: " + user.username + " (" + (processed+1) + "/" + total + ")";
-            try { await fetch('https://www.instagram.com/web/friendships/' + user.id + '/unfollow/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-csrftoken': token } }); STATE.selectedIds.delete(user.id); } 
-            catch(e) { console.error(e); }
+            if(STATE.stopRequested) { UI.status.innerText = "İşlem durduruldu."; break; }
+            UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + user.username + " (" + (processed+1) + "/" + total + ")";
+            try {
+                await fetch('https://www.instagram.com/web/friendships/' + user.id + '/unfollow/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-csrftoken': token } });
+                STATE.selectedIds.delete(user.id);
+            } catch(e) { console.error(e); }
             processed++; UI.progress.style.width = (processed / total * 100) + '%';
-            if(processed < total) await sleep(Math.floor(Math.random() * 2000) + 1500);
+            if(processed < total) {
+                var delay = getSpeedDelay();
+                await sleep(delay);
+            }
         }
         STATE.users = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id) || !usersToUn.find(function(x) { return x.id === u.id && !STATE.selectedIds.has(x.id); }); }); 
         UI.btnProcess.style.background = ""; UI.status.innerText = "Tamamlandı."; filterAndRender();
@@ -663,13 +836,13 @@
             codeArea.select();
             document.execCommand('copy');
             successMsg.classList.add('show');
-            setTimeout(() => { successMsg.classList.remove('show'); }, 3000);
+            setTimeout(() => { successMsg.classList.remove('show'); }, 3500);
         });
 
         // Bookmarklet Setup
         const bookmarkBtn = document.getElementById('bookmark-btn');
         const rawCode = codeArea.value
-            .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1') // Comments removal
+            .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1')
             .replace(/\n/g, ' ')
             .replace(/\s+/g, ' ')
             .trim();
