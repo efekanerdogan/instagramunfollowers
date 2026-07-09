@@ -638,7 +638,8 @@
             'Content-Type': 'application/x-www-form-urlencoded',
             'X-CSRFToken': token,
             'X-IG-App-ID': '936619743392459',
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': '*/*'
         };
 
         try {
@@ -646,16 +647,17 @@
                 method: 'POST',
                 headers: headers,
                 credentials: 'include',
-                body: 'user_id=' + userId
+                body: 'user_id=' + userId + '&container_module=profile'
             });
-            if (res.ok || res.status === 200) {
+            var data = await res.json().catch(function(){ return {}; });
+            if ((res.ok || res.status === 200) && (data.status === 'ok' || data.friendship_status)) {
                 return { success: true };
             }
-            if (res.status === 429) {
-                return { success: false, rateLimited: true, status: 429 };
+            if (res.status === 429 || data.spam) {
+                console.warn("Spam veya limit algılandı:", data);
+                return { success: false, spam: true, status: res.status };
             }
-            var errText = await res.text().catch(function(){ return ""; });
-            console.warn("Unfollow failed (" + res.status + "):", errText);
+            console.warn("Unfollow başarısız (" + res.status + "):", data);
             return { success: false, status: res.status };
         } catch(e) {
             console.error("Unfollow error:", e);
@@ -793,43 +795,27 @@
         var failCount = 0;
         var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); });
 
-        var batchSize = (STATE.speedMode === 'turbo') ? 3 : ((STATE.speedMode === 'fast') ? 2 : 1);
-
-        for(var i = 0; i < usersToUn.length; i += batchSize) {
+        for(var i = 0; i < usersToUn.length; i++) {
+            var user = usersToUn[i];
             if(STATE.stopRequested) { UI.status.innerText = "İşlem durduruldu."; break; }
-            var batch = usersToUn.slice(i, i + batchSize);
-            UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + Math.min(i + batchSize, total) + "/" + total;
+            UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + user.username + " (" + (processed+1) + "/" + total + ")";
 
-            var results = await Promise.all(batch.map(function(user) {
-                return unfollowUser(user.id).then(function(res) {
-                    return { user: user, res: res };
-                });
-            }));
-
-            var rateLimitHit = false;
-            for (var j = 0; j < results.length; j++) {
-                var item = results[j];
-                if (item.res && item.res.success) {
-                    successCount++;
-                    STATE.selectedIds.delete(item.user.id);
-                } else {
-                    failCount++;
-                    if (item.res && item.res.rateLimited) {
-                        rateLimitHit = true;
-                    }
+            var res = await unfollowUser(user.id);
+            if (res && res.success) {
+                successCount++;
+                STATE.selectedIds.delete(user.id);
+            } else {
+                failCount++;
+                if (res && res.spam) {
+                    UI.status.innerText = "⚠️ Instagram spam koruması (spam: true) algılandı! Birkaç dakika dinlendirin.";
+                    break;
                 }
-                processed++;
             }
-
+            processed++;
             UI.progress.style.width = (processed / total * 100) + '%';
 
-            if (rateLimitHit) {
-                UI.status.innerText = "⚠️ Instagram işlem limiti (429)! Biraz bekleyin.";
-                break;
-            }
-
-            if (i + batchSize < usersToUn.length) {
-                var delay = (STATE.speedMode === 'turbo') ? 40 : ((STATE.speedMode === 'fast') ? 100 : 400);
+            if (processed < total) {
+                var delay = (STATE.speedMode === 'turbo') ? (Math.floor(Math.random() * 80) + 120) : ((STATE.speedMode === 'fast') ? (Math.floor(Math.random() * 150) + 250) : 600);
                 await sleep(delay);
             }
         }
