@@ -641,32 +641,26 @@
             'X-Requested-With': 'XMLHttpRequest'
         };
 
-        var endpoints = [
-            { url: '/api/v1/friendships/destroy/' + userId + '/', body: 'user_id=' + userId },
-            { url: '/api/v1/web/friendships/' + userId + '/unfollow/', body: 'container_module=profile&user_id=' + userId },
-            { url: '/web/friendships/' + userId + '/unfollow/', body: 'user_id=' + userId }
-        ];
-
-        for (var i = 0; i < endpoints.length; i++) {
-            try {
-                var ep = endpoints[i];
-                var res = await fetch(ep.url, {
-                    method: 'POST',
-                    headers: headers,
-                    credentials: 'include',
-                    body: ep.body
-                });
-                if (res.ok || res.status === 200) {
-                    return { success: true };
-                }
-                if (res.status === 429) {
-                    return { success: false, rateLimited: true, status: 429 };
-                }
-            } catch(e) {
-                console.error("Unfollow ep " + i + " error:", e);
+        try {
+            var res = await fetch('/api/v1/friendships/destroy/' + userId + '/', {
+                method: 'POST',
+                headers: headers,
+                credentials: 'include',
+                body: 'user_id=' + userId
+            });
+            if (res.ok || res.status === 200) {
+                return { success: true };
             }
+            if (res.status === 429) {
+                return { success: false, rateLimited: true, status: 429 };
+            }
+            var errText = await res.text().catch(function(){ return ""; });
+            console.warn("Unfollow failed (" + res.status + "):", errText);
+            return { success: false, status: res.status };
+        } catch(e) {
+            console.error("Unfollow error:", e);
+            return { success: false, error: e.message };
         }
-        return { success: false };
     };
 
     var customConfirm = function(message) {
