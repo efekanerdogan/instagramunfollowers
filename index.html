@@ -645,6 +645,55 @@
     var sleep = function(ms) { return new Promise(function(r) { setTimeout(r, ms) }); };
     var getCookie = function(n) { var m = ('; ' + document.cookie).split('; ' + n + '='); if(m.length == 2) return m.pop().split(';').shift(); return null; };
 
+    var getCsrfToken = function() {
+        var cookieToken = getCookie('csrftoken');
+        if (cookieToken) return cookieToken;
+        var match = document.cookie.match(/csrftoken=([^;]+)/);
+        return match ? match[1] : '';
+    };
+
+    var unfollowUser = async function(userId) {
+        var token = getCsrfToken();
+        var headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'x-csrftoken': token,
+            'x-ig-app-id': '936619743392459',
+            'x-instagram-ajax': '1',
+            'x-requested-with': 'XMLHttpRequest'
+        };
+        var body = 'user_id=' + userId;
+
+        try {
+            var res1 = await fetch('https://www.instagram.com/api/v1/friendships/' + userId + '/destroy/', {
+                method: 'POST',
+                headers: headers,
+                credentials: 'include',
+                body: body
+            });
+            if (res1.ok) {
+                var data1 = await res1.json().catch(function(){ return {}; });
+                if (data1.status === 'ok' || res1.status === 200) return { success: true };
+            }
+            if (res1.status === 429) return { success: false, rateLimited: true, status: 429 };
+        } catch(e) { console.error("API v1 destroy error:", e); }
+
+        try {
+            var res2 = await fetch('https://www.instagram.com/web/friendships/' + userId + '/unfollow/', {
+                method: 'POST',
+                headers: headers,
+                credentials: 'include'
+            });
+            if (res2.ok) {
+                return { success: true };
+            }
+            if (res2.status === 429) return { success: false, rateLimited: true, status: 429 };
+            return { success: false, status: res2.status };
+        } catch(e) {
+            console.error("Web unfollow error:", e);
+            return { success: false, error: e.message };
+        }
+    };
+
     var customConfirm = function(message) {
         return new Promise(function(resolve) {
             var overlay = document.createElement('div');
@@ -751,7 +800,7 @@
             var hasNext = true, cursor = null, count = 0; var queryHash = '3dec7e2c57367ef3da3d987d89f9dbc8';
             while(hasNext) {
                 var url = 'https://www.instagram.com/graphql/query/?query_hash=' + queryHash + '&variables=' + encodeURIComponent(JSON.stringify({ id: userId, first: 50, after: cursor }));
-                var res = await fetch(url).then(function(r) { return r.json(); });
+                var res = await fetch(url, { headers: { 'x-ig-app-id': '936619743392459' }, credentials: 'include' }).then(function(r) { return r.json(); });
                 var data = res.data.user.edge_follow;
                 hasNext = data.page_info.has_next_page; cursor = data.page_info.end_cursor;
                 data.edges.forEach(function(item) { if(!item.node.follows_viewer) STATE.users.push(item.node); });
@@ -769,23 +818,38 @@
         var confirmed = await customConfirm('Seçili <b>' + total + '</b> kullanıcı <b>' + speedDesc + '</b> ile takipten çıkarılacak.');
         if(!confirmed) return;
         STATE.stopRequested = false; UI.btnProcess.innerText = "DURDUR"; UI.btnProcess.style.background = "#2a2420"; UI.btnProcess.onclick = function() { STATE.stopRequested = true; };
-        var processed = 0; var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); }); var token = getCookie('csrftoken');
+        var processed = 0;
+        var successCount = 0;
+        var failCount = 0;
+        var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); });
+
         for(var i=0; i<usersToUn.length; i++) {
             var user = usersToUn[i];
             if(STATE.stopRequested) { UI.status.innerText = "İşlem durduruldu."; break; }
             UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + user.username + " (" + (processed+1) + "/" + total + ")";
-            try {
-                await fetch('https://www.instagram.com/web/friendships/' + user.id + '/unfollow/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-csrftoken': token } });
+            
+            var result = await unfollowUser(user.id);
+            if (result && result.success) {
+                successCount++;
                 STATE.selectedIds.delete(user.id);
-            } catch(e) { console.error(e); }
-            processed++; UI.progress.style.width = (processed / total * 100) + '%';
+            } else {
+                failCount++;
+                if (result && result.rateLimited) {
+                    UI.status.innerText = "⚠️ Instagram işlem limiti (429)! Biraz bekleyin.";
+                    break;
+                }
+            }
+            processed++;
+            UI.progress.style.width = (processed / total * 100) + '%';
             if(processed < total) {
                 var delay = getSpeedDelay();
                 await sleep(delay);
             }
         }
         STATE.users = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id) || !usersToUn.find(function(x) { return x.id === u.id && !STATE.selectedIds.has(x.id); }); }); 
-        UI.btnProcess.style.background = ""; UI.status.innerText = "Tamamlandı."; filterAndRender();
+        UI.btnProcess.style.background = "";
+        UI.status.innerText = "Tamamlandı: " + successCount + " çıkarıldı" + (failCount > 0 ? " (" + failCount + " başarısız)" : "");
+        filterAndRender();
     };
 })();
 </textarea>
