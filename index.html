@@ -543,12 +543,12 @@
     '<div class="ee-toolbar">' +
     '<div class="filter-chip active" data-filter="verified">Onaylı</div><div class="filter-chip active" data-filter="private">Gizli</div><div class="filter-chip active" data-filter="public">Açık</div>' +
     '<div style="width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 2px;"></div>' +
-    '<div class="speed-chip" data-speed="turbo" title="150-300ms Süper Hızlı">⚡ Turbo</div>' +
-    '<div class="speed-chip active" data-speed="fast" title="300-600ms Hızlı ve Dengeli">🚀 Hızlı</div>' +
-    '<div class="speed-chip" data-speed="safe" title="1000-1500ms Klasik Güvenli Mod">🛡️ Güvenli</div>' +
+    '<div class="speed-chip active" data-speed="turbo" title="70-150ms Süper Hızlı">⚡ Turbo</div>' +
+    '<div class="speed-chip" data-speed="fast" title="180-380ms Hızlı ve Dengeli">🚀 Hızlı</div>' +
+    '<div class="speed-chip" data-speed="safe" title="600-1000ms Klasik Güvenli Mod">🛡️ Güvenli</div>' +
     '<input type="text" class="ee-search" placeholder="Ara..." disabled><div class="select-toggle">TÜMÜNÜ SEÇ</div></div>' +
     '<div class="ee-list"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#666;text-align:center;"><svg style="margin-bottom:12px;opacity:0.4;" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><div style="font-size:13px;font-weight:500;">Hazır Bekleniyor...<br><span style="font-size:11px;color:#555;">Takipten çıkmayanları bulmak için analizi başlatın</span></div></div></div>' +
-    '<div class="ee-footer"><div class="ee-footer-row"><div class="stat-inline"><div class="stat-item"><h4 id="stat-found">0</h4><span>BULUNAN</span></div><div class="stat-item selected"><h4 id="stat-selected">0</h4><span>SEÇİLEN</span></div></div><button class="main-btn btn-orange" id="btn-scan">ANALİZİ BAŞLAT</button><button class="main-btn btn-danger" id="btn-process">SEÇİLENLERİ ÇIKAR</button></div><div class="ee-footer-row" style="margin-top:10px;"><div class="progress-wrap"><div class="progress-line"><div class="progress-fill"></div></div><div class="status-txt">🚀 Hız Modu: Hızlı (Önerilen) • Sistem Hazır</div></div></div></div>';
+    '<div class="ee-footer"><div class="ee-footer-row"><div class="stat-inline"><div class="stat-item"><h4 id="stat-found">0</h4><span>BULUNAN</span></div><div class="stat-item selected"><h4 id="stat-selected">0</h4><span>SEÇİLEN</span></div></div><button class="main-btn btn-orange" id="btn-scan">ANALİZİ BAŞLAT</button><button class="main-btn btn-danger" id="btn-process">SEÇİLENLERİ ÇIKAR</button></div><div class="ee-footer-row" style="margin-top:10px;"><div class="progress-wrap"><div class="progress-line"><div class="progress-fill"></div></div><div class="status-txt">⚡ Hız Modu: Turbo (Çok Hızlı) • Sistem Hazır</div></div></div></div>';
     
     var container = document.createElement('div');
     container.id = 'ee-tool';
@@ -616,7 +616,7 @@
         users: [],
         selectedIds: new Set(),
         filters: { verified: true, private: true, public: true },
-        speedMode: 'fast',
+        speedMode: 'turbo',
         isScanning: false,
         stopRequested: false
     };
@@ -628,11 +628,11 @@
 
     var getSpeedDelay = function() {
         if (STATE.speedMode === 'turbo') {
-            return Math.floor(Math.random() * 150) + 150;
+            return Math.floor(Math.random() * 80) + 70;
         } else if (STATE.speedMode === 'fast') {
-            return Math.floor(Math.random() * 300) + 300;
+            return Math.floor(Math.random() * 200) + 180;
         } else {
-            return Math.floor(Math.random() * 500) + 1000;
+            return Math.floor(Math.random() * 400) + 600;
         }
     };
 
