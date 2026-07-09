@@ -624,10 +624,11 @@
     var getCsrfToken = function() {
         var match = document.cookie.match(/csrftoken=([^;]+)/);
         if (match && match[1]) return match[1];
+        if (window._sharedData && window._sharedData.config && window._sharedData.config.csrf_token) {
+            return window._sharedData.config.csrf_token;
+        }
         var cookieToken = getCookie('csrftoken');
         if (cookieToken) return cookieToken;
-        var meta = document.querySelector('meta[name="csrf-token"]');
-        if (meta) return meta.getAttribute('content');
         return '';
     };
 
@@ -635,49 +636,37 @@
         var token = getCsrfToken();
         var headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'x-csrftoken': token,
-            'x-ig-app-id': '936619743392459',
-            'x-instagram-ajax': '1',
-            'x-requested-with': 'XMLHttpRequest',
-            'Accept': '*/*'
+            'X-CSRFToken': token,
+            'X-IG-App-ID': '936619743392459',
+            'X-Requested-With': 'XMLHttpRequest'
         };
 
-        try {
-            var res1 = await fetch('https://www.instagram.com/api/v1/friendships/destroy/' + userId + '/', {
-                method: 'POST',
-                headers: headers,
-                credentials: 'include',
-                body: 'user_id=' + userId
-            });
-            if (res1.ok || res1.status === 200) return { success: true };
-            if (res1.status === 429) return { success: false, rateLimited: true, status: 429 };
-        } catch(e) { console.error("Endpoint 1 error:", e); }
+        var endpoints = [
+            { url: '/api/v1/friendships/destroy/' + userId + '/', body: 'user_id=' + userId },
+            { url: '/api/v1/web/friendships/' + userId + '/unfollow/', body: 'container_module=profile&user_id=' + userId },
+            { url: '/web/friendships/' + userId + '/unfollow/', body: 'user_id=' + userId }
+        ];
 
-        try {
-            var res2 = await fetch('https://www.instagram.com/api/v1/web/friendships/' + userId + '/unfollow/', {
-                method: 'POST',
-                headers: headers,
-                credentials: 'include',
-                body: 'container_module=profile&user_id=' + userId
-            });
-            if (res2.ok || res2.status === 200) return { success: true };
-            if (res2.status === 429) return { success: false, rateLimited: true, status: 429 };
-        } catch(e) { console.error("Endpoint 2 error:", e); }
-
-        try {
-            var res3 = await fetch('https://www.instagram.com/web/friendships/' + userId + '/unfollow/', {
-                method: 'POST',
-                headers: headers,
-                credentials: 'include',
-                body: 'user_id=' + userId
-            });
-            if (res3.ok || res3.status === 200) return { success: true };
-            if (res3.status === 429) return { success: false, rateLimited: true, status: 429 };
-            return { success: false, status: res3.status };
-        } catch(e) {
-            console.error("Endpoint 3 error:", e);
-            return { success: false, error: e.message };
+        for (var i = 0; i < endpoints.length; i++) {
+            try {
+                var ep = endpoints[i];
+                var res = await fetch(ep.url, {
+                    method: 'POST',
+                    headers: headers,
+                    credentials: 'include',
+                    body: ep.body
+                });
+                if (res.ok || res.status === 200) {
+                    return { success: true };
+                }
+                if (res.status === 429) {
+                    return { success: false, rateLimited: true, status: 429 };
+                }
+            } catch(e) {
+                console.error("Unfollow ep " + i + " error:", e);
+            }
         }
+        return { success: false };
     };
 
     var customConfirm = function(message) {
@@ -810,7 +799,7 @@
         var failCount = 0;
         var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); });
 
-        var batchSize = (STATE.speedMode === 'turbo') ? 10 : ((STATE.speedMode === 'fast') ? 5 : 1);
+        var batchSize = (STATE.speedMode === 'turbo') ? 3 : ((STATE.speedMode === 'fast') ? 2 : 1);
 
         for(var i = 0; i < usersToUn.length; i += batchSize) {
             if(STATE.stopRequested) { UI.status.innerText = "İşlem durduruldu."; break; }
@@ -846,7 +835,7 @@
             }
 
             if (i + batchSize < usersToUn.length) {
-                var delay = (STATE.speedMode === 'turbo') ? 15 : ((STATE.speedMode === 'fast') ? 50 : 350);
+                var delay = (STATE.speedMode === 'turbo') ? 40 : ((STATE.speedMode === 'fast') ? 100 : 400);
                 await sleep(delay);
             }
         }
