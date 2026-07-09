@@ -804,31 +804,49 @@
         var confirmed = await customConfirm('Seçili <b>' + total + '</b> kullanıcı <b>' + speedDesc + '</b> ile takipten çıkarılacak.');
         if(!confirmed) return;
         STATE.stopRequested = false; UI.btnProcess.innerText = "DURDUR"; UI.btnProcess.style.background = "#2a2420"; UI.btnProcess.onclick = function() { STATE.stopRequested = true; };
+        
         var processed = 0;
         var successCount = 0;
         var failCount = 0;
         var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); });
 
-        for(var i=0; i<usersToUn.length; i++) {
-            var user = usersToUn[i];
+        var batchSize = (STATE.speedMode === 'turbo') ? 10 : ((STATE.speedMode === 'fast') ? 5 : 1);
+
+        for(var i = 0; i < usersToUn.length; i += batchSize) {
             if(STATE.stopRequested) { UI.status.innerText = "İşlem durduruldu."; break; }
-            UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + user.username + " (" + (processed+1) + "/" + total + ")";
-            
-            var result = await unfollowUser(user.id);
-            if (result && result.success) {
-                successCount++;
-                STATE.selectedIds.delete(user.id);
-            } else {
-                failCount++;
-                if (result && result.rateLimited) {
-                    UI.status.innerText = "⚠️ Instagram işlem limiti (429)! Biraz bekleyin.";
-                    break;
+            var batch = usersToUn.slice(i, i + batchSize);
+            UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + Math.min(i + batchSize, total) + "/" + total;
+
+            var results = await Promise.all(batch.map(function(user) {
+                return unfollowUser(user.id).then(function(res) {
+                    return { user: user, res: res };
+                });
+            }));
+
+            var rateLimitHit = false;
+            for (var j = 0; j < results.length; j++) {
+                var item = results[j];
+                if (item.res && item.res.success) {
+                    successCount++;
+                    STATE.selectedIds.delete(item.user.id);
+                } else {
+                    failCount++;
+                    if (item.res && item.res.rateLimited) {
+                        rateLimitHit = true;
+                    }
                 }
+                processed++;
             }
-            processed++;
+
             UI.progress.style.width = (processed / total * 100) + '%';
-            if(processed < total) {
-                var delay = getSpeedDelay();
+
+            if (rateLimitHit) {
+                UI.status.innerText = "⚠️ Instagram işlem limiti (429)! Biraz bekleyin.";
+                break;
+            }
+
+            if (i + batchSize < usersToUn.length) {
+                var delay = (STATE.speedMode === 'turbo') ? 15 : ((STATE.speedMode === 'fast') ? 50 : 350);
                 await sleep(delay);
             }
         }
