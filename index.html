@@ -646,10 +646,13 @@
     var getCookie = function(n) { var m = ('; ' + document.cookie).split('; ' + n + '='); if(m.length == 2) return m.pop().split(';').shift(); return null; };
 
     var getCsrfToken = function() {
+        var match = document.cookie.match(/csrftoken=([^;]+)/);
+        if (match && match[1]) return match[1];
         var cookieToken = getCookie('csrftoken');
         if (cookieToken) return cookieToken;
-        var match = document.cookie.match(/csrftoken=([^;]+)/);
-        return match ? match[1] : '';
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) return meta.getAttribute('content');
+        return '';
     };
 
     var unfollowUser = async function(userId) {
@@ -659,37 +662,44 @@
             'x-csrftoken': token,
             'x-ig-app-id': '936619743392459',
             'x-instagram-ajax': '1',
-            'x-requested-with': 'XMLHttpRequest'
+            'x-requested-with': 'XMLHttpRequest',
+            'Accept': '*/*'
         };
-        var body = 'user_id=' + userId;
 
         try {
-            var res1 = await fetch('https://www.instagram.com/api/v1/friendships/' + userId + '/destroy/', {
+            var res1 = await fetch('https://www.instagram.com/api/v1/friendships/destroy/' + userId + '/', {
                 method: 'POST',
                 headers: headers,
                 credentials: 'include',
-                body: body
+                body: 'user_id=' + userId
             });
-            if (res1.ok) {
-                var data1 = await res1.json().catch(function(){ return {}; });
-                if (data1.status === 'ok' || res1.status === 200) return { success: true };
-            }
+            if (res1.ok || res1.status === 200) return { success: true };
             if (res1.status === 429) return { success: false, rateLimited: true, status: 429 };
-        } catch(e) { console.error("API v1 destroy error:", e); }
+        } catch(e) { console.error("Endpoint 1 error:", e); }
 
         try {
-            var res2 = await fetch('https://www.instagram.com/web/friendships/' + userId + '/unfollow/', {
+            var res2 = await fetch('https://www.instagram.com/api/v1/web/friendships/' + userId + '/unfollow/', {
                 method: 'POST',
                 headers: headers,
-                credentials: 'include'
+                credentials: 'include',
+                body: 'container_module=profile&user_id=' + userId
             });
-            if (res2.ok) {
-                return { success: true };
-            }
+            if (res2.ok || res2.status === 200) return { success: true };
             if (res2.status === 429) return { success: false, rateLimited: true, status: 429 };
-            return { success: false, status: res2.status };
+        } catch(e) { console.error("Endpoint 2 error:", e); }
+
+        try {
+            var res3 = await fetch('https://www.instagram.com/web/friendships/' + userId + '/unfollow/', {
+                method: 'POST',
+                headers: headers,
+                credentials: 'include',
+                body: 'user_id=' + userId
+            });
+            if (res3.ok || res3.status === 200) return { success: true };
+            if (res3.status === 429) return { success: false, rateLimited: true, status: 429 };
+            return { success: false, status: res3.status };
         } catch(e) {
-            console.error("Web unfollow error:", e);
+            console.error("Endpoint 3 error:", e);
             return { success: false, error: e.message };
         }
     };
