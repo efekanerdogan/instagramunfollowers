@@ -647,12 +647,31 @@
                 method: 'POST',
                 headers: headers,
                 credentials: 'include',
-                body: 'user_id=' + userId + '&container_module=profile'
+                body: 'user_id=' + userId
             });
-            var data = await res.json().catch(function(){ return {}; });
-            if ((res.ok || res.status === 200) && (data.status === 'ok' || data.friendship_status)) {
+            
+            // Eğer yeni endpoint 404 veya 400 verirse eski endpointi dene
+            if (!res.ok) {
+                res = await fetch('/api/v1/friendships/destroy/' + userId + '/', {
+                    method: 'POST',
+                    headers: headers,
+                    credentials: 'include',
+                    body: 'user_id=' + userId
+                });
+            }
+
+            var text = await res.text();
+            var data = {};
+            try { data = JSON.parse(text); } catch(e) {}
+            
+            if (res.ok || res.status === 200) {
+                if (data.status === 'fail') {
+                    console.warn("Unfollow başarısız (fail):", data);
+                    return { success: false, status: res.status };
+                }
                 return { success: true };
             }
+            
             if (res.status === 429 || data.spam) {
                 console.warn("Spam veya limit algılandı:", data);
                 return { success: false, spam: true, status: res.status };
