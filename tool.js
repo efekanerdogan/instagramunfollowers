@@ -122,18 +122,19 @@ const API = {
     return { following, nonFollowers: following.filter((u) => !u.followsBack) };
   },
   async unfollow(id) {
-    const headers = Object.assign(igHeaders(), { 'content-type': 'application/x-www-form-urlencoded' });
-    const endpoints = ['/api/v1/friendships/destroy/' + id + '/', '/web/friendships/' + id + '/unfollow/'];
+    const headers = Object.assign(igHeaders(), { 'content-type': 'application/x-www-form-urlencoded', accept: '*/*' });
+    const endpoints = ['/api/v1/web/friendships/' + id + '/unfollow/', '/api/v1/friendships/destroy/' + id + '/'];
     let last = { ok: false, reason: 'unknown' };
     for (const ep of endpoints) {
       let res, data = {};
       try { res = await fetch(ep, { method: 'POST', headers, credentials: 'include', body: 'user_id=' + id }); }
       catch (e) { last = { ok: false, reason: 'network' }; continue; }
       try { data = await res.json(); } catch (e) {}
+      console.info('[Unfollowers] ' + ep.split('/').slice(0, -2).join('/') + ' → HTTP ' + res.status + (data.message ? ' · ' + data.message : '') + (data.status ? ' · ' + data.status : ''));
       if (res.status === 429 || data.spam || data.message === 'feedback_required') return { ok: false, limited: true };
       if (res.status === 401 || data.message === 'login_required') return { ok: false, auth: true };
       if (res.ok && data.status !== 'fail') return { ok: true };
-      last = { ok: false, reason: 'HTTP ' + res.status };
+      last = { ok: false, reason: 'HTTP ' + res.status + (data.message ? ' ' + data.message : '') };
     }
     return last;
   }
@@ -655,7 +656,7 @@ const runUnfollow = async () => {
 
   S.busy = 'unfollow'; S.stop = false;
   render();
-  let done = 0, failed = 0, limitHits = 0;
+  let done = 0, failed = 0, limitHits = 0, failStreak = 0, lastReason = '';
   const total = queue.length;
   const label = () => sp.icon + ' ' + fmt(done + failed) + ' / ' + fmt(total) + ' · ' + fmt(done) + ' çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '');
   setStatus(label(), 0);
@@ -667,7 +668,7 @@ const runUnfollow = async () => {
     setStatus(label() + ' · @' + u.username, ((done + failed) / total) * 100);
     const r = await API.unfollow(u.id);
     if (r.ok) {
-      done++; sessionDone++; limitHits = 0;
+      done++; sessionDone++; limitHits = 0; failStreak = 0;
       S.selected.delete(u.id);
       S.users = S.users.filter((x) => x.id !== u.id);
       S.followingCount = Math.max(0, S.followingCount - 1);
@@ -685,8 +686,9 @@ const runUnfollow = async () => {
       S.stop = true;
       break;
     } else {
-      failed++;
-      console.warn('[Unfollowers] @' + u.username + ' çıkarılamadı:', r.reason);
+      failed++; failStreak++; lastReason = r.reason || 'bilinmeyen hata';
+      console.warn('[Unfollowers] @' + u.username + ' çıkarılamadı:', lastReason);
+      if (failStreak >= 3) { setStatus('❌ Üst üste 3 istek başarısız (' + lastReason + '). İşlem durduruldu.', ((done + failed) / total) * 100); S.stop = true; break; }
     }
     store.set('history', S.history);
     if (i % 10 === 0) saveCache();
@@ -704,7 +706,7 @@ const runUnfollow = async () => {
   saveCache();
   const stopped = S.stop && done + failed < total;
   S.busy = null; S.stop = false;
-  if (!/⛔|🔒/.test(UI.status.textContent)) setStatus((stopped ? '⏹️ Durduruldu · ' : '✅ Bitti · ') + fmt(done) + ' kişi takipten çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '') + '.', stopped ? undefined : 100);
+  if (!/⛔|🔒|❌/.test(UI.status.textContent)) setStatus((stopped ? '⏹️ Durduruldu · ' : '✅ Bitti · ') + fmt(done) + ' kişi takipten çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '') + '.', stopped ? undefined : 100);
   render();
   if (root.classList.contains('ee-min')) toast('Unfollowers: ' + fmt(done) + ' kişi takipten çıkarıldı');
 };
