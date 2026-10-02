@@ -86,11 +86,15 @@ const API = {
       const edge = d && d.data && d.data.user && d.data.user.edge_follow;
       if (!edge) throw new Error('GraphQL yanıtı beklenen biçimde değil');
       if (edge.count) ctx.total = edge.count;
+      if (edge.edges.length && !edge.edges.some((e) => 'follows_viewer' in e.node)) throw new Error('GraphQL yanıtında follows_viewer alanı yok');
       edge.edges.forEach((e) => following.push(Object.assign(normUser(e.node), { followsBack: !!e.node.follows_viewer })));
       ctx.progress(following.length, 'Takip edilenler taranıyor');
       more = edge.page_info.has_next_page;
       after = edge.page_info.end_cursor;
       if (more) await sleep(rand(220, 480));
+    }
+    if (!following.length || (ctx.total && following.length < ctx.total * 0.9)) {
+      throw new Error('GraphQL eksik liste döndürdü (' + following.length + '/' + (ctx.total || '?') + ')');
     }
     return { following, nonFollowers: following.filter((u) => !u.followsBack) };
   },
@@ -112,6 +116,7 @@ const API = {
     };
     const following = await pull('following', 'Takip edilenler taranıyor', 0);
     const followers = await pull('followers', 'Takipçiler taranıyor', 0);
+    if (!following.length) throw new Error('Takip listesi boş geldi (Instagram liste vermedi)');
     const fset = new Set(followers.map((u) => u.id));
     following.forEach((u) => { u.followsBack = fset.has(u.id); });
     return { following, nonFollowers: following.filter((u) => !u.followsBack) };
