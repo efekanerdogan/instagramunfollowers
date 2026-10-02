@@ -72,9 +72,6 @@ const getJSON = async (url) => {
 
 const API = {
   viewerId() { return getCookie('ds_user_id'); },
-  async viewerInfo(uid) {
-    try { const d = await getJSON('/api/v1/users/' + uid + '/info/'); return d.user || null; } catch (e) { return null; }
-  },
   /* Yöntem 1: GraphQL — "follows_viewer" alanı sayesinde tek listeyle sonuç verir. */
   async scanGraphQL(uid, ctx) {
     const following = [];
@@ -95,7 +92,7 @@ const API = {
     return { following, nonFollowers: following.filter((u) => !u.followsBack) };
   },
   /* Yöntem 2: REST — takipçi ve takip listelerini ayrı ayrı çekip karşılaştırır. */
-  async scanREST(uid, ctx, info) {
+  async scanREST(uid, ctx) {
     const pull = async (kind, label, total) => {
       const out = [];
       let maxId = '';
@@ -110,8 +107,8 @@ const API = {
       } while (maxId);
       return out;
     };
-    const following = await pull('following', 'Takip edilenler taranıyor', info && info.following_count);
-    const followers = await pull('followers', 'Takipçiler taranıyor', info && info.follower_count);
+    const following = await pull('following', 'Takip edilenler taranıyor', 0);
+    const followers = await pull('followers', 'Takipçiler taranıyor', 0);
     const fset = new Set(followers.map((u) => u.id));
     following.forEach((u) => { u.followsBack = fset.has(u.id); });
     return { following, nonFollowers: following.filter((u) => !u.followsBack) };
@@ -151,7 +148,6 @@ if (DEMO) {
   };
   const all = Array.from({ length: 248 }, (_, i) => fake(i));
   API.viewerId = () => 'demo';
-  API.viewerInfo = async () => ({ username: 'demo.hesap', following_count: all.length, follower_count: 312 });
   API.scanGraphQL = async (uid, ctx) => {
     ctx.total = all.length;
     for (let i = 0; i < all.length; i += 50) { ctx.checkStop(); await sleep(260); ctx.progress(Math.min(all.length, i + 50), 'Takip edilenler taranıyor (demo)'); }
@@ -591,10 +587,8 @@ const scan = async () => {
   S.busy = 'scan'; S.stop = false; S.selected.clear(); S.tab = 'non';
   setStatus('Hesap bilgileri alınıyor…', null);
   render();
-  const info = S.viewer || await API.viewerInfo(viewerId);
-  if (info) { S.viewer = info; updateSub(); }
   const ctx = {
-    total: info && info.following_count,
+    total: 0,
     checkStop() { if (S.stop) throw new Error('STOP'); },
     progress(n, label) {
       const t = ctx.total || 0;
@@ -618,7 +612,7 @@ const scan = async () => {
       if (e.message === 'STOP' || e instanceof AuthError) throw e;
       console.warn('[Unfollowers] GraphQL başarısız, REST yöntemine geçiliyor:', e);
       setStatus('Alternatif yöntem deneniyor…', null);
-      result = await API.scanREST(viewerId, ctx, info);
+      result = await API.scanREST(viewerId, ctx);
     }
     S.users = result.nonFollowers;
     S.followingCount = result.following.length;
@@ -883,5 +877,4 @@ window.addEventListener('beforeunload', (e) => { if (S.busy === 'unfollow') { e.
 updateSub();
 render();
 if (S.scannedAt) setStatus('Kayıtlı tarama yüklendi (' + ago(S.scannedAt) + '). Güncel sonuç için yeniden tara.', 100);
-if (viewerId) API.viewerInfo(viewerId).then((info) => { if (info) { S.viewer = info; updateSub(); } });
 })();
