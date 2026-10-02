@@ -1,874 +1,1427 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦊 UNFOLLOWERS - Instagram Analiz & Hızlı Çıkarma Aracı</title>
-    <link rel="icon" type="image/png" href="https://efekanerdogan.com/images/favicon_custom.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #ff6b00;
-            --primary-light: #ff8533;
-            --primary-dark: #cc5500;
-            --primary-glow: rgba(255, 107, 0, 0.35);
-            --bg: #090706;
-            --card-bg: rgba(20, 16, 14, 0.65);
-            --border: rgba(255, 107, 0, 0.22);
-            --border-light: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-dim: #99938e;
-            --success: #10b981;
-            --turbo: #f59e0b;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unfollowers — Instagram'da seni geri takip etmeyenleri bul</title>
+<meta name="description" content="Instagram'da seni geri takip etmeyenleri saniyeler içinde bul, beyaz liste ve güvenli hız modlarıyla takipten çık. Ücretsiz, açık kaynak, tamamen tarayıcında çalışır.">
+<meta name="theme-color" content="#0c0a09">
+<meta property="og:title" content="🦊 Unfollowers — Instagram Analiz Aracı">
+<meta property="og:description" content="Seni geri takip etmeyenleri bul ve tek tıkla yönet. Şifre istemez, sunucuya veri göndermez.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦊</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0a09;--bg2:#141110;--bg3:#1c1816;--card:#15120f;
+  --ln:rgba(255,255,255,.07);--ln2:rgba(255,255,255,.12);
+  --tx:#f7f4f1;--tx2:#aaa29b;--tx3:#756d66;
+  --ac:#ff6b00;--ac2:#ff8a3d;--pink:#ff3d6e;--acs:rgba(255,107,0,.12);
+  --ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;
+  --r:18px;--shadow:0 30px 80px rgba(0,0,0,.45);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:Outfit,Inter,sans-serif;line-height:1.1;letter-spacing:-.02em}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.grad{background:linear-gradient(100deg,var(--ac) 10%,var(--pink) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* arka plan */
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);opacity:.6}
+.glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.35}
+.glow.g1{width:520px;height:520px;background:var(--ac);top:-220px;left:8%}
+.glow.g2{width:420px;height:420px;background:var(--pink);top:-160px;right:4%;opacity:.22}
 
-        body {
-            background-color: var(--bg);
-            background-image:
-                radial-gradient(ellipse at 15% 15%, rgba(255, 107, 0, 0.14) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 85%, rgba(255, 140, 0, 0.09) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(25, 18, 14, 0.8) 0%, transparent 100%);
-            color: var(--text-main);
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
-        }
+/* nav */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(12,10,9,.72);border-bottom:1px solid var(--ln)}
+nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-family:Outfit,sans-serif;font-weight:700;font-size:18px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--pink));display:grid;place-items:center;font-size:18px;box-shadow:0 6px 20px rgba(255,107,0,.35)}
+.brand small{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--tx3);font-weight:500;border:1px solid var(--ln2);border-radius:6px;padding:1px 6px;margin-left:2px}
+.nav-links{display:flex;gap:24px;margin-left:auto;font-size:14.5px;color:var(--tx2)}
+.nav-links a:hover{color:var(--tx)}
+.gh{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--ln2);font-size:14px;font-weight:600;transition:.2s}
+.gh:hover{background:var(--bg3)}
 
-        /* Ambient floating lights */
-        .ambient-light {
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            filter: blur(100px);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.45;
-            animation: pulseLight 8s ease-in-out infinite alternate;
-        }
+/* hero */
+.hero{padding:84px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:99px;background:var(--bg2);border:1px solid var(--ln2);font-size:13px;color:var(--tx2);margin-bottom:24px}
+.eyebrow b{background:var(--acs);color:var(--ac2);padding:2px 8px;border-radius:99px;font-size:12px}
+h1{font-size:clamp(40px,5.4vw,64px);font-weight:800;margin-bottom:22px}
+.lead{font-size:18.5px;color:var(--tx2);max-width:540px;margin-bottom:34px}
+.lead strong{color:var(--tx);font-weight:600}
 
-        .ambient-1 {
-            top: -100px;
-            left: 10%;
-            background: var(--primary);
-        }
+.install{background:linear-gradient(180deg,var(--bg2),var(--card));border:1px solid var(--ln2);border-radius:var(--r);padding:22px;max-width:560px;position:relative}
+.install-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.install-label span{color:var(--ok);background:rgba(34,197,94,.12);padding:2px 8px;border-radius:99px;letter-spacing:.04em;font-size:11px}
+.drag-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.bookmarklet{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 26px;border-radius:99px;background:linear-gradient(135deg,var(--ac),#e44d0c);color:#fff;font-weight:700;font-size:17px;box-shadow:0 12px 30px rgba(255,107,0,.35),inset 0 1px 0 rgba(255,255,255,.25);cursor:grab;transition:transform .2s,box-shadow .2s;position:relative}
+.bookmarklet:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(255,107,0,.45),inset 0 1px 0 rgba(255,255,255,.25)}
+.bookmarklet:active{cursor:grabbing}
+.bookmarklet::after{content:"";position:absolute;inset:-7px;border-radius:99px;border:1.5px dashed rgba(255,138,61,.55);animation:pulse 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes pulse{50%{inset:-11px;opacity:.35}}
+@media (prefers-reduced-motion:reduce){.bookmarklet::after{animation:none}}
+.drag-hint{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--tx2)}
+.drag-hint svg{color:var(--ac2);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translate(-4px,-4px)}}
+.install-steps{margin-top:18px;font-size:14px;color:var(--tx2);display:grid;gap:6px}
+.install-steps b{color:var(--tx);font-weight:600}
+kbd{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--bg3);border:1px solid var(--ln2);border-bottom-width:2px;border-radius:6px;padding:1px 6px;color:var(--tx)}
+.alt-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:11px;font-weight:600;font-size:14px;border:1px solid var(--ln2);background:var(--bg3);transition:.18s}
+.btn:hover{border-color:rgba(255,255,255,.25);background:#24201d}
+.btn.primary{background:var(--tx);color:#111;border-color:transparent}
+.btn.primary:hover{background:#fff}
+.btn svg{flex-shrink:0}
+.trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--tx2)}
+.trust span{display:flex;align-items:center;gap:7px}
+.trust svg{color:var(--ok)}
 
-        .ambient-2 {
-            bottom: -100px;
-            right: 10%;
-            background: #ff3b00;
-            animation-delay: -4s;
-        }
+/* panel önizleme */
+.preview{position:relative}
+.preview::before{content:"";position:absolute;inset:10% -6% -8% 8%;background:radial-gradient(closest-side,rgba(255,107,0,.35),transparent);filter:blur(40px);z-index:-1}
+.mock{background:#121010;border:1px solid var(--ln2);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;font-size:13px;transform:perspective(1400px) rotateY(-6deg) rotateX(2deg);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.preview:hover .mock{transform:none}
+.m-head{display:flex;align-items:center;gap:11px;padding:13px 16px;border-bottom:1px solid var(--ln);background:linear-gradient(180deg,rgba(255,107,0,.07),transparent)}
+.m-logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--ac),var(--pink));display:grid;place-items:center;font-size:15px}
+.m-head b{display:block;font-size:14px}
+.m-head span{font-size:11.5px;color:var(--tx2)}
+.m-dots{margin-left:auto;display:flex;gap:6px}
+.m-dots i{width:26px;height:26px;border-radius:8px;background:var(--bg3)}
+.m-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 16px 4px}
+.m-stat{background:var(--bg2);border:1px solid var(--ln);border-radius:11px;padding:8px 11px}
+.m-stat b{display:block;font-size:17px;font-variant-numeric:tabular-nums}
+.m-stat span{font-size:10.5px;color:var(--tx2)}
+.m-stat.hl b{color:var(--ac2)}
+.m-tabs{display:flex;gap:16px;padding:10px 16px 0;border-bottom:1px solid var(--ln);font-weight:600;color:var(--tx2);font-size:12.5px}
+.m-tabs span{padding-bottom:9px}
+.m-tabs .on{color:var(--tx);border-bottom:2px solid var(--ac)}
+.m-list{padding:8px}
+.m-row{display:flex;align-items:center;gap:11px;padding:7px 9px;border-radius:11px;border:1px solid transparent}
+.m-row.sel{background:var(--acs);border-color:rgba(255,107,0,.32)}
+.m-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0}
+.m-row .t{flex:1;min-width:0}
+.m-row .t b{font-size:13px;display:flex;align-items:center;gap:4px}
+.m-row .t span{font-size:11.5px;color:var(--tx2)}
+.m-star{color:#facc15;font-size:13px}
+.m-chk{width:20px;height:20px;border-radius:50%;border:2px solid #4a433e;display:grid;place-items:center}
+.m-row.sel .m-chk{background:var(--ac);border-color:var(--ac)}
+.m-foot{border-top:1px solid var(--ln);padding:12px 16px 14px;background:var(--bg2);display:flex;align-items:center;gap:12px}
+.m-bar{flex:1}
+.m-bar div{height:5px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.m-bar div i{display:block;height:100%;width:64%;background:linear-gradient(90deg,var(--ac),var(--pink));border-radius:99px;animation:fill 3.2s ease-in-out infinite alternate}
+@keyframes fill{from{width:22%}to{width:78%}}
+.m-bar small{display:block;font-size:11px;color:var(--tx2);margin-top:5px}
+.m-btn{background:linear-gradient(135deg,#ef4444,#c62828);color:#fff;font-weight:700;font-size:12px;padding:10px 14px;border-radius:10px;white-space:nowrap}
+.float-badge{position:absolute;left:-28px;bottom:-22px;background:var(--bg2);border:1px solid var(--ln2);border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);font-size:13px;animation:bob 4s ease-in-out infinite}
+.float-badge b{display:block;font-size:14px}
+.float-badge span{color:var(--tx2);font-size:12px}
+@keyframes bob{50%{transform:translateY(-8px)}}
 
-        @keyframes pulseLight {
-            0% { transform: scale(0.9) translateY(0); opacity: 0.35; }
-            100% { transform: scale(1.15) translateY(-20px); opacity: 0.55; }
-        }
+/* bölümler */
+section{padding:84px 0;scroll-margin-top:40px}
+#kur{scroll-margin-top:90px}
+.sec-head{text-align:center;max-width:640px;margin:0 auto 48px}
+.kicker{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ac2);margin-bottom:12px}
+h2{font-size:clamp(30px,3.6vw,42px);font-weight:700;margin-bottom:14px}
+.sec-head p{color:var(--tx2);font-size:17px}
 
-        .container {
-            width: 100%;
-            max-width: 920px;
-            padding: 50px 24px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
+/* nasıl */
+.tabs{display:flex;justify-content:center;gap:6px;margin-bottom:28px;flex-wrap:wrap}
+.tab{padding:9px 16px;border-radius:99px;border:1px solid var(--ln2);color:var(--tx2);font-weight:600;font-size:14px;transition:.18s}
+.tab:hover{color:var(--tx)}
+.tab[aria-selected=true]{background:var(--tx);color:#111;border-color:transparent}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.step{background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:22px;position:relative}
+.step-n{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--ac2);background:var(--acs);width:30px;height:30px;border-radius:9px;display:grid;place-items:center;margin-bottom:16px}
+.step h3{font-size:17px;margin-bottom:6px;font-weight:600}
+.step p{color:var(--tx2);font-size:14.5px}
+.panel-pane[hidden]{display:none}
+.mob-only{display:none !important}
+.install-steps.mob{display:none}
+@media (max-width:640px){.install-steps.mob{display:grid}}
+.note{margin-top:18px;text-align:center;font-size:14px;color:var(--tx2)}
+.note a{color:var(--ac2);font-weight:600}
 
-        .description {
-            color: var(--text-dim);
-            font-size: 1.15rem;
-            margin-bottom: 36px;
-            max-width: 620px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.65;
-        }
+/* özellikler */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:26px;transition:border-color .2s,transform .2s}
+.feat:hover{border-color:rgba(255,107,0,.35);transform:translateY(-3px)}
+.feat-ico{width:44px;height:44px;border-radius:12px;background:var(--acs);display:grid;place-items:center;font-size:21px;margin-bottom:18px}
+.feat h3{font-size:18px;font-weight:600;margin-bottom:6px}
+.feat p{color:var(--tx2);font-size:14.5px}
+.feat .new{font-family:Inter,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--ac2);background:var(--acs);padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:3px}
 
-        .description strong {
-            color: #fff;
-            font-weight: 600;
-        }
+/* hız */
+.speeds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.speed{background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:26px;position:relative}
+.speed.rec{border-color:rgba(255,107,0,.45);background:linear-gradient(180deg,rgba(255,107,0,.07),var(--card) 60%)}
+.speed .tag{position:absolute;top:18px;right:18px;font-size:11px;font-weight:700;color:var(--ac2);background:var(--acs);padding:3px 9px;border-radius:99px}
+.speed h3{font-size:22px;margin-bottom:4px}
+.speed .ms{font-family:"JetBrains Mono",monospace;color:var(--tx2);font-size:13px;margin-bottom:18px}
+.speed ul{list-style:none;display:grid;gap:8px;font-size:14.5px;color:var(--tx2);margin-bottom:20px}
+.speed li::before{content:"→ ";color:var(--tx3)}
+.risk{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--tx2)}
+.risk-bar{flex:1;display:flex;gap:4px}
+.risk-bar i{flex:1;height:6px;border-radius:99px;background:var(--bg3)}
+.risk.low i:nth-child(1){background:var(--ok)}
+.risk.mid i:nth-child(-n+2){background:var(--warn)}
+.risk.high i{background:var(--bad)}
 
-        /* CARD MAIN */
-        .main-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 44px;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            box-shadow:
-                0 30px 60px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
+/* sss */
+.faq{max-width:760px;margin:0 auto;display:grid;gap:10px}
+details{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:0 20px;transition:border-color .2s}
+details[open]{border-color:var(--ln2)}
+summary{list-style:none;cursor:pointer;padding:18px 0;font-weight:600;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;color:var(--tx3);transition:transform .2s;font-weight:400}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--tx2);font-size:15px;padding-bottom:18px}
+details code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--bg3);padding:1px 6px;border-radius:5px}
 
-        .main-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.8;
-        }
+/* cta + footer */
+.cta{text-align:center;background:linear-gradient(135deg,rgba(255,107,0,.12),rgba(255,61,110,.08));border:1px solid rgba(255,107,0,.25);border-radius:28px;padding:56px 24px}
+.cta h2{margin-bottom:12px}
+.cta p{color:var(--tx2);margin-bottom:26px}
+.cta .alt-row{justify-content:center}
+footer{border-top:1px solid var(--ln);padding:36px 0 48px;color:var(--tx3);font-size:13.5px}
+footer .wrap{display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap}
+footer p{max-width:620px}
+footer a{color:var(--tx2)}
+footer a:hover{color:var(--tx)}
 
-        /* FEATURES PILLS */
-        .features-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 36px;
-        }
+/* toast */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:var(--tx);color:#111;font-weight:600;font-size:14.5px;padding:12px 18px;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.4);transition:.3s;z-index:50;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 
-        .feature-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            font-size: 0.85rem;
-            color: #d1cbc7;
-            font-weight: 500;
-        }
+/* reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
 
-        .feature-pill svg {
-            color: var(--primary);
-            width: 16px;
-            height: 16px;
-        }
-
-        /* BUTTON */
-        .copy-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 16px 36px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 12px 30px rgba(255, 107, 0, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .copy-btn:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 45px rgba(255, 107, 0, 0.5);
-        }
-
-        .copy-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .divider {
-            color: #716b66;
-            font-size: 0.82rem;
-            font-weight: 700;
-            margin-bottom: 18px;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-        }
-
-        /* BOOKMARK SECTION */
-        .bookmark-box {
-            background: rgba(255, 107, 0, 0.04);
-            border: 1px solid rgba(255, 107, 0, 0.18);
-            border-radius: 20px;
-            padding: 28px;
-            margin-bottom: 36px;
-            transition: 0.3s;
-        }
-
-        .bookmark-box:hover {
-            background: rgba(255, 107, 0, 0.07);
-            border-color: rgba(255, 107, 0, 0.35);
-        }
-
-        .bookmark-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(145deg, #1f1814, #14100c);
-            border: 2px dashed rgba(255, 107, 0, 0.6);
-            color: #fff;
-            padding: 16px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.25s ease;
-            cursor: move;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .bookmark-link:hover {
-            border-color: var(--primary);
-            color: var(--primary-light);
-            background: rgba(255, 107, 0, 0.12);
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(255, 107, 0, 0.25);
-        }
-
-        .bookmark-instruction {
-            margin-top: 14px;
-            font-size: 0.92rem;
-            color: var(--text-dim);
-            line-height: 1.5;
-        }
-
-        .bookmark-instruction b {
-            color: #fff;
-        }
-
-        /* STEPS */
-        .manual-section {
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-top: 24px;
-            text-align: left;
-        }
-
-        .step-item {
-            background: rgba(255, 255, 255, 0.025);
-            padding: 18px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: 0.3s;
-        }
-
-        .step-item:hover {
-            border-color: var(--border);
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .step-num {
-            background: rgba(255, 107, 0, 0.14);
-            color: var(--primary-light);
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            margin-bottom: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-
-        .step-text {
-            font-size: 0.88rem;
-            color: #bebaa;
-            line-height: 1.45;
-        }
-
-        .step-text b {
-            color: white;
-        }
-
-        /* SUCCESS MESSAGE */
-        #success-msg {
-            color: var(--success);
-            margin-top: 14px;
-            font-weight: 600;
-            opacity: 0;
-            height: 20px;
-            font-size: 0.92rem;
-            transition: 0.3s;
-        }
-
-        #success-msg.show {
-            opacity: 1;
-        }
-
-        #code-area {
-            position: absolute;
-            left: -9999px;
-            opacity: 0;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 16px;
-            }
-
-            .main-card {
-                padding: 28px 20px;
-                border-radius: 20px;
-            }
-
-            .steps {
-                grid-template-columns: 1fr;
-            }
-
-            .logo img {
-                height: 75px;
-            }
-
-            .copy-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .bookmark-link {
-                width: 100%;
-                padding: 14px 20px;
-                box-sizing: border-box;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                justify-content: center;
-            }
-        }
-    </style>
+@media (max-width:960px){
+  .hero{padding:56px 0}
+  .hero .wrap{grid-template-columns:1fr;gap:56px}
+  .preview{max-width:520px;margin:0 auto;width:100%}
+  .mock{transform:none}
+  .float-badge{left:auto;right:-8px;bottom:-18px}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .features{grid-template-columns:1fr 1fr}
+  .speeds{grid-template-columns:1fr;max-width:560px;margin:0 auto}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .nav-links{display:none}
+  nav .gh{margin-left:auto}
+  section{padding:64px 0}
+  .lead{font-size:17px}
+  .install{padding:18px}
+  .bookmarklet{width:100%;justify-content:center}
+  .drag-hint{display:none}
+  .steps,.features,.speeds{grid-template-columns:1fr}
+  .alt-row .btn{flex:1 1 100%;justify-content:center}
+  .install-steps.desk{display:none}
+  .mob-only{display:inline-flex !important}
+  .m-stats{grid-template-columns:repeat(3,1fr)}
+  .float-badge{display:none}
+}
+</style>
 </head>
-
 <body>
-    <div class="ambient-light ambient-1"></div>
-    <div class="ambient-light ambient-2"></div>
+<div class="bg"><div class="glow g1"></div><div class="glow g2"></div></div>
 
-    <div class="container">
-        <p class="description">
-            Instagram'da sizi geri takip etmeyenleri saniyeler içinde analiz edin.<br>
-            <strong>Turbo & Hızlı Takipten Çıkarma</strong> seçenekleriyle zaman kaybetmeden yönetin.
-        </p>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><span class="brand-mark">🦊</span>Unfollowers <small>v2</small></a>
+    <div class="nav-links">
+      <a href="#nasil">Nasıl kullanılır</a>
+      <a href="#ozellikler">Özellikler</a>
+      <a href="#hiz">Hız modları</a>
+      <a href="#sss">SSS</a>
+    </div>
+    <a class="gh" href="https://github.com/efekanerdogan/instagramunfollowers" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>
+      GitHub
+    </a>
+  </div>
+</nav>
 
-        <div class="main-card">
-            <div class="features-row">
-                <div class="feature-pill">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                    3 Farklı Hız Modu (Turbo / Hızlı / Güvenli)
-                </div>
-                <div class="feature-pill">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    100% İstemci Taraflı & Güvenli
-                </div>
-                <div class="feature-pill">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    Onaylı & Gizli Hesap Filtreleme
-                </div>
-            </div>
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow"><b>YENİ</b> Beyaz liste, CSV dışa aktarma ve otomatik molalar</div>
+      <h1>Seni geri takip etmeyenleri <span class="grad">saniyeler içinde</span> bul.</h1>
+      <p class="lead">Instagram takip listeni tarar, seni takip etmeyenleri gösterir ve istediklerini <strong>güvenli hız modlarıyla</strong> takipten çıkarır. Şifre istemez, kurulum gerektirmez.</p>
 
-            <div class="bookmark-box">
-                <div class="divider">KOLAY YÖNTEM (ÖNERİLEN)</div>
-                <a id="bookmark-btn" class="bookmark-link" href="#" title="Beni Yer İmleri Çubuğuna Sürükle!">
-                    <span>🦊 Unfollowers</span>
-                </a>
-                <p class="bookmark-instruction">
-                    Yukarıdaki butonu tarayıcınızın <b>Yer İmleri Çubuğuna (Bookmarks Bar)</b> sürükleyip bırakın.<br>
-                    Ardından Instagram.com üzerinde oturum açıp bu yer işaretine tıklayın.
-                </p>
-            </div>
-
-            <div class="manual-section">
-                <div class="divider">VEYA MANUEL KURULUM (KONSOL)</div>
-
-                <button class="copy-btn" id="copyBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                    Kodu Kopyala
-                </button>
-                <div id="success-msg">⚡ KOD BAŞARIYLA KOPYALANDI!</div>
-
-                <div class="steps">
-                    <div class="step-item">
-                        <div class="step-num">1</div>
-                        <div class="step-text"><b>Kodu Kopyala</b> butonuna tıklayarak kodu alın.</div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-num">2</div>
-                        <div class="step-text">Instagram.com üzerinde <b>F12</b> ile Geliştirici Konsolunu açın.</div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-num">3</div>
-                        <div class="step-text">Kodu yapıştırıp (CTRL+V) <b>Enter</b> tuşuna basın.</div>
-                    </div>
-                </div>
-            </div>
+      <div class="install" id="kur">
+        <div class="install-label">Kolay kurulum <span>Önerilen</span></div>
+        <div class="drag-row">
+          <a id="bookmarklet" class="bookmarklet" href="#" title="Beni yer imleri çubuğuna sürükle" draggable="true">🦊 Unfollowers</a>
+          <div class="drag-hint">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            Yer imleri çubuğuna sürükle
+          </div>
         </div>
+        <div class="install-steps mob">
+          <div>📱 Telefonda mısın? <b>Yer imi bağlantısını kopyala</b>, sonra aşağıdaki <a href="#nasil" style="color:var(--ac2);font-weight:600">Mobil adımlarını</a> izle.</div>
+        </div>
+        <div class="install-steps desk">
+          <div>Çubuk görünmüyor mu? <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> &nbsp;(Mac: <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>)</div>
+          <div>Sonra <b>instagram.com</b>'da oturum açıp yer imine tıkla.</div>
+        </div>
+        <div class="alt-row">
+          <button class="btn primary" id="demo-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>
+            Demoyu dene
+          </button>
+          <button class="btn" data-copy="console">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+            Konsol kodunu kopyala
+          </button>
+          <button class="btn mob-only" data-copy="bookmarklet">🔗 Yer imi bağlantısını kopyala</button>
+        </div>
+      </div>
+
+      <div class="trust">
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5L20 7"/></svg>Şifre istemez</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5L20 7"/></svg>Veriler tarayıcıda kalır</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5L20 7"/></svg>Açık kaynak · MIT</span>
+      </div>
     </div>
 
-    <textarea id="code-area">
-(function(){
-    var css = ":root{--primary:#ff6b00;--primary-dark:#cc5500;--bg-glass:rgba(15,12,10,0.96);--border:rgba(255,107,0,0.22);--text-main:#ffffff;--text-dim:#999999}" +
-    "#ee-tool{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:95%;max-width:720px;height:90%;max-height:92vh;background:var(--bg-glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:20px;box-shadow:0 40px 100px rgba(0,0,0,0.92),0 0 0 1px var(--border);z-index:2147483647;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column;opacity:0;animation:slideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;color:var(--text-main);overflow:hidden}" +
-    "#ee-tool.dragging{transition:none!important;animation:none!important;opacity:1}" +
-    "@keyframes slideIn{from{opacity:0;transform:translate(-50%,-45%)}to{opacity:1;transform:translate(-50%,-50%)}}" +
-    ".ee-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(255,107,0,0.08) 0%,transparent 100%);flex-shrink:0;cursor:move;user-select:none}" +
-    ".ee-header-btns{display:flex;align-items:center;gap:8px}" +
-    ".ee-header-btn{cursor:pointer;color:var(--text-dim);font-size:16px;transition:0.2s;padding:5px;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.05)}" +
-    ".ee-header-btn:hover{color:#fff;background:rgba(255,255,255,0.12)}" +
-    ".ee-header-btn.ee-close:hover{background:rgba(239,68,68,0.25);color:#ef4444}" +
-    "#ee-tool.fullscreen{top:0!important;left:0!important;transform:none!important;width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0}" +
-    "#ee-tool.fullscreen .ee-header{cursor:default}" +
-    "#ee-tool.fullscreen .ee-fullscreen{display:none}" +
-    "#ee-tool.fullscreen .ee-restore{display:flex}" +
-    ".ee-restore{display:none}" +
-    ".ee-brand{display:flex;align-items:center;gap:8px}" +
-    ".ee-brand-text{font-family:inherit;font-size:14px;font-weight:700;letter-spacing:0.5px;color:#fff}" +
-    ".ee-toolbar{padding:10px 14px;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;background:rgba(255,255,255,0.01)}" +
-    ".filter-chip{padding:5px 11px;border-radius:15px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-dim);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;user-select:none;white-space:nowrap}" +
-    ".filter-chip.active{background:rgba(255,107,0,0.18);border-color:var(--primary);color:#ff8533}" +
-    ".filter-chip:hover{background:rgba(255,255,255,0.1)}" +
-    ".speed-chip{padding:5px 10px;border-radius:15px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-dim);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;user-select:none;white-space:nowrap}" +
-    ".speed-chip.active{background:rgba(245,158,11,0.2);border-color:#f59e0b;color:#fbbf24}" +
-    ".speed-chip:hover{background:rgba(255,255,255,0.12)}" +
-    ".ee-search{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:20px;color:#fff;font-family:inherit;font-size:12px;padding:6px 12px;flex:1;min-width:110px;transition:0.3s}" +
-    ".ee-search:focus{outline:none;border-color:var(--primary)}" +
-    ".ee-search::placeholder{color:#666}" +
-    ".select-toggle{font-size:10px;color:var(--primary);cursor:pointer;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;user-select:none;white-space:nowrap;padding:5px 10px;border:1px solid var(--primary);border-radius:12px;transition:0.2s}" +
-    ".select-toggle:hover{background:rgba(255,107,0,0.15)}" +
-    ".ee-list{flex:1;overflow-y:auto;padding:10px;min-height:0}.ee-list::-webkit-scrollbar{width:5px}.ee-list::-webkit-scrollbar-thumb{background:#333;border-radius:3px}" +
-    ".user-card{display:flex;align-items:center;padding:9px 12px;border-radius:12px;margin-bottom:5px;transition:0.15s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);cursor:pointer;transform:scale(1)}" +
-    ".user-card:active{transform:scale(0.985)}.user-card:hover{background:rgba(255,255,255,0.06)}" +
-    ".user-card.selected{background:rgba(255,107,0,0.14);border-color:rgba(255,107,0,0.45)}" +
-    ".u-avatar-box{position:relative;margin-right:12px}.u-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#222}" +
-    ".u-info{flex:1;min-width:0}.u-name{font-weight:600;font-size:13px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.u-sub{font-size:11px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
-    ".u-select-btn{width:20px;height:20px;border-radius:50%;border:2px solid #555;display:flex;align-items:center;justify-content:center;transition:0.2s;margin-left:8px;flex-shrink:0}" +
-    ".user-card.selected .u-select-btn{background:var(--primary);border-color:var(--primary);box-shadow:0 0 10px rgba(255,107,0,0.5);animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275)}" +
-    ".u-select-btn::after{content:'';width:4px;height:8px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg);display:none;margin-bottom:2px}" +
-    ".user-card.selected .u-select-btn::after{display:block}" +
-    "@keyframes popIn{from{transform:scale(0.5)}to{transform:scale(1)}}" +
-    ".badge{display:inline-flex;width:14px;height:14px;flex-shrink:0}.badge-verified{color:#0095f6}.badge-private{color:#aaa}" +
-    ".ee-footer{padding:12px 16px;border-top:1px solid var(--border);background:rgba(0,0,0,0.4);flex-shrink:0}" +
-    ".ee-footer-row{display:flex;align-items:center;gap:12px}" +
-    ".stat-inline{display:flex;align-items:center;gap:16px;flex-shrink:0}" +
-    ".stat-inline .stat-item{display:flex;align-items:center;gap:5px}" +
-    ".stat-inline .stat-item h4{font-size:15px;margin:0;color:#fff;font-weight:700}" +
-    ".stat-inline .stat-item span{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:0.5px}" +
-    ".stat-inline .stat-item.selected h4{color:var(--primary)}" +
-    ".main-btn{flex:1;padding:11px 16px;border-radius:12px;border:none;font-weight:700;font-size:12px;cursor:pointer;transition:0.3s;letter-spacing:0.5px}" +
-    ".btn-orange{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;box-shadow:0 4px 15px rgba(255,107,0,0.25)}" +
-    ".btn-orange:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,0,0.4)}.btn-orange:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:grayscale(1)}" +
-    ".btn-danger{background:linear-gradient(135deg,#d32f2f 0%,#b71c1c 100%);color:#fff;display:none}" +
-    ".btn-danger:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(211,47,47,0.45)}" +
-    ".progress-wrap{flex:1;display:flex;flex-direction:column;gap:5px}" +
-    ".progress-line{width:100%;height:4px;background:#25201c;border-radius:2px;overflow:hidden}" +
-    ".progress-fill{width:0%;height:100%;background:var(--primary);transition:width 0.25s;box-shadow:0 0 10px var(--primary)}" +
-    ".status-txt{font-size:11px;color:#999;font-family:monospace}" +
-    ".ee-confirm-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:2147483648;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeIn 0.2s forwards}" +
-    "@keyframes fadeIn{to{opacity:1}}" +
-    ".ee-confirm-box{background:linear-gradient(145deg,#1c1815 0%,#100d0a 100%);border:1px solid var(--border);border-radius:20px;padding:28px;max-width:400px;width:90%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.9);transform:scale(0.9);animation:popUp 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards}" +
-    "@keyframes popUp{to{transform:scale(1)}}" +
-    ".ee-confirm-icon{width:54px;height:54px;margin:0 auto 16px;background:rgba(255,107,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center}" +
-    ".ee-confirm-icon svg{width:30px;height:30px;color:var(--primary)}" +
-    ".ee-confirm-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px}" +
-    ".ee-confirm-msg{font-size:13px;color:#999;margin-bottom:22px;line-height:1.55}" +
-    ".ee-confirm-msg b{color:var(--primary);font-weight:600}" +
-    ".ee-confirm-btns{display:flex;gap:10px}" +
-    ".ee-confirm-btn{flex:1;padding:12px 20px;border-radius:12px;border:none;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.2s}" +
-    ".ee-confirm-btn.cancel{background:rgba(255,255,255,0.08);color:#bbb}.ee-confirm-btn.cancel:hover{background:rgba(255,255,255,0.15);color:#fff}" +
-    ".ee-confirm-btn.confirm{background:linear-gradient(135deg,#d32f2f 0%,#b71c1c 100%);color:#fff}.ee-confirm-btn.confirm:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(211,47,47,0.4)}";
+    <div class="preview" aria-hidden="true">
+      <div class="mock">
+        <div class="m-head">
+          <div class="m-logo">🦊</div>
+          <div><b>Unfollowers</b><span>@hesabin · Son tarama az önce</span></div>
+          <div class="m-dots"><i></i><i></i><i></i></div>
+        </div>
+        <div class="m-stats">
+          <div class="m-stat"><b>842</b><span>Takip edilen</span></div>
+          <div class="m-stat hl"><b>127</b><span>Geri takip etmeyen</span></div>
+          <div class="m-stat"><b>3</b><span>Seçili</span></div>
+        </div>
+        <div class="m-tabs"><span class="on">Geri takip etmeyenler</span><span>Beyaz liste</span><span>Geçmiş</span></div>
+        <div class="m-list">
+          <div class="m-row sel"><div class="m-av" style="background:hsl(24 55% 34%)">k</div><div class="t"><b>kahve.notlari</b><span>Ece Yılmaz</span></div><div class="m-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4"><path d="m5 12 5 5L20 7"/></svg></div></div>
+          <div class="m-row"><div class="m-av" style="background:hsl(210 45% 32%)">m</div><div class="t"><b>mavi_gezgin <svg width="13" height="13" viewBox="0 0 24 24" fill="#3897f0"><circle cx="12" cy="12" r="10"/></svg></b><span>Mavi Gezgin</span></div><span class="m-star">★</span><div class="m-chk"></div></div>
+          <div class="m-row sel"><div class="m-av" style="background:hsl(150 40% 28%)">z</div><div class="t"><b>zeytin.studio</b><span>Mert Kaya</span></div><div class="m-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4"><path d="m5 12 5 5L20 7"/></svg></div></div>
+          <div class="m-row sel"><div class="m-av" style="background:hsl(280 35% 34%)">r</div><div class="t"><b>retro.music42</b><span>Selin Demir</span></div><div class="m-chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4"><path d="m5 12 5 5L20 7"/></svg></div></div>
+          <div class="m-row"><div class="m-av" style="background:hsl(350 45% 34%)">n</div><div class="t"><b>nar_mutfak 🔒</b><span>Zeynep Çelik</span></div><div class="m-chk"></div></div>
+        </div>
+        <div class="m-foot">
+          <div class="m-bar"><div><i></i></div><small>🚀 Hızlı · 2 / 3 · @zeytin.studio</small></div>
+          <div class="m-btn">3 kişiyi takipten çık</div>
+        </div>
+      </div>
+      <div class="float-badge"><span style="font-size:22px">⭐</span><div><b>Beyaz liste</b><span>Asla yanlışlıkla çıkarma</span></div></div>
+    </div>
+  </div>
+</header>
 
-    var style = document.createElement('style');
-    style.textContent = css;
-    document.head.appendChild(style);
+<section id="nasil">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Nasıl kullanılır</div>
+      <h2>Üç yol, bir dakikadan kısa</h2>
+      <p>Masaüstünde yer imi en pratik yöntem. Telefondan da kullanabilirsin.</p>
+    </div>
+    <div class="tabs reveal" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-pane="p-bm">🔖 Yer imi</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="p-con">⌨️ Konsol</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="p-mob">📱 Mobil</button>
+    </div>
 
-    if(!window.location.hostname.includes('instagram.com')){
-        var overlay = document.createElement('div');
-        overlay.className = 'ee-confirm-overlay';
-        overlay.innerHTML = '<div class="ee-confirm-box">' +
-            '<div class="ee-confirm-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>' +
-            '<div class="ee-confirm-title">Yanlış Web Sitesi</div>' +
-            '<div class="ee-confirm-msg">Bu araç sadece <b>Instagram</b> üzerinde çalışır.<br>Instagram\'ı şimdi açmak ister misiniz?</div>' +
-            '<div class="ee-confirm-btns">' +
-            '<button class="ee-confirm-btn cancel" id="ee-redir-cancel">İptal</button>' +
-            '<button class="ee-confirm-btn confirm" id="ee-redir-go" style="background:linear-gradient(135deg,#ff6b00 0%,#cc5500 100%);">Instagram\'a Git</button>' +
-            '</div></div>';
-        document.body.appendChild(overlay);
-        document.getElementById('ee-redir-cancel').onclick = function(){ overlay.remove(); };
-        document.getElementById('ee-redir-go').onclick = function(){ window.open('https://www.instagram.com', '_blank'); overlay.remove(); };
-        return;
+    <div class="panel-pane reveal" id="p-bm">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><h3>Sürükle</h3><p>Yukarıdaki <b>🦊 Unfollowers</b> butonunu yer imleri çubuğuna sürükleyip bırak.</p></div>
+        <div class="step"><div class="step-n">2</div><h3>Instagram'ı aç</h3><p>Bilgisayarda <b>instagram.com</b>'a gir ve hesabına giriş yap.</p></div>
+        <div class="step"><div class="step-n">3</div><h3>Tıkla</h3><p>Yer imine tıkla; panel sayfanın üstünde açılır. <b>Analizi başlat</b>'a bas.</p></div>
+        <div class="step"><div class="step-n">4</div><h3>Seç ve çık</h3><p>Listeden seç (Shift ile aralık seçebilirsin), hız modunu belirle ve onayla.</p></div>
+      </div>
+    </div>
+    <div class="panel-pane" id="p-con" hidden>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><h3>Kodu kopyala</h3><p><b>Konsol kodunu kopyala</b> butonuna bas.</p></div>
+        <div class="step"><div class="step-n">2</div><h3>Konsolu aç</h3><p>instagram.com'da <kbd>F12</kbd> veya <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> ile Console sekmesine geç.</p></div>
+        <div class="step"><div class="step-n">3</div><h3>Yapıştır</h3><p>Kodu yapıştır ve <kbd>Enter</kbd>'a bas. Chrome izin isterse <code style="font-family:JetBrains Mono,monospace;font-size:13px">allow pasting</code> yaz.</p></div>
+        <div class="step"><div class="step-n">4</div><h3>Kullan</h3><p>Panel açılır; tarama ve seçim yer imi yöntemiyle aynı.</p></div>
+      </div>
+      <p class="note"><button class="btn" data-copy="console" style="margin:0 auto">Konsol kodunu kopyala</button></p>
+    </div>
+    <div class="panel-pane" id="p-mob" hidden>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><h3>Bağlantıyı kopyala</h3><p>Aşağıdaki <b>Yer imi bağlantısını kopyala</b> butonuna bas.</p></div>
+        <div class="step"><div class="step-n">2</div><h3>Yer imi ekle</h3><p>Herhangi bir sayfayı yer imlerine ekle, adını <b>unf</b> yap ve adresini kopyaladığın metinle değiştir.</p></div>
+        <div class="step"><div class="step-n">3</div><h3>Instagram'a gir</h3><p>Tarayıcıda (uygulamada değil) <b>instagram.com</b>'u açıp giriş yap.</p></div>
+        <div class="step"><div class="step-n">4</div><h3>Çalıştır</h3><p>Adres çubuğuna <b>unf</b> yaz ve önerilen yer imine dokun. Panel tam ekran açılır.</p></div>
+      </div>
+      <p class="note"><button class="btn" data-copy="bookmarklet" style="margin:0 auto">🔗 Yer imi bağlantısını kopyala</button></p>
+    </div>
+  </div>
+</section>
+
+<section id="ozellikler">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Özellikler</div>
+      <h2>Liste çıkarmaktan fazlası</h2>
+      <p>Kimin seni takip etmediğini bulmak kolay. Önemli olan, yanlış kişiyi çıkarmadan ve hesabını riske atmadan yönetmek.</p>
+    </div>
+    <div class="features">
+      <div class="feat reveal"><div class="feat-ico">🔍</div><h3>Hızlı ve dayanıklı tarama</h3><p>Binlerce takip saniyeler içinde taranır. Bir yöntem çalışmazsa araç otomatik olarak alternatif yönteme geçer.</p></div>
+      <div class="feat reveal"><div class="feat-ico">⭐</div><h3>Beyaz liste <span class="new">YENİ</span></h3><p>Ünlüler, markalar, yakın arkadaşlar… Yıldızladığın hesaplar asla seçilmez. Listeyi dışa ve içe aktarabilirsin.</p></div>
+      <div class="feat reveal"><div class="feat-ico">☕</div><h3>Otomatik molalar <span class="new">YENİ</span></h3><p>Hızlı ve Güvenli modlar belirli aralıklarla mola verir. Instagram yavaşlatırsa araç bekleyip kaldığı yerden devam eder.</p></div>
+      <div class="feat reveal"><div class="feat-ico">🎛️</div><h3>Filtre, arama, sıralama</h3><p>Onaylı, gizli veya herkese açık hesapları filtrele; isimle ara; A→Z ya da onaylılar önce sırala. Shift ile toplu seç.</p></div>
+      <div class="feat reveal"><div class="feat-ico">📄</div><h3>CSV ve geçmiş <span class="new">YENİ</span></h3><p>Listeyi Excel'de açılabilen CSV olarak indir. Takipten çıkardıkların tarihleriyle geçmişte saklanır.</p></div>
+      <div class="feat reveal"><div class="feat-ico">🔐</div><h3>Gizlilik öncelikli</h3><p>Kod yalnızca senin tarayıcında, Instagram'ın kendi oturumunla çalışır. Hiçbir veri bize ya da başka bir sunucuya gitmez.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="hiz">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Hız modları</div>
+      <h2>Hız mı, güvenlik mi? Sen seç.</h2>
+      <p>Instagram kısa sürede çok fazla takipten çıkmayı sınırlayabilir. Az sayıda kişi için Turbo, büyük temizlikler için Güvenli mod idealdir.</p>
+    </div>
+    <div class="speeds">
+      <div class="speed reveal">
+        <h3>⚡ Turbo</h3>
+        <div class="ms">120–260 ms / kişi</div>
+        <ul><li>Mola yok, en hızlı mod</li><li>Birkaç düzine kişi için ideal</li><li>Büyük listelerde engel riski</li></ul>
+        <div class="risk high">Risk <div class="risk-bar"><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="speed rec reveal">
+        <span class="tag">Önerilen</span>
+        <h3>🚀 Hızlı</h3>
+        <div class="ms">0,4–0,8 sn / kişi</div>
+        <ul><li>Her 40 kişide 30 sn mola</li><li>Hız ve güvenlik dengesi</li><li>Çoğu kullanıcı için en iyisi</li></ul>
+        <div class="risk mid">Risk <div class="risk-bar"><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="speed reveal">
+        <h3>🛡️ Güvenli</h3>
+        <div class="ms">1,2–2,5 sn / kişi</div>
+        <ul><li>Her 15 kişide 90 sn mola</li><li>İnsan davranışına en yakın</li><li>Yüzlerce kişilik temizlikler için</li></ul>
+        <div class="risk low">Risk <div class="risk-bar"><i></i><i></i><i></i></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sss">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">SSS</div>
+      <h2>Sık sorulan sorular</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>Güvenli mi? Şifremi istiyor mu?</summary><p>Hayır, şifre istemez. Araç, Instagram'da zaten açık olan oturumunu kullanarak doğrudan Instagram'ın kendi sunucularıyla konuşur. Kodun tamamı açık kaynaktır; GitHub'da inceleyebilirsin.</p></details>
+      <details class="reveal"><summary>Hesabım engellenir mi?</summary><p>Instagram, kısa sürede çok sayıda takipten çıkmayı geçici olarak engelleyebilir (action block). Araç bunu algıladığında otomatik olarak bekler; üst üste olursa durur. Yüzlerce kişi çıkaracaksan <b>Güvenli</b> modu seç ve işlemi birkaç güne bölmeyi düşün.</p></details>
+      <details class="reveal"><summary>Yer imine tıklıyorum ama bir şey olmuyor.</summary><p>Yer imine <b>instagram.com</b> sekmesindeyken ve giriş yapmışken tıklaman gerekir. Hâlâ açılmıyorsa sayfayı yenileyip tekrar dene ya da Konsol yöntemini kullan. Bazı eklentiler (reklam engelleyiciler) yer imi kodlarını engelleyebilir.</p></details>
+      <details class="reveal"><summary>Tarama sonuçları kaydediliyor mu?</summary><p>Son tarama, beyaz liste ve geçmiş sadece senin tarayıcında (instagram.com'un yerel depolamasında) saklanır. Panelin <b>⋯</b> menüsünden istediğin an silebilirsin.</p></details>
+      <details class="reveal"><summary>Neden bazı kişiler "başarısız" görünüyor?</summary><p>Hesap kapatılmış, seni engellemiş ya da Instagram o an isteği reddetmiş olabilir. Daha sonra yeniden tarayıp tekrar deneyebilirsin.</p></details>
+      <details class="reveal"><summary>Instagram uygulamasında çalışır mı?</summary><p>Hayır; Instagram uygulaması yer imlerini çalıştırmaz. Telefonda <b>Chrome</b> veya <b>Safari</b> ile instagram.com'u açıp Mobil sekmesindeki adımları izle.</p></details>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <h2>Listeni temizlemeye hazır mısın?</h2>
+      <p>Önce demoyu dene, beğenirsen yer imini sürükle.</p>
+      <div class="alt-row">
+        <button class="btn primary" id="demo-btn-2">▶ Demoyu dene</button>
+        <a class="btn" href="#kur">🦊 Kuruluma git</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--tx2)">Yasal uyarı:</b> Bu proje eğitim ve kişisel kullanım amaçlıdır; Instagram veya Meta ile bağlantılı değildir. Kullanımdan doğabilecek hesap kısıtlamalarından geliştirici sorumlu tutulamaz.</p>
+    <p>© <span id="year"></span> <a href="https://efekanerdogan.com" target="_blank" rel="noopener">Efekan Erdoğan</a> · <a href="https://github.com/efekanerdogan/instagramunfollowers/blob/main/LICENSE" target="_blank" rel="noopener">MIT Lisansı</a></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Araç kaynak kodu: tool.js dosyasından `node build.mjs` ile buraya gömülür. Elle düzenlemeyin. -->
+<!-- TOOL:START -->
+<script type="text/plain" id="tool-src">
+(() => {
+'use strict';
+/* 🦊 EE Unfollowers v2 — Instagram'da geri takip etmeyenleri bulur ve takipten çıkarır.
+   Tamamen tarayıcıda çalışır; hiçbir veri üçüncü bir sunucuya gönderilmez. */
+
+const VERSION = '2.0.0';
+const APP_ID = '936619743392459';
+const QUERY_HASH = '3dec7e2c57367ef3da3d987d89f9dbc8';
+const DEMO = window.EE_UNF_DEMO === true;
+const KEY = (DEMO ? 'ee_unf_demo_' : 'ee_unf_') + 'v2_';
+
+const existing = document.getElementById('ee-root');
+if (existing) {
+  existing.classList.remove('ee-min');
+  existing.querySelector('.ee-panel').animate([{ transform: 'scale(.98)' }, { transform: 'scale(1)' }], { duration: 180 });
+  return;
+}
+
+const SPEEDS = {
+  turbo: { icon: '⚡', label: 'Turbo', min: 120, max: 260, every: 0, rest: 0, desc: '120–260 ms · mola yok · yüksek risk' },
+  fast: { icon: '🚀', label: 'Hızlı', min: 400, max: 800, every: 40, rest: 30000, desc: '0,4–0,8 sn · her 40 kişide 30 sn mola' },
+  safe: { icon: '🛡️', label: 'Güvenli', min: 1200, max: 2500, every: 15, rest: 90000, desc: '1,2–2,5 sn · her 15 kişide 90 sn mola' }
+};
+
+/* ---------- yardımcılar ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(KEY + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(KEY + k); } catch (e) {} }
+};
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const fmt = (n) => Number(n || 0).toLocaleString('tr-TR');
+const getCookie = (n) => { const m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : null; };
+const ago = (t) => {
+  const s = Math.max(1, Math.round((Date.now() - t) / 1000));
+  if (s < 60) return 'az önce';
+  if (s < 3600) return Math.round(s / 60) + ' dk önce';
+  if (s < 86400) return Math.round(s / 3600) + ' sa önce';
+  return Math.round(s / 86400) + ' gün önce';
+};
+const normUser = (u) => ({
+  id: String(u.id || u.pk_id || u.pk),
+  username: u.username || '',
+  full_name: u.full_name || '',
+  pic: u.profile_pic_url || '',
+  verified: !!u.is_verified,
+  private: !!u.is_private
+});
+
+/* ---------- Instagram API ---------- */
+class RateLimitError extends Error {}
+class AuthError extends Error {}
+
+const igHeaders = () => {
+  const h = { 'x-ig-app-id': APP_ID, 'x-requested-with': 'XMLHttpRequest', 'x-csrftoken': getCookie('csrftoken') || '' };
+  try { const c = sessionStorage.getItem('www-claim-v2'); if (c) h['x-ig-www-claim'] = c; } catch (e) {}
+  return h;
+};
+
+const getJSON = async (url) => {
+  const res = await fetch(url, { headers: igHeaders(), credentials: 'include' });
+  if (res.status === 429) throw new RateLimitError('429');
+  if (res.status === 401 || res.status === 403) throw new AuthError(String(res.status));
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  if (data && data.message === 'login_required') throw new AuthError('login_required');
+  if (data && (data.spam || data.message === 'feedback_required')) throw new RateLimitError('spam');
+  return data;
+};
+
+const API = {
+  viewerId() { return getCookie('ds_user_id'); },
+  async viewerInfo(uid) {
+    try { const d = await getJSON('/api/v1/users/' + uid + '/info/'); return d.user || null; } catch (e) { return null; }
+  },
+  /* Yöntem 1: GraphQL — "follows_viewer" alanı sayesinde tek listeyle sonuç verir. */
+  async scanGraphQL(uid, ctx) {
+    const following = [];
+    let after = null, more = true;
+    while (more) {
+      ctx.checkStop();
+      const vars = { id: uid, include_reel: false, fetch_mutual: false, first: 50, after };
+      const d = await ctx.retry(() => getJSON('/graphql/query/?query_hash=' + QUERY_HASH + '&variables=' + encodeURIComponent(JSON.stringify(vars))));
+      const edge = d && d.data && d.data.user && d.data.user.edge_follow;
+      if (!edge) throw new Error('GraphQL yanıtı beklenen biçimde değil');
+      if (edge.count) ctx.total = edge.count;
+      edge.edges.forEach((e) => following.push(Object.assign(normUser(e.node), { followsBack: !!e.node.follows_viewer })));
+      ctx.progress(following.length, 'Takip edilenler taranıyor');
+      more = edge.page_info.has_next_page;
+      after = edge.page_info.end_cursor;
+      if (more) await sleep(rand(220, 480));
     }
-
-    var html = '<div class="ee-header"><div class="ee-brand"><span class="ee-brand-text">🦊 UNFOLLOWERS</span></div><div class="ee-header-btns"><div class="ee-header-btn ee-fullscreen" title="Tam Ekran"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></div><div class="ee-header-btn ee-restore" title="Küçült"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg></div><div class="ee-header-btn ee-close" title="Kapat">×</div></div></div>' +
-    '<div class="ee-toolbar">' +
-    '<div class="filter-chip active" data-filter="verified">Onaylı</div><div class="filter-chip active" data-filter="private">Gizli</div><div class="filter-chip active" data-filter="public">Açık</div>' +
-    '<div style="width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 2px;"></div>' +
-    '<div class="speed-chip active" data-speed="turbo" title="70-150ms Süper Hızlı">⚡ Turbo</div>' +
-    '<div class="speed-chip" data-speed="fast" title="180-380ms Hızlı ve Dengeli">🚀 Hızlı</div>' +
-    '<div class="speed-chip" data-speed="safe" title="600-1000ms Klasik Güvenli Mod">🛡️ Güvenli</div>' +
-    '<input type="text" class="ee-search" placeholder="Ara..." disabled><div class="select-toggle">TÜMÜNÜ SEÇ</div></div>' +
-    '<div class="ee-list"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#666;text-align:center;"><svg style="margin-bottom:12px;opacity:0.4;" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><div style="font-size:13px;font-weight:500;">Hazır Bekleniyor...<br><span style="font-size:11px;color:#555;">Takipten çıkmayanları bulmak için analizi başlatın</span></div></div></div>' +
-    '<div class="ee-footer"><div class="ee-footer-row"><div class="stat-inline"><div class="stat-item"><h4 id="stat-found">0</h4><span>BULUNAN</span></div><div class="stat-item selected"><h4 id="stat-selected">0</h4><span>SEÇİLEN</span></div></div><button class="main-btn btn-orange" id="btn-scan">ANALİZİ BAŞLAT</button><button class="main-btn btn-danger" id="btn-process">SEÇİLENLERİ ÇIKAR</button></div><div class="ee-footer-row" style="margin-top:10px;"><div class="progress-wrap"><div class="progress-line"><div class="progress-fill"></div></div><div class="status-txt">⚡ Hız Modu: Turbo (Çok Hızlı) • Sistem Hazır</div></div></div></div>';
-    
-    var container = document.createElement('div');
-    container.id = 'ee-tool';
-    container.innerHTML = html;
-    document.body.appendChild(container);
-
-    var UI = {
-        close: container.querySelector('.ee-close'),
-        filters: container.querySelectorAll('.filter-chip'),
-        speedChips: container.querySelectorAll('.speed-chip'),
-        search: container.querySelector('.ee-search'),
-        selectToggle: container.querySelector('.select-toggle'),
-        list: container.querySelector('.ee-list'),
-        btnScan: container.querySelector('#btn-scan'),
-        btnProcess: container.querySelector('#btn-process'),
-        statFound: container.querySelector('#stat-found'),
-        statSelected: container.querySelector('#stat-selected'),
-        progress: container.querySelector('.progress-fill'),
-        status: container.querySelector('.status-txt'),
-        header: container.querySelector('.ee-header'),
-        btnFullscreen: container.querySelector('.ee-fullscreen'),
-        btnRestore: container.querySelector('.ee-restore')
+    return { following, nonFollowers: following.filter((u) => !u.followsBack) };
+  },
+  /* Yöntem 2: REST — takipçi ve takip listelerini ayrı ayrı çekip karşılaştırır. */
+  async scanREST(uid, ctx, info) {
+    const pull = async (kind, label, total) => {
+      const out = [];
+      let maxId = '';
+      do {
+        ctx.checkStop();
+        const d = await ctx.retry(() => getJSON('/api/v1/friendships/' + uid + '/' + kind + '/?count=100' + (maxId ? '&max_id=' + encodeURIComponent(maxId) : '')));
+        (d.users || []).forEach((u) => out.push(normUser(u)));
+        ctx.total = total;
+        ctx.progress(out.length, label);
+        maxId = d.next_max_id || '';
+        if (maxId) await sleep(rand(300, 650));
+      } while (maxId);
+      return out;
     };
+    const following = await pull('following', 'Takip edilenler taranıyor', info && info.following_count);
+    const followers = await pull('followers', 'Takipçiler taranıyor', info && info.follower_count);
+    const fset = new Set(followers.map((u) => u.id));
+    following.forEach((u) => { u.followsBack = fset.has(u.id); });
+    return { following, nonFollowers: following.filter((u) => !u.followsBack) };
+  },
+  async unfollow(id) {
+    const headers = Object.assign(igHeaders(), { 'content-type': 'application/x-www-form-urlencoded' });
+    const endpoints = ['/api/v1/friendships/destroy/' + id + '/', '/web/friendships/' + id + '/unfollow/'];
+    let last = { ok: false, reason: 'unknown' };
+    for (const ep of endpoints) {
+      let res, data = {};
+      try { res = await fetch(ep, { method: 'POST', headers, credentials: 'include', body: 'user_id=' + id }); }
+      catch (e) { last = { ok: false, reason: 'network' }; continue; }
+      try { data = await res.json(); } catch (e) {}
+      if (res.status === 429 || data.spam || data.message === 'feedback_required') return { ok: false, limited: true };
+      if (res.status === 401 || data.message === 'login_required') return { ok: false, auth: true };
+      if (res.ok && data.status !== 'fail') return { ok: true };
+      last = { ok: false, reason: 'HTTP ' + res.status };
+    }
+    return last;
+  }
+};
 
-    var toggleFullscreen = function() {
-        container.classList.toggle('fullscreen');
-    };
-    UI.btnFullscreen.onclick = toggleFullscreen;
-    UI.btnRestore.onclick = toggleFullscreen;
+/* ---------- Demo (sahte veri, ağ isteği yok) ---------- */
+if (DEMO) {
+  const A = ['kahve', 'mavi', 'gece', 'deniz', 'kuzey', 'ruzgar', 'pixel', 'atlas', 'zeytin', 'nar', 'bulut', 'lale', 'kum', 'yildiz', 'orman', 'tarcin', 'retro', 'mor'];
+  const B = ['sever', 'kus', 'yolcu', 'studio', 'notlari', 'daily', 'art', 'foto', 'gezgin', 'mutfak', 'design', 'tv', 'kitap', 'music', 'club', 'lab'];
+  const N = ['Ece', 'Mert', 'Zeynep', 'Can', 'Deniz', 'Elif', 'Kaan', 'Selin', 'Burak', 'Ada', 'Emre', 'İrem', 'Onur', 'Defne', 'Arda', 'Nil'];
+  const S = ['Yılmaz', 'Kaya', 'Demir', 'Şahin', 'Çelik', 'Aydın', 'Arslan', 'Doğan', 'Kılıç', 'Koç'];
+  const pick = (a) => a[rand(0, a.length - 1)];
+  const seen = new Set();
+  const fake = (i) => {
+    let un;
+    do { un = pick(A) + pick(['.', '_', '']) + pick(B) + (Math.random() < 0.4 ? rand(1, 99) : ''); } while (seen.has(un));
+    seen.add(un);
+    const brand = Math.random() < 0.12;
+    return { id: String(9000 + i), username: un, full_name: brand ? un.replace(/[._\d]/g, ' ').trim().replace(/\b\w/g, (c) => c.toUpperCase()) : pick(N) + ' ' + pick(S), pic: '', verified: brand, private: !brand && Math.random() < 0.35, followsBack: Math.random() < 0.72 };
+  };
+  const all = Array.from({ length: 248 }, (_, i) => fake(i));
+  API.viewerId = () => 'demo';
+  API.viewerInfo = async () => ({ username: 'demo.hesap', following_count: all.length, follower_count: 312 });
+  API.scanGraphQL = async (uid, ctx) => {
+    ctx.total = all.length;
+    for (let i = 0; i < all.length; i += 50) { ctx.checkStop(); await sleep(260); ctx.progress(Math.min(all.length, i + 50), 'Takip edilenler taranıyor (demo)'); }
+    const following = all.map((u) => Object.assign({}, u));
+    return { following, nonFollowers: following.filter((u) => !u.followsBack) };
+  };
+  API.unfollow = async () => { await sleep(rand(60, 160)); return Math.random() < 0.96 ? { ok: true } : { ok: false, reason: 'demo' }; };
+}
 
-    var dragState = { isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 };
-    
-    UI.header.addEventListener('mousedown', function(e) {
-        if (e.target.closest('.ee-header-btn')) return;
-        if (container.classList.contains('fullscreen')) return;
-        dragState.isDragging = true;
-        container.classList.add('dragging');
-        var rect = container.getBoundingClientRect();
-        dragState.startX = e.clientX;
-        dragState.startY = e.clientY;
-        dragState.initialX = rect.left + rect.width / 2;
-        dragState.initialY = rect.top + rect.height / 2;
-        e.preventDefault();
-    });
+/* ---------- Durum ---------- */
+const viewerId = API.viewerId();
+const S = {
+  tab: 'non',
+  users: [],
+  followingCount: 0,
+  scannedAt: 0,
+  selected: new Set(),
+  whitelist: store.get('whitelist', {}),
+  history: store.get('history', []),
+  filters: { verified: true, private: true, public: true },
+  sort: 'default',
+  query: '',
+  speed: SPEEDS[store.get('speed', 'fast')] ? store.get('speed', 'fast') : 'fast',
+  busy: null,
+  stop: false,
+  lastIndex: -1,
+  viewer: null
+};
+const cached = viewerId ? store.get('cache_' + viewerId, null) : null;
+if (cached && Array.isArray(cached.users)) {
+  S.users = cached.users;
+  S.followingCount = cached.followingCount || 0;
+  S.scannedAt = cached.t || 0;
+}
+const saveCache = () => { if (viewerId) store.set('cache_' + viewerId, { t: S.scannedAt, followingCount: S.followingCount, users: S.users }); };
 
-    document.addEventListener('mousemove', function(e) {
-        if (!dragState.isDragging) return;
-        var deltaX = e.clientX - dragState.startX;
-        var deltaY = e.clientY - dragState.startY;
-        var newX = dragState.initialX + deltaX;
-        var newY = dragState.initialY + deltaY;
-        container.style.left = newX + 'px';
-        container.style.top = newY + 'px';
-        container.style.transform = 'translate(-50%, -50%)';
-    });
+/* ---------- Stil ---------- */
+const CSS = `
+#ee-root{--ac:#ff6b00;--ac2:#ff8a3d;--acs:rgba(255,107,0,.14);--bg:#121010;--bg2:#1a1715;--bg3:#24201d;--ln:rgba(255,255,255,.08);--ln2:rgba(255,255,255,.14);--tx:#f6f3f0;--tx2:#a39b94;--tx3:#6f6862;--ok:#22c55e;--bad:#ef4444;--warn:#f59e0b;
+all:initial;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--tx);font-size:13px;line-height:1.4}
+:where(#ee-root) *,:where(#ee-root) *::before,:where(#ee-root) *::after{box-sizing:border-box;margin:0;padding:0;letter-spacing:normal}
+:where(#ee-root) :is(button,input,select,a,textarea){font:inherit;color:inherit}
+:where(#ee-root) button{cursor:pointer;background:none;border:0;text-align:inherit}
+#ee-root button:focus-visible,#ee-root input:focus-visible,#ee-root select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+#ee-root svg{display:block;flex-shrink:0}
+.ee-panel{position:fixed;z-index:2147483646;top:50%;left:50%;transform:translate(-50%,-50%);width:min(760px,calc(100vw - 24px));height:min(820px,calc(100vh - 24px));display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--ln2);border-radius:20px;box-shadow:0 40px 120px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.4);overflow:hidden;animation:ee-in .35s cubic-bezier(.16,1,.3,1)}
+@keyframes ee-in{from{opacity:0;transform:translate(-50%,-46%) scale(.98)}}
+.ee-panel.ee-full{top:0!important;left:0!important;transform:none!important;width:100vw;height:100vh;border-radius:0;animation:none}
+#ee-root.ee-min .ee-panel{display:none}
+.ee-pill{display:none;position:fixed;z-index:2147483646;right:20px;bottom:20px;align-items:center;gap:10px;padding:10px 16px 10px 12px;background:var(--bg);border:1px solid var(--ln2);border-radius:999px;box-shadow:0 18px 50px rgba(0,0,0,.5);font-weight:600}
+#ee-root.ee-min .ee-pill{display:flex}
+.ee-pill-ring{width:28px;height:28px;border-radius:50%;background:conic-gradient(var(--ac) var(--p,0%),var(--bg3) 0);display:grid;place-items:center}
+.ee-pill-ring::after{content:"🦊";width:22px;height:22px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:12px}
+.ee-head{display:flex;align-items:center;gap:12px;padding:14px 14px 14px 18px;border-bottom:1px solid var(--ln);cursor:grab;user-select:none;background:linear-gradient(180deg,rgba(255,107,0,.07),transparent)}
+.ee-full .ee-head{cursor:default}
+.ee-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--ac),#ff3d6e);display:grid;place-items:center;font-size:18px;box-shadow:0 6px 18px rgba(255,107,0,.35)}
+.ee-title{flex:1;min-width:0}
+.ee-title b{display:block;font-size:15px;font-weight:700}
+.ee-title span{display:block;font-size:12px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ee-hbtn{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--tx2);transition:.15s}
+.ee-hbtn:hover{background:var(--bg3);color:var(--tx)}
+.ee-hbtn.ee-x:hover{background:rgba(239,68,68,.16);color:var(--bad)}
+.ee-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 18px 4px}
+.ee-stat{background:var(--bg2);border:1px solid var(--ln);border-radius:12px;padding:10px 12px}
+.ee-stat b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.ee-stat span{font-size:11px;color:var(--tx2)}
+.ee-stat.ee-hl b{color:var(--ac2)}
+.ee-tabs{display:flex;gap:4px;padding:12px 18px 0;border-bottom:1px solid var(--ln);overflow-x:auto;scrollbar-width:none}
+.ee-tab{white-space:nowrap;flex-shrink:0;padding:9px 12px 11px;color:var(--tx2);font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;transition:.15s}
+.ee-tab:hover{color:var(--tx)}
+.ee-tab.on{color:var(--tx);border-bottom-color:var(--ac)}
+.ee-tab i{font-style:normal;font-size:11px;background:var(--bg3);color:var(--tx2);padding:1px 7px;border-radius:99px}
+.ee-tab.on i{background:var(--acs);color:var(--ac2)}
+.ee-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 18px}
+.ee-search{flex:1 1 180px;display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--ln);border-radius:10px;padding:0 10px;height:36px;color:var(--tx3)}
+.ee-search:focus-within{border-color:var(--ac)}
+.ee-search input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--tx);height:100%}
+.ee-search input::placeholder{color:var(--tx3)}
+.ee-select{height:36px;background:var(--bg2);border:1px solid var(--ln);border-radius:10px;color:var(--tx);padding:0 10px;outline:0}
+.ee-select option{background:var(--bg2)}
+.ee-chips{display:flex;gap:6px;flex-wrap:wrap}
+.ee-chip{height:30px;padding:0 11px;border-radius:99px;border:1px solid var(--ln2);color:var(--tx2);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.ee-chip:hover{border-color:var(--tx3)}
+.ee-chip.on{background:var(--acs);border-color:rgba(255,107,0,.5);color:var(--ac2)}
+.ee-chip.ee-ghost{border-style:dashed}
+.ee-spacer{flex:1}
+.ee-link{color:var(--ac2);font-weight:700;font-size:12px;padding:6px 4px}
+.ee-link:hover{text-decoration:underline}
+.ee-link:disabled{opacity:.4;cursor:default;text-decoration:none}
+.ee-list{flex:1;min-height:0;overflow-y:auto;padding:0 10px 10px;scrollbar-width:thin;scrollbar-color:#3a3430 transparent}
+.ee-row{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:12px;border:1px solid transparent;cursor:pointer;transition:background .12s;user-select:none}
+.ee-row:hover{background:var(--bg2)}
+.ee-row.sel{background:var(--acs);border-color:rgba(255,107,0,.35)}
+.ee-row.ee-nosel{cursor:default}
+.ee-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;object-fit:cover;background:var(--bg3);display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;text-transform:uppercase}
+.ee-info{flex:1;min-width:0}
+.ee-un{display:flex;align-items:center;gap:5px;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden}
+.ee-un span{overflow:hidden;text-overflow:ellipsis}
+.ee-fn{font-size:12px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.ee-ver{color:#3897f0}.ee-lock{color:var(--tx3)}
+.ee-act{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--tx3);opacity:0;transition:.15s;text-decoration:none}
+.ee-row:hover .ee-act,.ee-act.on,.ee-act:focus-visible{opacity:1}
+.ee-act:hover{background:var(--bg3);color:var(--tx)}
+.ee-act.on{color:#facc15}
+.ee-chk{width:22px;height:22px;border-radius:50%;border:2px solid #4a433e;display:grid;place-items:center;flex-shrink:0;transition:.15s;color:transparent}
+.ee-row.sel .ee-chk{background:var(--ac);border-color:var(--ac);color:#fff;box-shadow:0 0 0 4px rgba(255,107,0,.18)}
+.ee-time{font-size:11px;color:var(--tx3);white-space:nowrap}
+.ee-empty{height:100%;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;color:var(--tx2);padding:24px}
+.ee-empty .ee-big{font-size:38px}
+.ee-empty b{color:var(--tx);font-size:15px}
+.ee-empty p{max-width:360px;font-size:13px}
+.ee-more{display:block;margin:8px auto 0;padding:8px 14px;border-radius:10px;background:var(--bg2);color:var(--tx2);font-weight:600;font-size:12px}
+.ee-foot{border-top:1px solid var(--ln);padding:12px 18px 16px;background:var(--bg2);display:flex;flex-direction:column;gap:12px}
+.ee-speed{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ee-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:3px}
+.ee-seg button{padding:6px 12px;border-radius:7px;font-weight:600;font-size:12px;color:var(--tx2);transition:.15s}
+.ee-seg button.on{background:var(--bg3);color:var(--tx);box-shadow:0 1px 0 rgba(255,255,255,.06) inset}
+.ee-seg button[data-speed=turbo].on{color:var(--warn)}
+.ee-speed small{color:var(--tx3);font-size:11.5px}
+.ee-run{display:flex;align-items:center;gap:14px}
+.ee-prog{flex:1;min-width:0}
+.ee-bar{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.ee-bar div{height:100%;width:0;background:linear-gradient(90deg,var(--ac),#ff3d6e);border-radius:99px;transition:width .3s}
+.ee-bar.ee-indet div{width:30%!important;animation:ee-ind 1.1s ease-in-out infinite}
+@keyframes ee-ind{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+.ee-status{font-size:12px;color:var(--tx2);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.ee-btn{height:44px;padding:0 22px;border-radius:12px;font-weight:700;font-size:13.5px;color:#fff;background:linear-gradient(135deg,var(--ac),#e2560a);box-shadow:0 8px 22px rgba(255,107,0,.28);transition:.18s;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
+.ee-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(255,107,0,.4)}
+.ee-btn.ee-danger{background:linear-gradient(135deg,#ef4444,#c62828);box-shadow:0 8px 22px rgba(239,68,68,.28)}
+.ee-btn.ee-stop{background:var(--bg3);box-shadow:none;border:1px solid var(--ln2)}
+.ee-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.ee-modal{position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;animation:ee-fade .2s}
+@keyframes ee-fade{from{opacity:0}}
+.ee-box{width:min(420px,100%);background:var(--bg);border:1px solid var(--ln2);border-radius:20px;padding:24px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:ee-pop .25s cubic-bezier(.16,1,.3,1)}
+@keyframes ee-pop{from{transform:scale(.94);opacity:0}}
+.ee-box .ee-ico{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:var(--acs)}
+.ee-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.ee-box p{color:var(--tx2);font-size:13.5px;line-height:1.55;margin-bottom:20px}
+.ee-box p b{color:var(--tx)}
+.ee-box .ee-btns{display:flex;gap:10px}
+.ee-box .ee-btns button{flex:1;justify-content:center}
+.ee-btn2{height:44px;border-radius:12px;font-weight:600;background:var(--bg3);color:var(--tx);border:1px solid var(--ln2)}
+.ee-btn2:hover{background:#2e2925}
+.ee-toast{position:fixed;z-index:2147483647;left:50%;bottom:28px;transform:translateX(-50%);background:#f6f3f0;color:#121010;font-weight:600;padding:10px 16px;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.4);animation:ee-toast 2.6s forwards;pointer-events:none}
+@keyframes ee-toast{0%{opacity:0;transform:translate(-50%,10px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.ee-menu{position:relative}
+.ee-drop{position:absolute;right:0;top:calc(100% + 6px);min-width:210px;background:var(--bg2);border:1px solid var(--ln2);border-radius:12px;padding:6px;box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:3;display:none}
+.ee-drop.open{display:block}
+.ee-drop button{display:flex;width:100%;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--tx);font-size:13px}
+.ee-drop button:hover{background:var(--bg3)}
+.ee-drop hr{border:0;border-top:1px solid var(--ln);margin:5px 0}
+.ee-drop .ee-red{color:#f87171}
+@media (max-width:640px){
+.ee-panel{top:0!important;left:0!important;transform:none!important;width:100vw;height:100vh;height:100dvh;border-radius:0;animation:none;border:0}
+.ee-head{cursor:default}
+.ee-full-btn{display:none}
+.ee-stats{grid-template-columns:repeat(2,1fr);padding:12px 14px 2px}
+.ee-tabs,.ee-tools{padding-left:14px;padding-right:14px}
+.ee-tab{padding:9px 8px 11px;font-size:12.5px}
+.ee-foot{padding:12px 14px 14px}
+.ee-act{opacity:1}
+.ee-run{flex-direction:column;align-items:stretch}
+.ee-btn{justify-content:center}
+}`;
 
-    document.addEventListener('mouseup', function() {
-        if (dragState.isDragging) {
-            dragState.isDragging = false;
-            container.classList.remove('dragging');
+/* ---------- İkonlar ---------- */
+const I = {
+  search: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  min: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>',
+  full: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>',
+  close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  more: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+  check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>',
+  ver: '<svg class="ee-ver" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5 14.6 4l3.5-.4.9 3.4 3 1.9-1.4 3.1 1.4 3.1-3 1.9-.9 3.4-3.5-.4L12 22.5 9.4 20l-3.5.4L5 17l-3-1.9L3.4 12 2 8.9 5 7l.9-3.4 3.5.4zm-1.3 13.9 6-6-1.4-1.4-4.6 4.6-2.3-2.3-1.4 1.4z"/></svg>',
+  lock: '<svg class="ee-lock" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17 9V7A5 5 0 0 0 7 7v2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2zM9 7a3 3 0 0 1 6 0v2H9z"/></svg>',
+  star: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>',
+  starO: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>',
+  ext: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
+};
+
+const style = document.createElement('style');
+style.id = 'ee-style';
+style.textContent = CSS;
+document.head.appendChild(style);
+
+const root = document.createElement('div');
+root.id = 'ee-root';
+document.body.appendChild(root);
+
+const toast = (msg) => {
+  const t = document.createElement('div');
+  t.className = 'ee-toast';
+  t.textContent = msg;
+  root.appendChild(t);
+  setTimeout(() => t.remove(), 2700);
+};
+
+const modal = ({ icon = '⚠️', title, html, ok = 'Tamam', cancel = 'Vazgeç', danger = false }) => new Promise((resolve) => {
+  const m = document.createElement('div');
+  m.className = 'ee-modal';
+  m.innerHTML = '<div class="ee-box" role="dialog" aria-modal="true"><div class="ee-ico">' + icon + '</div><h3>' + esc(title) + '</h3><p>' + html + '</p><div class="ee-btns">' +
+    (cancel ? '<button class="ee-btn2" data-v="0">' + esc(cancel) + '</button>' : '') +
+    '<button class="ee-btn' + (danger ? ' ee-danger' : '') + '" data-v="1">' + esc(ok) + '</button></div></div>';
+  const done = (v) => { m.remove(); document.removeEventListener('keydown', onKey, true); resolve(v); };
+  const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); done(false); } };
+  m.addEventListener('click', (e) => { const b = e.target.closest('[data-v]'); if (b) done(b.dataset.v === '1'); else if (e.target === m) done(false); });
+  document.addEventListener('keydown', onKey, true);
+  root.appendChild(m);
+  m.querySelector('[data-v="1"]').focus();
+});
+
+/* ---------- Yanlış site ---------- */
+if (!DEMO && !/(^|\.)instagram\.com$/.test(location.hostname)) {
+  modal({ icon: '🦊', title: 'Instagram açık değil', html: 'Bu araç yalnızca <b>instagram.com</b> üzerinde, oturum açıkken çalışır. Instagram\'ı yeni sekmede açmak ister misin?', ok: 'Instagram\'ı aç' })
+    .then((go) => { if (go) window.open('https://www.instagram.com/', '_blank', 'noopener'); root.remove(); style.remove(); });
+  return;
+}
+
+/* ---------- İskelet ---------- */
+root.innerHTML = `
+<div class="ee-panel" role="dialog" aria-label="Unfollowers">
+  <div class="ee-head">
+    <div class="ee-logo">🦊</div>
+    <div class="ee-title"><b>Unfollowers${DEMO ? ' · Demo' : ''}</b><span class="ee-sub">Hazır</span></div>
+    <button class="ee-hbtn" data-a="minimize" title="Küçült">${I.min}</button>
+    <button class="ee-hbtn ee-full-btn" data-a="full" title="Tam ekran">${I.full}</button>
+    <button class="ee-hbtn ee-x" data-a="close" title="Kapat (Esc)">${I.close}</button>
+  </div>
+  <div class="ee-stats">
+    <div class="ee-stat"><b data-s="following">–</b><span>Takip edilen</span></div>
+    <div class="ee-stat ee-hl"><b data-s="non">–</b><span>Geri takip etmeyen</span></div>
+    <div class="ee-stat"><b data-s="sel">0</b><span>Seçili</span></div>
+    <div class="ee-stat"><b data-s="done">0</b><span>Bu oturumda çıkarılan</span></div>
+  </div>
+  <div class="ee-tabs" role="tablist">
+    <button class="ee-tab on" data-tab="non">Takip etmeyenler <i data-c="non">0</i></button>
+    <button class="ee-tab" data-tab="wl">Beyaz liste <i data-c="wl">0</i></button>
+    <button class="ee-tab" data-tab="hist">Geçmiş <i data-c="hist">0</i></button>
+  </div>
+  <div class="ee-tools">
+    <label class="ee-search">${I.search}<input type="search" placeholder="Kullanıcı adı veya isim ara…" autocomplete="off"></label>
+    <select class="ee-select" data-a="sort" title="Sırala">
+      <option value="default">Takip sırası</option>
+      <option value="az">A → Z</option>
+      <option value="za">Z → A</option>
+      <option value="verified">Onaylılar önce</option>
+      <option value="private">Gizliler önce</option>
+    </select>
+    <div class="ee-menu">
+      <button class="ee-hbtn" data-a="menu" title="Diğer işlemler">${I.more}</button>
+      <div class="ee-drop">
+        <button data-a="csv">⬇️ Listeyi CSV olarak indir</button>
+        <button data-a="copy">📋 Kullanıcı adlarını kopyala</button>
+        <hr>
+        <button data-a="wl-export">📤 Beyaz listeyi dışa aktar</button>
+        <button data-a="wl-import">📥 Beyaz liste içe aktar</button>
+        <hr>
+        <button data-a="clear-hist" class="ee-red">🗑️ Geçmişi temizle</button>
+        <button data-a="clear-cache" class="ee-red">♻️ Kayıtlı taramayı sil</button>
+      </div>
+    </div>
+    <div class="ee-chips ee-filter-row" style="width:100%">
+      <button class="ee-chip on" data-f="verified">${I.ver} Onaylı</button>
+      <button class="ee-chip on" data-f="private">${I.lock} Gizli</button>
+      <button class="ee-chip on" data-f="public">🌐 Herkese açık</button>
+      <span class="ee-spacer"></span>
+      <button class="ee-link" data-a="toggle-all">Tümünü seç</button>
+    </div>
+  </div>
+  <div class="ee-list" tabindex="-1"></div>
+  <div class="ee-foot">
+    <div class="ee-speed">
+      <div class="ee-seg" role="radiogroup" aria-label="Hız modu">
+        ${Object.keys(SPEEDS).map((k) => `<button data-speed="${k}" role="radio">${SPEEDS[k].icon} ${SPEEDS[k].label}</button>`).join('')}
+      </div>
+      <small class="ee-speed-desc"></small>
+    </div>
+    <div class="ee-run">
+      <div class="ee-prog"><div class="ee-bar"><div></div></div><div class="ee-status">Analizi başlatmak için butona bas.</div></div>
+      <button class="ee-btn" data-a="main">Analizi başlat</button>
+    </div>
+  </div>
+</div>
+<button class="ee-pill" data-a="restore"><span class="ee-pill-ring"></span><span class="ee-pill-txt">Unfollowers</span></button>`;
+
+const $ = (s) => root.querySelector(s);
+const $$ = (s) => Array.from(root.querySelectorAll(s));
+const UI = {
+  panel: $('.ee-panel'), head: $('.ee-head'), sub: $('.ee-sub'), list: $('.ee-list'), search: $('.ee-search input'),
+  sort: $('[data-a="sort"]'), drop: $('.ee-drop'), toggleAll: $('[data-a="toggle-all"]'), filterRow: $('.ee-filter-row'),
+  bar: $('.ee-bar'), fill: $('.ee-bar div'), status: $('.ee-status'), main: $('[data-a="main"]'),
+  speedDesc: $('.ee-speed-desc'), pill: $('.ee-pill'), pillTxt: $('.ee-pill-txt'), pillRing: $('.ee-pill-ring')
+};
+
+let sessionDone = 0;
+let renderLimit = 300;
+
+/* ---------- Görünüm ---------- */
+const setStatus = (txt, pct) => {
+  UI.status.textContent = txt;
+  UI.pillTxt.textContent = txt.length > 46 ? txt.slice(0, 45) + '…' : txt;
+  if (pct === null) { UI.bar.classList.add('ee-indet'); }
+  else if (pct !== undefined) {
+    UI.bar.classList.remove('ee-indet');
+    const p = Math.max(0, Math.min(100, pct)) + '%';
+    UI.fill.style.width = p;
+    UI.pillRing.style.setProperty('--p', p);
+  }
+};
+
+const avatar = (u) => {
+  const hue = [...u.username].reduce((a, c) => a + c.charCodeAt(0), 0) % 360;
+  const init = esc((u.username || '?').replace(/[^a-z0-9]/gi, '').charAt(0) || '?');
+  return u.pic
+    ? `<img class="ee-av" src="${esc(u.pic)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-init="${init}" data-hue="${hue}">`
+    : `<div class="ee-av" style="background:hsl(${hue} 45% 32%)">${init}</div>`;
+};
+
+const visibleUsers = () => {
+  const q = S.query.trim().toLowerCase().replace(/^@/, '');
+  const f = S.filters;
+  let list = S.users.filter((u) => {
+    if (S.whitelist[u.id]) return false;
+    const type = u.verified ? f.verified : u.private ? f.private : f.public;
+    return type && (!q || u.username.toLowerCase().includes(q) || u.full_name.toLowerCase().includes(q));
+  });
+  const by = (fn) => list.slice().sort(fn);
+  const az = (a, b) => a.username.localeCompare(b.username, 'tr');
+  if (S.sort === 'az') list = by(az);
+  else if (S.sort === 'za') list = by((a, b) => -az(a, b));
+  else if (S.sort === 'verified') list = by((a, b) => (b.verified - a.verified));
+  else if (S.sort === 'private') list = by((a, b) => (b.private - a.private));
+  return list;
+};
+
+const searchFilter = (arr) => {
+  const q = S.query.trim().toLowerCase().replace(/^@/, '');
+  return q ? arr.filter((u) => u.username.toLowerCase().includes(q) || (u.full_name || '').toLowerCase().includes(q)) : arr;
+};
+
+const empty = (big, title, text) => `<div class="ee-empty"><div class="ee-big">${big}</div><b>${title}</b><p>${text}</p></div>`;
+
+let currentVisible = [];
+const render = () => {
+  const wlCount = Object.keys(S.whitelist).length;
+  const nonCount = S.users.filter((u) => !S.whitelist[u.id]).length;
+  root.querySelector('[data-s="following"]').textContent = S.scannedAt ? fmt(S.followingCount) : '–';
+  root.querySelector('[data-s="non"]').textContent = S.scannedAt ? fmt(nonCount) : '–';
+  root.querySelector('[data-s="sel"]').textContent = fmt(S.selected.size);
+  root.querySelector('[data-s="done"]').textContent = fmt(sessionDone);
+  root.querySelector('[data-c="non"]').textContent = fmt(nonCount);
+  root.querySelector('[data-c="wl"]').textContent = fmt(wlCount);
+  root.querySelector('[data-c="hist"]').textContent = fmt(S.history.length);
+  $$('.ee-tab').forEach((t) => t.classList.toggle('on', t.dataset.tab === S.tab));
+  UI.filterRow.style.display = S.tab === 'non' ? '' : 'none';
+  UI.sort.style.display = S.tab === 'non' ? '' : 'none';
+
+  let html = '';
+  if (S.tab === 'non') {
+    currentVisible = visibleUsers();
+    if (!S.scannedAt) html = empty('🔍', S.busy === 'scan' ? 'Taranıyor…' : 'Henüz analiz yapılmadı', S.busy === 'scan' ? 'Takip listen sayfa sayfa okunuyor. Bu, takip ettiğin kişi sayısına göre biraz sürebilir.' : 'Aşağıdaki <b>Analizi başlat</b> butonuna bas. Takip ettiğin herkes kontrol edilir ve seni geri takip etmeyenler burada listelenir.');
+    else if (!S.users.length) html = empty('🎉', 'Herkes seni geri takip ediyor', 'Takip ettiğin hesapların tamamı seni de takip ediyor.');
+    else if (!currentVisible.length) html = empty('🫥', 'Sonuç yok', 'Arama veya filtrelere uyan kullanıcı bulunamadı.');
+    else {
+      html = currentVisible.slice(0, renderLimit).map((u, i) => `
+        <div class="ee-row${S.selected.has(u.id) ? ' sel' : ''}" data-id="${esc(u.id)}" data-i="${i}">
+          ${avatar(u)}
+          <div class="ee-info"><div class="ee-un"><span>${esc(u.username)}</span>${u.verified ? I.ver : ''}${u.private ? I.lock : ''}</div><div class="ee-fn">${esc(u.full_name) || '&nbsp;'}</div></div>
+          <button class="ee-act" data-a="wl" title="Beyaz listeye ekle (asla seçilmez)">${I.starO}</button>
+          <a class="ee-act" href="https://www.instagram.com/${encodeURIComponent(u.username)}/" target="_blank" rel="noopener" title="Profili aç">${I.ext}</a>
+          <div class="ee-chk">${I.check}</div>
+        </div>`).join('');
+      if (currentVisible.length > renderLimit) html += `<button class="ee-more" data-a="more">${fmt(currentVisible.length - renderLimit)} kişi daha göster</button>`;
+    }
+    const allSel = currentVisible.length > 0 && currentVisible.every((u) => S.selected.has(u.id));
+    UI.toggleAll.textContent = allSel ? 'Seçimi kaldır' : `Tümünü seç (${fmt(currentVisible.length)})`;
+    UI.toggleAll.disabled = !currentVisible.length || !!S.busy;
+  } else if (S.tab === 'wl') {
+    const wl = searchFilter(Object.values(S.whitelist));
+    html = !wl.length
+      ? empty('⭐', 'Beyaz liste boş', 'Takipten çıkmak istemediğin hesapların yanındaki yıldıza bas. Beyaz listedekiler hiçbir zaman seçilmez ve listeden gizlenir.')
+      : wl.map((u) => `
+        <div class="ee-row ee-nosel" data-id="${esc(u.id)}">
+          ${avatar(u)}
+          <div class="ee-info"><div class="ee-un"><span>${esc(u.username)}</span>${u.verified ? I.ver : ''}${u.private ? I.lock : ''}</div><div class="ee-fn">${esc(u.full_name) || '&nbsp;'}</div></div>
+          <button class="ee-act on" data-a="wl" title="Beyaz listeden çıkar">${I.star}</button>
+          <a class="ee-act" href="https://www.instagram.com/${encodeURIComponent(u.username)}/" target="_blank" rel="noopener" title="Profili aç">${I.ext}</a>
+        </div>`).join('');
+  } else {
+    const h = searchFilter(S.history);
+    html = !h.length
+      ? empty('🕓', 'Geçmiş boş', 'Takipten çıkardığın hesaplar tarih bilgisiyle burada tutulur (bu tarayıcıda, son 1000 kayıt).')
+      : h.slice(0, 1000).map((u) => `
+        <div class="ee-row ee-nosel">
+          ${avatar(u)}
+          <div class="ee-info"><div class="ee-un"><span>${esc(u.username)}</span></div><div class="ee-fn">${esc(u.full_name) || '&nbsp;'}</div></div>
+          <span class="ee-time">${ago(u.t)}</span>
+          <a class="ee-act" href="https://www.instagram.com/${encodeURIComponent(u.username)}/" target="_blank" rel="noopener" title="Profili aç">${I.ext}</a>
+        </div>`).join('');
+  }
+  UI.list.innerHTML = html;
+  renderFooter();
+};
+
+const renderFooter = () => {
+  $$('.ee-seg button').forEach((b) => { const on = b.dataset.speed === S.speed; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); b.disabled = S.busy === 'unfollow'; });
+  UI.speedDesc.textContent = SPEEDS[S.speed].desc;
+  const m = UI.main;
+  m.classList.remove('ee-danger', 'ee-stop');
+  m.disabled = !!S.busy && S.stop;
+  if (S.busy) { m.textContent = 'Durdur'; m.classList.add('ee-stop'); }
+  else if (S.selected.size) { m.textContent = fmt(S.selected.size) + ' kişiyi takipten çık'; m.classList.add('ee-danger'); }
+  else m.textContent = S.scannedAt ? 'Yeniden tara' : 'Analizi başlat';
+};
+
+const updateSub = () => {
+  const who = S.viewer && S.viewer.username ? '@' + S.viewer.username : '';
+  const when = S.scannedAt ? 'Son tarama ' + ago(S.scannedAt) : 'Henüz taranmadı';
+  UI.sub.textContent = [who, when, 'v' + VERSION].filter(Boolean).join(' · ');
+};
+
+/* ---------- İşlemler ---------- */
+const waitCountdown = async (sec, label) => {
+  for (let s = sec; s > 0; s--) {
+    if (S.stop) return false;
+    setStatus(label + ' · ' + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'));
+    await sleep(1000);
+  }
+  return !S.stop;
+};
+
+const scan = async () => {
+  if (!viewerId) {
+    await modal({ icon: '🔒', title: 'Oturum bulunamadı', html: 'Önce Instagram hesabına giriş yap, sayfayı yenile ve aracı tekrar çalıştır.', cancel: null });
+    return;
+  }
+  S.busy = 'scan'; S.stop = false; S.selected.clear(); S.tab = 'non';
+  setStatus('Hesap bilgileri alınıyor…', null);
+  render();
+  const info = S.viewer || await API.viewerInfo(viewerId);
+  if (info) { S.viewer = info; updateSub(); }
+  const ctx = {
+    total: info && info.following_count,
+    checkStop() { if (S.stop) throw new Error('STOP'); },
+    progress(n, label) {
+      const t = ctx.total || 0;
+      setStatus(label + ' · ' + fmt(n) + (t ? ' / ' + fmt(t) : ''), t ? (n / t) * 100 : null);
+    },
+    async retry(fn) {
+      for (let attempt = 0; ; attempt++) {
+        try { return await fn(); }
+        catch (e) {
+          if (!(e instanceof RateLimitError) || attempt >= 3) throw e;
+          const ok = await waitCountdown(60 * (attempt + 1), '⏳ Instagram yavaşlattı, bekleniyor');
+          if (!ok) throw new Error('STOP');
         }
-    });
+      }
+    }
+  };
+  try {
+    let result;
+    try { result = await API.scanGraphQL(viewerId, ctx); }
+    catch (e) {
+      if (e.message === 'STOP' || e instanceof AuthError) throw e;
+      console.warn('[Unfollowers] GraphQL başarısız, REST yöntemine geçiliyor:', e);
+      setStatus('Alternatif yöntem deneniyor…', null);
+      result = await API.scanREST(viewerId, ctx, info);
+    }
+    S.users = result.nonFollowers;
+    S.followingCount = result.following.length;
+    S.scannedAt = Date.now();
+    saveCache();
+    const n = S.users.filter((u) => !S.whitelist[u.id]).length;
+    setStatus('✅ Tarama bitti · ' + fmt(result.following.length) + ' hesap kontrol edildi, ' + fmt(n) + ' kişi seni geri takip etmiyor.', 100);
+  } catch (e) {
+    if (e.message === 'STOP') setStatus('Tarama durduruldu.', 0);
+    else if (e instanceof AuthError) setStatus('🔒 Oturum doğrulanamadı. Instagram\'a tekrar giriş yapıp sayfayı yenile.', 0);
+    else if (e instanceof RateLimitError) setStatus('⚠️ Instagram geçici olarak sınırladı. Birkaç dakika sonra tekrar dene.', 0);
+    else { console.error('[Unfollowers]', e); setStatus('❌ Tarama başarısız: ' + e.message, 0); }
+  } finally {
+    S.busy = null;
+    updateSub();
+    render();
+  }
+};
 
-    var STATE = {
-        users: [],
-        selectedIds: new Set(),
-        filters: { verified: true, private: true, public: true },
-        speedMode: 'turbo',
-        isScanning: false,
-        stopRequested: false
+const runUnfollow = async () => {
+  const queue = S.users.filter((u) => S.selected.has(u.id) && !S.whitelist[u.id]);
+  if (!queue.length) return;
+  const sp = SPEEDS[S.speed];
+  const turboWarn = S.speed === 'turbo' && queue.length > 50
+    ? '<br><br>⚠️ Turbo modda çok sayıda kişiyi hızlıca çıkarmak Instagram\'ın <b>işlem engeli</b> (action block) uygulamasına yol açabilir.' : '';
+  const ok = await modal({
+    icon: '👋', title: fmt(queue.length) + ' kişi takipten çıkarılsın mı?', danger: true, ok: 'Takipten çık',
+    html: 'Seçtiğin hesaplar <b>' + sp.icon + ' ' + sp.label + '</b> modunda (' + esc(sp.desc) + ') takipten çıkarılacak. İstediğin an durdurabilirsin.' + turboWarn
+  });
+  if (!ok) return;
+
+  S.busy = 'unfollow'; S.stop = false;
+  render();
+  let done = 0, failed = 0, limitHits = 0;
+  const total = queue.length;
+  const label = () => sp.icon + ' ' + fmt(done + failed) + ' / ' + fmt(total) + ' · ' + fmt(done) + ' çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '');
+  setStatus(label(), 0);
+
+  for (let i = 0; i < queue.length; i++) {
+    if (S.stop) break;
+    const u = queue[i];
+    if (S.whitelist[u.id] || !S.selected.has(u.id)) continue;
+    setStatus(label() + ' · @' + u.username, ((done + failed) / total) * 100);
+    const r = await API.unfollow(u.id);
+    if (r.ok) {
+      done++; sessionDone++; limitHits = 0;
+      S.selected.delete(u.id);
+      S.users = S.users.filter((x) => x.id !== u.id);
+      S.followingCount = Math.max(0, S.followingCount - 1);
+      S.history.unshift({ id: u.id, username: u.username, full_name: u.full_name, pic: u.pic, t: Date.now() });
+      if (S.history.length > 1000) S.history.length = 1000;
+    } else if (r.limited) {
+      limitHits++;
+      if (limitHits > 2) { setStatus('⛔ Instagram limit uyguladı. Birkaç saat ara verip tekrar dene. ' + label(), ((done + failed) / total) * 100); S.stop = true; break; }
+      const goOn = await waitCountdown(300 * limitHits, '⏳ Instagram limit uyguladı, otomatik bekleniyor');
+      if (!goOn) break;
+      i--;
+      continue;
+    } else if (r.auth) {
+      setStatus('🔒 Oturum düştü. Instagram\'a tekrar giriş yap.', ((done + failed) / total) * 100);
+      S.stop = true;
+      break;
+    } else {
+      failed++;
+      console.warn('[Unfollowers] @' + u.username + ' çıkarılamadı:', r.reason);
+    }
+    store.set('history', S.history);
+    if (i % 10 === 0) saveCache();
+    const top = UI.list.scrollTop;
+    render();
+    UI.list.scrollTop = top;
+    setStatus(label(), ((done + failed) / total) * 100);
+    if (i < queue.length - 1 && !S.stop) {
+      if (sp.every && done > 0 && r.ok && done % sp.every === 0) {
+        if (!(await waitCountdown(Math.round(sp.rest / 1000), '☕ Güvenlik molası'))) break;
+      } else await sleep(rand(sp.min, sp.max));
+    }
+  }
+  store.set('history', S.history);
+  saveCache();
+  const stopped = S.stop && done + failed < total;
+  S.busy = null; S.stop = false;
+  if (!/⛔|🔒/.test(UI.status.textContent)) setStatus((stopped ? '⏹️ Durduruldu · ' : '✅ Bitti · ') + fmt(done) + ' kişi takipten çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '') + '.', stopped ? undefined : 100);
+  render();
+  if (root.classList.contains('ee-min')) toast('Unfollowers: ' + fmt(done) + ' kişi takipten çıkarıldı');
+};
+
+const download = (name, text, type) => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name;
+  root.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+};
+
+const copyText = async (text) => {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    root.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy'); ta.remove(); return ok;
+  }
+};
+
+const currentRows = () => (S.tab === 'non' ? currentVisible : S.tab === 'wl' ? Object.values(S.whitelist) : S.history);
+
+const actions = {
+  minimize() { root.classList.add('ee-min'); },
+  restore() { root.classList.remove('ee-min'); },
+  full() { UI.panel.classList.toggle('ee-full'); UI.panel.style.left = UI.panel.style.top = ''; },
+  async close() {
+    if (S.busy === 'unfollow' && !(await modal({ icon: '⏹️', title: 'İşlem devam ediyor', html: 'Kapatırsan takipten çıkarma işlemi durdurulur.', ok: 'Durdur ve kapat', danger: true }))) return;
+    S.stop = true;
+    document.removeEventListener('keydown', onKey);
+    root.remove(); style.remove();
+  },
+  main() {
+    if (S.busy) { S.stop = true; setStatus('Durduruluyor…'); UI.main.disabled = true; return; }
+    if (S.selected.size) runUnfollow(); else scan();
+  },
+  menu() { UI.drop.classList.toggle('open'); },
+  more() { renderLimit += 500; render(); },
+  'toggle-all'() {
+    const allSel = currentVisible.every((u) => S.selected.has(u.id));
+    currentVisible.forEach((u) => (allSel ? S.selected.delete(u.id) : S.selected.add(u.id)));
+    render();
+  },
+  csv() {
+    const rows = currentRows();
+    if (!rows.length) return toast('Dışa aktarılacak kimse yok');
+    const q = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const lines = [['kullanici_adi', 'isim', 'onayli', 'gizli', 'profil'].join(',')].concat(rows.map((u) => [q(u.username), q(u.full_name), u.verified ? 1 : 0, u.private ? 1 : 0, q('https://www.instagram.com/' + u.username + '/')].join(',')));
+    download('unfollowers-' + S.tab + '-' + new Date().toISOString().slice(0, 10) + '.csv', '﻿' + lines.join('\n'), 'text/csv;charset=utf-8');
+    toast(fmt(rows.length) + ' satır indirildi');
+  },
+  async copy() {
+    const rows = currentRows();
+    if (!rows.length) return toast('Kopyalanacak kimse yok');
+    toast((await copyText(rows.map((u) => '@' + u.username).join('\n'))) ? fmt(rows.length) + ' kullanıcı adı kopyalandı' : 'Kopyalanamadı');
+  },
+  'wl-export'() {
+    const list = Object.values(S.whitelist);
+    if (!list.length) return toast('Beyaz liste boş');
+    download('unfollowers-beyaz-liste.json', JSON.stringify(list, null, 2), 'application/json');
+  },
+  'wl-import'() {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = '.json,application/json';
+    inp.onchange = async () => {
+      try {
+        const arr = JSON.parse(await inp.files[0].text());
+        let n = 0;
+        (Array.isArray(arr) ? arr : []).forEach((u) => { if (u && u.id && u.username) { S.whitelist[String(u.id)] = normUser(Object.assign({}, u, { profile_pic_url: u.pic })); n++; } });
+        store.set('whitelist', S.whitelist);
+        toast(fmt(n) + ' hesap beyaz listeye eklendi');
+        render();
+      } catch (e) { toast('Dosya okunamadı'); }
     };
-    
-    var ICONS = {
-        verified: '<svg class="badge badge-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 12.17l7.59-7.59L19 6l-9 11z"/></svg>',
-        private: '<svg class="badge badge-private" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H8.9V6z"/></svg>'
-    };
+    inp.click();
+  },
+  async 'clear-hist'() {
+    if (!(await modal({ icon: '🗑️', title: 'Geçmiş silinsin mi?', html: 'Bu tarayıcıdaki takipten çıkarma geçmişi silinir. Instagram hesabın etkilenmez.', ok: 'Sil', danger: true }))) return;
+    S.history = []; store.set('history', []); render();
+  },
+  async 'clear-cache'() {
+    if (S.busy) return;
+    S.users = []; S.scannedAt = 0; S.followingCount = 0; S.selected.clear();
+    if (viewerId) store.del('cache_' + viewerId);
+    setStatus('Kayıtlı tarama silindi.', 0);
+    updateSub(); render();
+  }
+};
 
-    var getSpeedDelay = function() {
-        if (STATE.speedMode === 'turbo') {
-            return Math.floor(Math.random() * 80) + 70;
-        } else if (STATE.speedMode === 'fast') {
-            return Math.floor(Math.random() * 200) + 180;
-        } else {
-            return Math.floor(Math.random() * 400) + 600;
-        }
-    };
+/* ---------- Olaylar ---------- */
+root.addEventListener('click', (e) => {
+  const tab = e.target.closest('.ee-tab');
+  if (tab) { S.tab = tab.dataset.tab; renderLimit = 300; UI.list.scrollTop = 0; render(); return; }
+  const chip = e.target.closest('[data-f]');
+  if (chip) { const k = chip.dataset.f; S.filters[k] = !S.filters[k]; chip.classList.toggle('on', S.filters[k]); render(); return; }
+  const sp = e.target.closest('[data-speed]');
+  if (sp && !S.busy) { S.speed = sp.dataset.speed; store.set('speed', S.speed); renderFooter(); return; }
+  if (!e.target.closest('.ee-menu')) UI.drop.classList.remove('open');
+  const act = e.target.closest('[data-a]');
+  if (act && act.tagName !== 'SELECT') {
+    const name = act.dataset.a;
+    if (name === 'wl') {
+      e.stopPropagation();
+      const id = act.closest('.ee-row').dataset.id;
+      if (S.whitelist[id]) { delete S.whitelist[id]; toast('Beyaz listeden çıkarıldı'); }
+      else { const u = S.users.find((x) => x.id === id); if (u) { S.whitelist[id] = { id: u.id, username: u.username, full_name: u.full_name, pic: u.pic, verified: u.verified, private: u.private }; S.selected.delete(id); toast('⭐ @' + u.username + ' beyaz listeye eklendi'); } }
+      store.set('whitelist', S.whitelist);
+      render();
+      return;
+    }
+    if (act.closest('.ee-drop')) UI.drop.classList.remove('open');
+    if (actions[name]) { actions[name](); return; }
+  }
+  if (e.target.closest('a')) return;
+  const row = e.target.closest('.ee-row:not(.ee-nosel)');
+  if (row && S.busy !== 'unfollow') {
+    const id = row.dataset.id, idx = +row.dataset.i;
+    const willSelect = !S.selected.has(id);
+    if (e.shiftKey && S.lastIndex >= 0) {
+      const [a, b] = [Math.min(S.lastIndex, idx), Math.max(S.lastIndex, idx)];
+      currentVisible.slice(a, b + 1).forEach((u) => (willSelect ? S.selected.add(u.id) : S.selected.delete(u.id)));
+    } else if (willSelect) S.selected.add(id); else S.selected.delete(id);
+    S.lastIndex = idx;
+    const top = UI.list.scrollTop;
+    render();
+    UI.list.scrollTop = top;
+  }
+});
 
-    var getSpeedLabel = function() {
-        if (STATE.speedMode === 'turbo') return '⚡ Turbo (Çok Hızlı)';
-        if (STATE.speedMode === 'fast') return '🚀 Hızlı (Önerilen)';
-        return '🛡️ Güvenli Mod';
-    };
+UI.list.addEventListener('error', (e) => {
+  const img = e.target;
+  if (img.tagName !== 'IMG') return;
+  const d = document.createElement('div');
+  d.className = 'ee-av';
+  d.style.background = 'hsl(' + img.dataset.hue + ' 45% 32%)';
+  d.textContent = img.dataset.init;
+  img.replaceWith(d);
+}, true);
 
-    var sleep = function(ms) { return new Promise(function(r) { setTimeout(r, ms) }); };
-    var getCookie = function(n) { var m = ('; ' + document.cookie).split('; ' + n + '='); if(m.length == 2) return m.pop().split(';').shift(); return null; };
+let searchT;
+UI.search.addEventListener('input', () => { clearTimeout(searchT); searchT = setTimeout(() => { S.query = UI.search.value; renderLimit = 300; S.lastIndex = -1; render(); }, 120); });
+UI.sort.addEventListener('change', () => { S.sort = UI.sort.value; S.lastIndex = -1; render(); });
 
-    var getCsrfToken = function() {
-        var match = document.cookie.match(/csrftoken=([^;]+)/);
-        if (match && match[1]) return match[1];
-        if (window._sharedData && window._sharedData.config && window._sharedData.config.csrf_token) {
-            return window._sharedData.config.csrf_token;
-        }
-        var cookieToken = getCookie('csrftoken');
-        if (cookieToken) return cookieToken;
-        return '';
-    };
+const onKey = (e) => {
+  if (e.key === 'Escape' && !root.querySelector('.ee-modal')) {
+    if (UI.drop.classList.contains('open')) UI.drop.classList.remove('open');
+    else if (!root.classList.contains('ee-min')) actions.minimize();
+  }
+};
+document.addEventListener('keydown', onKey);
 
-    var unfollowUser = async function(userId) {
-        var token = getCsrfToken();
-        var headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': token,
-            'X-IG-App-ID': '936619743392459',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': '*/*'
-        };
-
-        try {
-            var res = await fetch('/api/v1/web/friendships/' + userId + '/unfollow/', {
-                method: 'POST',
-                headers: headers,
-                credentials: 'include',
-                body: 'user_id=' + userId
-            });
-            
-            // Eğer yeni endpoint 404 veya 400 verirse eski endpointi dene
-            if (!res.ok) {
-                res = await fetch('/api/v1/friendships/destroy/' + userId + '/', {
-                    method: 'POST',
-                    headers: headers,
-                    credentials: 'include',
-                    body: 'user_id=' + userId
-                });
-            }
-
-            var text = await res.text();
-            var data = {};
-            try { data = JSON.parse(text); } catch(e) {}
-            
-            if (res.ok || res.status === 200) {
-                if (data.status === 'fail') {
-                    console.warn("Unfollow başarısız (fail):", data);
-                    return { success: false, status: res.status };
-                }
-                return { success: true };
-            }
-            
-            if (res.status === 429 || data.spam) {
-                console.warn("Spam veya limit algılandı:", data);
-                return { success: false, spam: true, status: res.status };
-            }
-            console.warn("Unfollow başarısız (" + res.status + "):", data);
-            return { success: false, status: res.status };
-        } catch(e) {
-            console.error("Unfollow error:", e);
-            return { success: false, error: e.message };
-        }
-    };
-
-    var customConfirm = function(message) {
-        return new Promise(function(resolve) {
-            var overlay = document.createElement('div');
-            overlay.className = 'ee-confirm-overlay';
-            overlay.innerHTML = '<div class="ee-confirm-box">' +
-                '<div class="ee-confirm-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>' +
-                '<div class="ee-confirm-title">Onaylıyor musunuz?</div>' +
-                '<div class="ee-confirm-msg">' + message + '</div>' +
-                '<div class="ee-confirm-btns">' +
-                '<button class="ee-confirm-btn cancel">Vazgeç</button>' +
-                '<button class="ee-confirm-btn confirm">Onayla ve Çıkar</button>' +
-                '</div></div>';
-            document.body.appendChild(overlay);
-
-            overlay.querySelector('.ee-confirm-btn.cancel').onclick = function() {
-                overlay.remove();
-                resolve(false);
-            };
-            overlay.querySelector('.ee-confirm-btn.confirm').onclick = function() {
-                overlay.remove();
-                resolve(true);
-            };
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) {
-                    overlay.remove();
-                    resolve(false);
-                }
-            });
-        });
-    };
-
-    var getVisibleUsers = function() {
-        var term = UI.search.value.toLowerCase();
-        return STATE.users.filter(function(u) {
-            var matchesText = u.username.toLowerCase().includes(term) || (u.full_name||"").toLowerCase().includes(term);
-            var matchesType = false;
-            if (u.is_verified && STATE.filters.verified) matchesType = true;
-            else if (u.is_private && STATE.filters.private) matchesType = true;
-            else if (!u.is_verified && !u.is_private && STATE.filters.public) matchesType = true;
-            return matchesText && matchesType;
-        });
-    };
-
-    var filterAndRender = function() {
-        var filtered = getVisibleUsers();
-        UI.list.innerHTML = "";
-        if(filtered.length === 0 && !STATE.isScanning) { UI.list.innerHTML = '<div style="text-align:center;margin-top:35px;color:#666;">Kriterlere uygun kullanıcı bulunamadı.</div>'; return; }
-        filtered.forEach(function(u) {
-            var el = document.createElement('div');
-            var isSel = STATE.selectedIds.has(u.id);
-            el.className = 'user-card ' + (isSel ? 'selected' : '');
-            el.onclick = function() { toggleSelection(u.id, el); };
-            var badgesHTML = "";
-            if(u.is_verified) badgesHTML += " " + ICONS.verified;
-            if(u.is_private) badgesHTML += " " + ICONS.private;
-            el.innerHTML = '<div class="u-avatar-box"><img src="' + u.profile_pic_url + '" class="u-avatar"></div>' +
-            '<div class="u-info"><div class="u-name">' + u.username + ' ' + badgesHTML + '</div><div class="u-sub">' + (u.full_name || "") + '</div></div><div class="u-select-btn"></div>';
-            UI.list.appendChild(el);
-        });
-        UI.statFound.innerText = STATE.users.length; UI.statSelected.innerText = STATE.selectedIds.size;
-        
-        if(filtered.length > 0 && filtered.every(function(u) { return STATE.selectedIds.has(u.id); })) { UI.selectToggle.innerText = "SEÇİMİ KALDIR"; } 
-        else { UI.selectToggle.innerText = "TÜMÜNÜ SEÇ"; }
-
-        if(STATE.selectedIds.size > 0) { UI.btnScan.style.display = 'none'; UI.btnProcess.style.display = 'block'; UI.btnProcess.innerText = STATE.selectedIds.size + " KİŞİYİ ÇIKAR"; } 
-        else if (!STATE.isScanning) { UI.btnScan.style.display = 'block'; UI.btnProcess.style.display = 'none'; }
-    };
-
-    var toggleSelection = function(id, el) { if(STATE.selectedIds.has(id)) { STATE.selectedIds.delete(id); } else { STATE.selectedIds.add(id); } filterAndRender(); };
-    UI.close.onclick = function() { container.remove(); };
-    
-    UI.filters.forEach(function(btn) {
-        btn.onclick = function() {
-            var key = btn.dataset.filter; var willBeActive = !STATE.filters[key]; STATE.filters[key] = willBeActive;
-            if(willBeActive) btn.classList.add('active'); else btn.classList.remove('active');
-            filterAndRender();
-        };
-    });
-
-    UI.speedChips.forEach(function(btn) {
-        btn.onclick = function() {
-            UI.speedChips.forEach(function(c){ c.classList.remove('active'); });
-            btn.classList.add('active');
-            STATE.speedMode = btn.dataset.speed;
-            UI.status.innerText = getSpeedLabel() + " seçildi • Hazır";
-        };
-    });
-
-    UI.search.oninput = filterAndRender;
-    UI.selectToggle.onclick = function() {
-        var visibleUsers = getVisibleUsers();
-        if(visibleUsers.length === 0) return;
-        var allVisibleSelected = visibleUsers.every(function(u) { return STATE.selectedIds.has(u.id); });
-        if(allVisibleSelected) { visibleUsers.forEach(function(u) { STATE.selectedIds.delete(u.id); }); } 
-        else { visibleUsers.forEach(function(u) { STATE.selectedIds.add(u.id); }); }
-        filterAndRender();
-    };
-
-    UI.btnScan.onclick = async function() {
-        STATE.isScanning = true; UI.btnScan.disabled = true; UI.search.disabled = true; STATE.users = []; STATE.selectedIds.clear();
-        UI.status.innerText = "Veriler hızlıca taranıyor...";
-        try {
-            var userId = getCookie('ds_user_id'); if(!userId) throw new Error("Giriş yapın.");
-            var hasNext = true, cursor = null, count = 0; var queryHash = '3dec7e2c57367ef3da3d987d89f9dbc8';
-            while(hasNext) {
-                var url = 'https://www.instagram.com/graphql/query/?query_hash=' + queryHash + '&variables=' + encodeURIComponent(JSON.stringify({ id: userId, first: 50, after: cursor }));
-                var res = await fetch(url, { headers: { 'x-ig-app-id': '936619743392459' }, credentials: 'include' }).then(function(r) { return r.json(); });
-                var data = res.data.user.edge_follow;
-                hasNext = data.page_info.has_next_page; cursor = data.page_info.end_cursor;
-                data.edges.forEach(function(item) { if(!item.node.follows_viewer) STATE.users.push(item.node); });
-                count += data.edges.length; UI.status.innerText = count + " kişi kontrol edildi..."; UI.progress.style.width = '50%';
-                await sleep(Math.random() * 180 + 120);
-            }
-            UI.progress.style.width = '100%'; UI.status.innerText = "Tarama Tamamlandı."; UI.search.disabled = false; filterAndRender();
-        } catch(e) { console.error(e); UI.status.innerText = e.message; } 
-        finally { STATE.isScanning = false; UI.btnScan.disabled = false; }
-    };
-
-    UI.btnProcess.onclick = async function() {
-        var total = STATE.selectedIds.size;
-        var speedDesc = getSpeedLabel();
-        var confirmed = await customConfirm('Seçili <b>' + total + '</b> kullanıcı <b>' + speedDesc + '</b> ile takipten çıkarılacak.');
-        if(!confirmed) return;
-        STATE.stopRequested = false; UI.btnProcess.innerText = "DURDUR"; UI.btnProcess.style.background = "#2a2420"; UI.btnProcess.onclick = function() { STATE.stopRequested = true; };
-        
-        var processed = 0;
-        var successCount = 0;
-        var failCount = 0;
-        var usersToUn = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id); });
-
-        for(var i = 0; i < usersToUn.length; i++) {
-            var user = usersToUn[i];
-            if(STATE.stopRequested) { UI.status.innerText = "İşlem durduruldu."; break; }
-            UI.status.innerText = "Çıkarılıyor (" + speedDesc + "): " + user.username + " (" + (processed+1) + "/" + total + ")";
-
-            var res = await unfollowUser(user.id);
-            if (res && res.success) {
-                successCount++;
-                STATE.selectedIds.delete(user.id);
-            } else {
-                failCount++;
-                if (res && res.spam) {
-                    UI.status.innerText = "⚠️ Instagram spam koruması (spam: true) algılandı! Birkaç dakika dinlendirin.";
-                    break;
-                }
-            }
-            processed++;
-            UI.progress.style.width = (processed / total * 100) + '%';
-
-            if (processed < total) {
-                var delay = (STATE.speedMode === 'turbo') ? (Math.floor(Math.random() * 80) + 120) : ((STATE.speedMode === 'fast') ? (Math.floor(Math.random() * 150) + 250) : 600);
-                await sleep(delay);
-            }
-        }
-        STATE.users = STATE.users.filter(function(u) { return STATE.selectedIds.has(u.id) || !usersToUn.find(function(x) { return x.id === u.id && !STATE.selectedIds.has(x.id); }); }); 
-        UI.btnProcess.style.background = "";
-        UI.status.innerText = "Tamamlandı: " + successCount + " çıkarıldı" + (failCount > 0 ? " (" + failCount + " başarısız)" : "");
-        filterAndRender();
-    };
+/* Sürükle-taşı (başlıktan) */
+(() => {
+  let drag = null;
+  UI.head.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0 || e.target.closest('button') || UI.panel.classList.contains('ee-full') || window.innerWidth <= 640) return;
+    const r = UI.panel.getBoundingClientRect();
+    drag = { x: e.clientX, y: e.clientY, cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+    UI.head.setPointerCapture(e.pointerId);
+    UI.head.style.cursor = 'grabbing';
+  });
+  UI.head.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    UI.panel.style.left = Math.max(80, Math.min(window.innerWidth - 80, drag.cx + e.clientX - drag.x)) + 'px';
+    UI.panel.style.top = Math.max(40, Math.min(window.innerHeight - 40, drag.cy + e.clientY - drag.y)) + 'px';
+  });
+  const end = () => { drag = null; UI.head.style.cursor = ''; };
+  UI.head.addEventListener('pointerup', end);
+  UI.head.addEventListener('pointercancel', end);
+  UI.head.addEventListener('dblclick', (e) => { if (!e.target.closest('button')) actions.full(); });
 })();
-</textarea>
 
-    <script>
-        // Copy Functionality
-        const copyBtn = document.getElementById('copyBtn');
-        const codeArea = document.getElementById('code-area');
-        const successMsg = document.getElementById('success-msg');
+window.addEventListener('beforeunload', (e) => { if (S.busy === 'unfollow') { e.preventDefault(); e.returnValue = ''; } });
 
-        copyBtn.addEventListener('click', () => {
-            codeArea.select();
-            document.execCommand('copy');
-            successMsg.classList.add('show');
-            setTimeout(() => { successMsg.classList.remove('show'); }, 3500);
-        });
+/* ---------- Başlat ---------- */
+updateSub();
+render();
+if (S.scannedAt) setStatus('Kayıtlı tarama yüklendi (' + ago(S.scannedAt) + '). Güncel sonuç için yeniden tara.', 100);
+if (viewerId) API.viewerInfo(viewerId).then((info) => { if (info) { S.viewer = info; updateSub(); } });
+})();
+</script>
+<script type="text/plain" id="tool-min">(()=>{"use strict";const e=!0===window.EE_UNF_DEMO,t=(e?"ee_unf_demo_":"ee_unf_")+"v2_",a=document.getElementById("ee-root");if(a)return a.classList.remove("ee-min"),void a.querySelector(".ee-panel").animate([{transform:"scale(.98)"},{transform:"scale(1)"}],{duration:180});const n={turbo:{icon:"⚡",label:"Turbo",min:120,max:260,every:0,rest:0,desc:"120–260 ms · mola yok · yüksek risk"},fast:{icon:"🚀",label:"Hızlı",min:400,max:800,every:40,rest:3e4,desc:"0,4–0,8 sn · her 40 kişide 30 sn mola"},safe:{icon:"🛡️",label:"Güvenli",min:1200,max:2500,every:15,rest:9e4,desc:"1,2–2,5 sn · her 15 kişide 90 sn mola"}},i={get(e,a){try{const n=localStorage.getItem(t+e);return n?JSON.parse(n):a}catch(e){return a}},set(e,a){try{localStorage.setItem(t+e,JSON.stringify(a))}catch(e){}},del(e){try{localStorage.removeItem(t+e)}catch(e){}}},r=e=>String(e??"").replace(/[&<>"']/g,e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e])),o=(e,t)=>Math.floor(Math.random()*(t-e+1))+e,s=e=>new Promise(t=>setTimeout(t,e)),l=e=>Number(e||0).toLocaleString("tr-TR"),d=e=>{const t=document.cookie.match(new RegExp("(?:^|; )"+e+"=([^;]*)"));return t?decodeURIComponent(t[1]):null},c=e=>{const t=Math.max(1,Math.round((Date.now()-e)/1e3));return t<60?"az önce":t<3600?Math.round(t/60)+" dk önce":t<86400?Math.round(t/3600)+" sa önce":Math.round(t/86400)+" gün önce"},p=e=>({id:String(e.id||e.pk_id||e.pk),username:e.username||"",full_name:e.full_name||"",pic:e.profile_pic_url||"",verified:!!e.is_verified,private:!!e.is_private});class u extends Error{}class g extends Error{}const h=()=>{const e={"x-ig-app-id":"936619743392459","x-requested-with":"XMLHttpRequest","x-csrftoken":d("csrftoken")||""};try{const t=sessionStorage.getItem("www-claim-v2");t&&(e["x-ig-www-claim"]=t)}catch(e){}return e},b=async e=>{const t=await fetch(e,{headers:h(),credentials:"include"});if(429===t.status)throw new u("429");if(401===t.status||403===t.status)throw new g(String(t.status));if(!t.ok)throw new Error("HTTP "+t.status);const a=await t.json();if(a&&"login_required"===a.message)throw new g("login_required");if(a&&(a.spam||"feedback_required"===a.message))throw new u("spam");return a},f={viewerId:()=>d("ds_user_id"),async viewerInfo(e){try{return(await b("/api/v1/users/"+e+"/info/")).user||null}catch(e){return null}},async scanGraphQL(e,t){const a=[];let n=null,i=!0;for(;i;){t.checkStop();const r={id:e,include_reel:!1,fetch_mutual:!1,first:50,after:n},l=await t.retry(()=>b("/graphql/query/?query_hash=3dec7e2c57367ef3da3d987d89f9dbc8&variables="+encodeURIComponent(JSON.stringify(r)))),d=l&&l.data&&l.data.user&&l.data.user.edge_follow;if(!d)throw new Error("GraphQL yanıtı beklenen biçimde değil");d.count&&(t.total=d.count),d.edges.forEach(e=>a.push(Object.assign(p(e.node),{followsBack:!!e.node.follows_viewer}))),t.progress(a.length,"Takip edilenler taranıyor"),i=d.page_info.has_next_page,n=d.page_info.end_cursor,i&&await s(o(220,480))}return{following:a,nonFollowers:a.filter(e=>!e.followsBack)}},async scanREST(e,t,a){const n=async(a,n,i)=>{const r=[];let l="";do{t.checkStop();const d=await t.retry(()=>b("/api/v1/friendships/"+e+"/"+a+"/?count=100"+(l?"&max_id="+encodeURIComponent(l):"")));(d.users||[]).forEach(e=>r.push(p(e))),t.total=i,t.progress(r.length,n),l=d.next_max_id||"",l&&await s(o(300,650))}while(l);return r},i=await n("following","Takip edilenler taranıyor",a&&a.following_count),r=await n("followers","Takipçiler taranıyor",a&&a.follower_count),l=new Set(r.map(e=>e.id));return i.forEach(e=>{e.followsBack=l.has(e.id)}),{following:i,nonFollowers:i.filter(e=>!e.followsBack)}},async unfollow(e){const t=Object.assign(h(),{"content-type":"application/x-www-form-urlencoded"}),a=["/api/v1/friendships/destroy/"+e+"/","/web/friendships/"+e+"/unfollow/"];let n={ok:!1,reason:"unknown"};for(const i of a){let a,r={};try{a=await fetch(i,{method:"POST",headers:t,credentials:"include",body:"user_id="+e})}catch(e){n={ok:!1,reason:"network"};continue}try{r=await a.json()}catch(e){}if(429===a.status||r.spam||"feedback_required"===r.message)return{ok:!1,limited:!0};if(401===a.status||"login_required"===r.message)return{ok:!1,auth:!0};if(a.ok&&"fail"!==r.status)return{ok:!0};n={ok:!1,reason:"HTTP "+a.status}}return n}};if(e){const e=["kahve","mavi","gece","deniz","kuzey","ruzgar","pixel","atlas","zeytin","nar","bulut","lale","kum","yildiz","orman","tarcin","retro","mor"],t=["sever","kus","yolcu","studio","notlari","daily","art","foto","gezgin","mutfak","design","tv","kitap","music","club","lab"],a=["Ece","Mert","Zeynep","Can","Deniz","Elif","Kaan","Selin","Burak","Ada","Emre","İrem","Onur","Defne","Arda","Nil"],n=["Yılmaz","Kaya","Demir","Şahin","Çelik","Aydın","Arslan","Doğan","Kılıç","Koç"],i=e=>e[o(0,e.length-1)],r=new Set,l=s=>{let l;do{l=i(e)+i([".","_",""])+i(t)+(Math.random()<.4?o(1,99):"")}while(r.has(l));r.add(l);const d=Math.random()<.12;return{id:String(9e3+s),username:l,full_name:d?l.replace(/[._\d]/g," ").trim().replace(/\b\w/g,e=>e.toUpperCase()):i(a)+" "+i(n),pic:"",verified:d,private:!d&&Math.random()<.35,followsBack:Math.random()<.72}},d=Array.from({length:248},(e,t)=>l(t));f.viewerId=()=>"demo",f.viewerInfo=async()=>({username:"demo.hesap",following_count:d.length,follower_count:312}),f.scanGraphQL=async(e,t)=>{t.total=d.length;for(let e=0;e<d.length;e+=50)t.checkStop(),await s(260),t.progress(Math.min(d.length,e+50),"Takip edilenler taranıyor (demo)");const a=d.map(e=>Object.assign({},e));return{following:a,nonFollowers:a.filter(e=>!e.followsBack)}},f.unfollow=async()=>(await s(o(60,160)),Math.random()<.96?{ok:!0}:{ok:!1,reason:"demo"})}const m=f.viewerId(),x={tab:"non",users:[],followingCount:0,scannedAt:0,selected:new Set,whitelist:i.get("whitelist",{}),history:i.get("history",[]),filters:{verified:!0,private:!0,public:!0},sort:"default",query:"",speed:n[i.get("speed","fast")]?i.get("speed","fast"):"fast",busy:null,stop:!1,lastIndex:-1,viewer:null},v=m?i.get("cache_"+m,null):null;v&&Array.isArray(v.users)&&(x.users=v.users,x.followingCount=v.followingCount||0,x.scannedAt=v.t||0);const w=()=>{m&&i.set("cache_"+m,{t:x.scannedAt,followingCount:x.followingCount,users:x.users})},y='<svg class="ee-ver" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5 14.6 4l3.5-.4.9 3.4 3 1.9-1.4 3.1 1.4 3.1-3 1.9-.9 3.4-3.5-.4L12 22.5 9.4 20l-3.5.4L5 17l-3-1.9L3.4 12 2 8.9 5 7l.9-3.4 3.5.4zm-1.3 13.9 6-6-1.4-1.4-4.6 4.6-2.3-2.3-1.4 1.4z"/></svg>',k='<svg class="ee-lock" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17 9V7A5 5 0 0 0 7 7v2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2zM9 7a3 3 0 0 1 6 0v2H9z"/></svg>',z='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',C=document.createElement("style");C.id="ee-style",C.textContent='\n#ee-root{--ac:#ff6b00;--ac2:#ff8a3d;--acs:rgba(255,107,0,.14);--bg:#121010;--bg2:#1a1715;--bg3:#24201d;--ln:rgba(255,255,255,.08);--ln2:rgba(255,255,255,.14);--tx:#f6f3f0;--tx2:#a39b94;--tx3:#6f6862;--ok:#22c55e;--bad:#ef4444;--warn:#f59e0b;\nall:initial;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--tx);font-size:13px;line-height:1.4}\n:where(#ee-root) *,:where(#ee-root) *::before,:where(#ee-root) *::after{box-sizing:border-box;margin:0;padding:0;letter-spacing:normal}\n:where(#ee-root) :is(button,input,select,a,textarea){font:inherit;color:inherit}\n:where(#ee-root) button{cursor:pointer;background:none;border:0;text-align:inherit}\n#ee-root button:focus-visible,#ee-root input:focus-visible,#ee-root select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}\n#ee-root svg{display:block;flex-shrink:0}\n.ee-panel{position:fixed;z-index:2147483646;top:50%;left:50%;transform:translate(-50%,-50%);width:min(760px,calc(100vw - 24px));height:min(820px,calc(100vh - 24px));display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--ln2);border-radius:20px;box-shadow:0 40px 120px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.4);overflow:hidden;animation:ee-in .35s cubic-bezier(.16,1,.3,1)}\n@keyframes ee-in{from{opacity:0;transform:translate(-50%,-46%) scale(.98)}}\n.ee-panel.ee-full{top:0!important;left:0!important;transform:none!important;width:100vw;height:100vh;border-radius:0;animation:none}\n#ee-root.ee-min .ee-panel{display:none}\n.ee-pill{display:none;position:fixed;z-index:2147483646;right:20px;bottom:20px;align-items:center;gap:10px;padding:10px 16px 10px 12px;background:var(--bg);border:1px solid var(--ln2);border-radius:999px;box-shadow:0 18px 50px rgba(0,0,0,.5);font-weight:600}\n#ee-root.ee-min .ee-pill{display:flex}\n.ee-pill-ring{width:28px;height:28px;border-radius:50%;background:conic-gradient(var(--ac) var(--p,0%),var(--bg3) 0);display:grid;place-items:center}\n.ee-pill-ring::after{content:"🦊";width:22px;height:22px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:12px}\n.ee-head{display:flex;align-items:center;gap:12px;padding:14px 14px 14px 18px;border-bottom:1px solid var(--ln);cursor:grab;user-select:none;background:linear-gradient(180deg,rgba(255,107,0,.07),transparent)}\n.ee-full .ee-head{cursor:default}\n.ee-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--ac),#ff3d6e);display:grid;place-items:center;font-size:18px;box-shadow:0 6px 18px rgba(255,107,0,.35)}\n.ee-title{flex:1;min-width:0}\n.ee-title b{display:block;font-size:15px;font-weight:700}\n.ee-title span{display:block;font-size:12px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.ee-hbtn{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--tx2);transition:.15s}\n.ee-hbtn:hover{background:var(--bg3);color:var(--tx)}\n.ee-hbtn.ee-x:hover{background:rgba(239,68,68,.16);color:var(--bad)}\n.ee-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 18px 4px}\n.ee-stat{background:var(--bg2);border:1px solid var(--ln);border-radius:12px;padding:10px 12px}\n.ee-stat b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}\n.ee-stat span{font-size:11px;color:var(--tx2)}\n.ee-stat.ee-hl b{color:var(--ac2)}\n.ee-tabs{display:flex;gap:4px;padding:12px 18px 0;border-bottom:1px solid var(--ln);overflow-x:auto;scrollbar-width:none}\n.ee-tab{white-space:nowrap;flex-shrink:0;padding:9px 12px 11px;color:var(--tx2);font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;transition:.15s}\n.ee-tab:hover{color:var(--tx)}\n.ee-tab.on{color:var(--tx);border-bottom-color:var(--ac)}\n.ee-tab i{font-style:normal;font-size:11px;background:var(--bg3);color:var(--tx2);padding:1px 7px;border-radius:99px}\n.ee-tab.on i{background:var(--acs);color:var(--ac2)}\n.ee-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 18px}\n.ee-search{flex:1 1 180px;display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--ln);border-radius:10px;padding:0 10px;height:36px;color:var(--tx3)}\n.ee-search:focus-within{border-color:var(--ac)}\n.ee-search input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--tx);height:100%}\n.ee-search input::placeholder{color:var(--tx3)}\n.ee-select{height:36px;background:var(--bg2);border:1px solid var(--ln);border-radius:10px;color:var(--tx);padding:0 10px;outline:0}\n.ee-select option{background:var(--bg2)}\n.ee-chips{display:flex;gap:6px;flex-wrap:wrap}\n.ee-chip{height:30px;padding:0 11px;border-radius:99px;border:1px solid var(--ln2);color:var(--tx2);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:.15s}\n.ee-chip:hover{border-color:var(--tx3)}\n.ee-chip.on{background:var(--acs);border-color:rgba(255,107,0,.5);color:var(--ac2)}\n.ee-chip.ee-ghost{border-style:dashed}\n.ee-spacer{flex:1}\n.ee-link{color:var(--ac2);font-weight:700;font-size:12px;padding:6px 4px}\n.ee-link:hover{text-decoration:underline}\n.ee-link:disabled{opacity:.4;cursor:default;text-decoration:none}\n.ee-list{flex:1;min-height:0;overflow-y:auto;padding:0 10px 10px;scrollbar-width:thin;scrollbar-color:#3a3430 transparent}\n.ee-row{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:12px;border:1px solid transparent;cursor:pointer;transition:background .12s;user-select:none}\n.ee-row:hover{background:var(--bg2)}\n.ee-row.sel{background:var(--acs);border-color:rgba(255,107,0,.35)}\n.ee-row.ee-nosel{cursor:default}\n.ee-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;object-fit:cover;background:var(--bg3);display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;text-transform:uppercase}\n.ee-info{flex:1;min-width:0}\n.ee-un{display:flex;align-items:center;gap:5px;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden}\n.ee-un span{overflow:hidden;text-overflow:ellipsis}\n.ee-fn{font-size:12px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}\n.ee-ver{color:#3897f0}.ee-lock{color:var(--tx3)}\n.ee-act{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--tx3);opacity:0;transition:.15s;text-decoration:none}\n.ee-row:hover .ee-act,.ee-act.on,.ee-act:focus-visible{opacity:1}\n.ee-act:hover{background:var(--bg3);color:var(--tx)}\n.ee-act.on{color:#facc15}\n.ee-chk{width:22px;height:22px;border-radius:50%;border:2px solid #4a433e;display:grid;place-items:center;flex-shrink:0;transition:.15s;color:transparent}\n.ee-row.sel .ee-chk{background:var(--ac);border-color:var(--ac);color:#fff;box-shadow:0 0 0 4px rgba(255,107,0,.18)}\n.ee-time{font-size:11px;color:var(--tx3);white-space:nowrap}\n.ee-empty{height:100%;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;color:var(--tx2);padding:24px}\n.ee-empty .ee-big{font-size:38px}\n.ee-empty b{color:var(--tx);font-size:15px}\n.ee-empty p{max-width:360px;font-size:13px}\n.ee-more{display:block;margin:8px auto 0;padding:8px 14px;border-radius:10px;background:var(--bg2);color:var(--tx2);font-weight:600;font-size:12px}\n.ee-foot{border-top:1px solid var(--ln);padding:12px 18px 16px;background:var(--bg2);display:flex;flex-direction:column;gap:12px}\n.ee-speed{display:flex;align-items:center;gap:10px;flex-wrap:wrap}\n.ee-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:3px}\n.ee-seg button{padding:6px 12px;border-radius:7px;font-weight:600;font-size:12px;color:var(--tx2);transition:.15s}\n.ee-seg button.on{background:var(--bg3);color:var(--tx);box-shadow:0 1px 0 rgba(255,255,255,.06) inset}\n.ee-seg button[data-speed=turbo].on{color:var(--warn)}\n.ee-speed small{color:var(--tx3);font-size:11.5px}\n.ee-run{display:flex;align-items:center;gap:14px}\n.ee-prog{flex:1;min-width:0}\n.ee-bar{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}\n.ee-bar div{height:100%;width:0;background:linear-gradient(90deg,var(--ac),#ff3d6e);border-radius:99px;transition:width .3s}\n.ee-bar.ee-indet div{width:30%!important;animation:ee-ind 1.1s ease-in-out infinite}\n@keyframes ee-ind{from{transform:translateX(-100%)}to{transform:translateX(340%)}}\n.ee-status{font-size:12px;color:var(--tx2);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}\n.ee-btn{height:44px;padding:0 22px;border-radius:12px;font-weight:700;font-size:13.5px;color:#fff;background:linear-gradient(135deg,var(--ac),#e2560a);box-shadow:0 8px 22px rgba(255,107,0,.28);transition:.18s;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}\n.ee-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(255,107,0,.4)}\n.ee-btn.ee-danger{background:linear-gradient(135deg,#ef4444,#c62828);box-shadow:0 8px 22px rgba(239,68,68,.28)}\n.ee-btn.ee-stop{background:var(--bg3);box-shadow:none;border:1px solid var(--ln2)}\n.ee-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}\n.ee-modal{position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;animation:ee-fade .2s}\n@keyframes ee-fade{from{opacity:0}}\n.ee-box{width:min(420px,100%);background:var(--bg);border:1px solid var(--ln2);border-radius:20px;padding:24px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:ee-pop .25s cubic-bezier(.16,1,.3,1)}\n@keyframes ee-pop{from{transform:scale(.94);opacity:0}}\n.ee-box .ee-ico{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:var(--acs)}\n.ee-box h3{font-size:18px;font-weight:700;margin-bottom:8px}\n.ee-box p{color:var(--tx2);font-size:13.5px;line-height:1.55;margin-bottom:20px}\n.ee-box p b{color:var(--tx)}\n.ee-box .ee-btns{display:flex;gap:10px}\n.ee-box .ee-btns button{flex:1;justify-content:center}\n.ee-btn2{height:44px;border-radius:12px;font-weight:600;background:var(--bg3);color:var(--tx);border:1px solid var(--ln2)}\n.ee-btn2:hover{background:#2e2925}\n.ee-toast{position:fixed;z-index:2147483647;left:50%;bottom:28px;transform:translateX(-50%);background:#f6f3f0;color:#121010;font-weight:600;padding:10px 16px;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.4);animation:ee-toast 2.6s forwards;pointer-events:none}\n@keyframes ee-toast{0%{opacity:0;transform:translate(-50%,10px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}\n.ee-menu{position:relative}\n.ee-drop{position:absolute;right:0;top:calc(100% + 6px);min-width:210px;background:var(--bg2);border:1px solid var(--ln2);border-radius:12px;padding:6px;box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:3;display:none}\n.ee-drop.open{display:block}\n.ee-drop button{display:flex;width:100%;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--tx);font-size:13px}\n.ee-drop button:hover{background:var(--bg3)}\n.ee-drop hr{border:0;border-top:1px solid var(--ln);margin:5px 0}\n.ee-drop .ee-red{color:#f87171}\n@media (max-width:640px){\n.ee-panel{top:0!important;left:0!important;transform:none!important;width:100vw;height:100vh;height:100dvh;border-radius:0;animation:none;border:0}\n.ee-head{cursor:default}\n.ee-full-btn{display:none}\n.ee-stats{grid-template-columns:repeat(2,1fr);padding:12px 14px 2px}\n.ee-tabs,.ee-tools{padding-left:14px;padding-right:14px}\n.ee-tab{padding:9px 8px 11px;font-size:12.5px}\n.ee-foot{padding:12px 14px 14px}\n.ee-act{opacity:1}\n.ee-run{flex-direction:column;align-items:stretch}\n.ee-btn{justify-content:center}\n}',document.head.appendChild(C);const L=document.createElement("div");L.id="ee-root",document.body.appendChild(L);const _=e=>{const t=document.createElement("div");t.className="ee-toast",t.textContent=e,L.appendChild(t),setTimeout(()=>t.remove(),2700)},S=({icon:e="⚠️",title:t,html:a,ok:n="Tamam",cancel:i="Vazgeç",danger:o=!1})=>new Promise(s=>{const l=document.createElement("div");l.className="ee-modal",l.innerHTML='<div class="ee-box" role="dialog" aria-modal="true"><div class="ee-ico">'+e+"</div><h3>"+r(t)+"</h3><p>"+a+'</p><div class="ee-btns">'+(i?'<button class="ee-btn2" data-v="0">'+r(i)+"</button>":"")+'<button class="ee-btn'+(o?" ee-danger":"")+'" data-v="1">'+r(n)+"</button></div></div>";const d=e=>{l.remove(),document.removeEventListener("keydown",c,!0),s(e)},c=e=>{"Escape"===e.key&&(e.stopPropagation(),d(!1))};l.addEventListener("click",e=>{const t=e.target.closest("[data-v]");t?d("1"===t.dataset.v):e.target===l&&d(!1)}),document.addEventListener("keydown",c,!0),L.appendChild(l),l.querySelector('[data-v="1"]').focus()});if(!e&&!/(^|\.)instagram\.com$/.test(location.hostname))return void S({icon:"🦊",title:"Instagram açık değil",html:"Bu araç yalnızca <b>instagram.com</b> üzerinde, oturum açıkken çalışır. Instagram'ı yeni sekmede açmak ister misin?",ok:"Instagram'ı aç"}).then(e=>{e&&window.open("https://www.instagram.com/","_blank","noopener"),L.remove(),C.remove()});L.innerHTML=`\n<div class="ee-panel" role="dialog" aria-label="Unfollowers">\n  <div class="ee-head">\n    <div class="ee-logo">🦊</div>\n    <div class="ee-title"><b>Unfollowers${e?" · Demo":""}</b><span class="ee-sub">Hazır</span></div>\n    <button class="ee-hbtn" data-a="minimize" title="Küçült"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>\n    <button class="ee-hbtn ee-full-btn" data-a="full" title="Tam ekran"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>\n    <button class="ee-hbtn ee-x" data-a="close" title="Kapat (Esc)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>\n  </div>\n  <div class="ee-stats">\n    <div class="ee-stat"><b data-s="following">–</b><span>Takip edilen</span></div>\n    <div class="ee-stat ee-hl"><b data-s="non">–</b><span>Geri takip etmeyen</span></div>\n    <div class="ee-stat"><b data-s="sel">0</b><span>Seçili</span></div>\n    <div class="ee-stat"><b data-s="done">0</b><span>Bu oturumda çıkarılan</span></div>\n  </div>\n  <div class="ee-tabs" role="tablist">\n    <button class="ee-tab on" data-tab="non">Takip etmeyenler <i data-c="non">0</i></button>\n    <button class="ee-tab" data-tab="wl">Beyaz liste <i data-c="wl">0</i></button>\n    <button class="ee-tab" data-tab="hist">Geçmiş <i data-c="hist">0</i></button>\n  </div>\n  <div class="ee-tools">\n    <label class="ee-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" placeholder="Kullanıcı adı veya isim ara…" autocomplete="off"></label>\n    <select class="ee-select" data-a="sort" title="Sırala">\n      <option value="default">Takip sırası</option>\n      <option value="az">A → Z</option>\n      <option value="za">Z → A</option>\n      <option value="verified">Onaylılar önce</option>\n      <option value="private">Gizliler önce</option>\n    </select>\n    <div class="ee-menu">\n      <button class="ee-hbtn" data-a="menu" title="Diğer işlemler"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>\n      <div class="ee-drop">\n        <button data-a="csv">⬇️ Listeyi CSV olarak indir</button>\n        <button data-a="copy">📋 Kullanıcı adlarını kopyala</button>\n        <hr>\n        <button data-a="wl-export">📤 Beyaz listeyi dışa aktar</button>\n        <button data-a="wl-import">📥 Beyaz liste içe aktar</button>\n        <hr>\n        <button data-a="clear-hist" class="ee-red">🗑️ Geçmişi temizle</button>\n        <button data-a="clear-cache" class="ee-red">♻️ Kayıtlı taramayı sil</button>\n      </div>\n    </div>\n    <div class="ee-chips ee-filter-row" style="width:100%">\n      <button class="ee-chip on" data-f="verified">${y} Onaylı</button>\n      <button class="ee-chip on" data-f="private">${k} Gizli</button>\n      <button class="ee-chip on" data-f="public">🌐 Herkese açık</button>\n      <span class="ee-spacer"></span>\n      <button class="ee-link" data-a="toggle-all">Tümünü seç</button>\n    </div>\n  </div>\n  <div class="ee-list" tabindex="-1"></div>\n  <div class="ee-foot">\n    <div class="ee-speed">\n      <div class="ee-seg" role="radiogroup" aria-label="Hız modu">\n        ${Object.keys(n).map(e=>`<button data-speed="${e}" role="radio">${n[e].icon} ${n[e].label}</button>`).join("")}\n      </div>\n      <small class="ee-speed-desc"></small>\n    </div>\n    <div class="ee-run">\n      <div class="ee-prog"><div class="ee-bar"><div></div></div><div class="ee-status">Analizi başlatmak için butona bas.</div></div>\n      <button class="ee-btn" data-a="main">Analizi başlat</button>\n    </div>\n  </div>\n</div>\n<button class="ee-pill" data-a="restore"><span class="ee-pill-ring"></span><span class="ee-pill-txt">Unfollowers</span></button>`;const T=e=>L.querySelector(e),E=e=>Array.from(L.querySelectorAll(e)),M={panel:T(".ee-panel"),head:T(".ee-head"),sub:T(".ee-sub"),list:T(".ee-list"),search:T(".ee-search input"),sort:T('[data-a="sort"]'),drop:T(".ee-drop"),toggleAll:T('[data-a="toggle-all"]'),filterRow:T(".ee-filter-row"),bar:T(".ee-bar"),fill:T(".ee-bar div"),status:T(".ee-status"),main:T('[data-a="main"]'),speedDesc:T(".ee-speed-desc"),pill:T(".ee-pill"),pillTxt:T(".ee-pill-txt"),pillRing:T(".ee-pill-ring")};let $=0,A=300;const I=(e,t)=>{if(M.status.textContent=e,M.pillTxt.textContent=e.length>46?e.slice(0,45)+"…":e,null===t)M.bar.classList.add("ee-indet");else if(void 0!==t){M.bar.classList.remove("ee-indet");const e=Math.max(0,Math.min(100,t))+"%";M.fill.style.width=e,M.pillRing.style.setProperty("--p",e)}},B=e=>{const t=[...e.username].reduce((e,t)=>e+t.charCodeAt(0),0)%360,a=r((e.username||"?").replace(/[^a-z0-9]/gi,"").charAt(0)||"?");return e.pic?`<img class="ee-av" src="${r(e.pic)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-init="${a}" data-hue="${t}">`:`<div class="ee-av" style="background:hsl(${t} 45% 32%)">${a}</div>`},j=e=>{const t=x.query.trim().toLowerCase().replace(/^@/,"");return t?e.filter(e=>e.username.toLowerCase().includes(t)||(e.full_name||"").toLowerCase().includes(t)):e},O=(e,t,a)=>`<div class="ee-empty"><div class="ee-big">${e}</div><b>${t}</b><p>${a}</p></div>`;let q=[];const R=()=>{const e=Object.keys(x.whitelist).length,t=x.users.filter(e=>!x.whitelist[e.id]).length;L.querySelector('[data-s="following"]').textContent=x.scannedAt?l(x.followingCount):"–",L.querySelector('[data-s="non"]').textContent=x.scannedAt?l(t):"–",L.querySelector('[data-s="sel"]').textContent=l(x.selected.size),L.querySelector('[data-s="done"]').textContent=l($),L.querySelector('[data-c="non"]').textContent=l(t),L.querySelector('[data-c="wl"]').textContent=l(e),L.querySelector('[data-c="hist"]').textContent=l(x.history.length),E(".ee-tab").forEach(e=>e.classList.toggle("on",e.dataset.tab===x.tab)),M.filterRow.style.display="non"===x.tab?"":"none",M.sort.style.display="non"===x.tab?"":"none";let a="";if("non"===x.tab){q=(()=>{const e=x.query.trim().toLowerCase().replace(/^@/,""),t=x.filters;let a=x.users.filter(a=>!x.whitelist[a.id]&&(a.verified?t.verified:a.private?t.private:t.public)&&(!e||a.username.toLowerCase().includes(e)||a.full_name.toLowerCase().includes(e)));const n=e=>a.slice().sort(e),i=(e,t)=>e.username.localeCompare(t.username,"tr");return"az"===x.sort?a=n(i):"za"===x.sort?a=n((e,t)=>-i(e,t)):"verified"===x.sort?a=n((e,t)=>t.verified-e.verified):"private"===x.sort&&(a=n((e,t)=>t.private-e.private)),a})(),x.scannedAt?x.users.length?q.length?(a=q.slice(0,A).map((e,t)=>`\n        <div class="ee-row${x.selected.has(e.id)?" sel":""}" data-id="${r(e.id)}" data-i="${t}">\n          ${B(e)}\n          <div class="ee-info"><div class="ee-un"><span>${r(e.username)}</span>${e.verified?y:""}${e.private?k:""}</div><div class="ee-fn">${r(e.full_name)||"&nbsp;"}</div></div>\n          <button class="ee-act" data-a="wl" title="Beyaz listeye ekle (asla seçilmez)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg></button>\n          <a class="ee-act" href="https://www.instagram.com/${encodeURIComponent(e.username)}/" target="_blank" rel="noopener" title="Profili aç">${z}</a>\n          <div class="ee-chk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div>\n        </div>`).join(""),q.length>A&&(a+=`<button class="ee-more" data-a="more">${l(q.length-A)} kişi daha göster</button>`)):a=O("🫥","Sonuç yok","Arama veya filtrelere uyan kullanıcı bulunamadı."):a=O("🎉","Herkes seni geri takip ediyor","Takip ettiğin hesapların tamamı seni de takip ediyor."):a=O("🔍","scan"===x.busy?"Taranıyor…":"Henüz analiz yapılmadı","scan"===x.busy?"Takip listen sayfa sayfa okunuyor. Bu, takip ettiğin kişi sayısına göre biraz sürebilir.":"Aşağıdaki <b>Analizi başlat</b> butonuna bas. Takip ettiğin herkes kontrol edilir ve seni geri takip etmeyenler burada listelenir.");const e=q.length>0&&q.every(e=>x.selected.has(e.id));M.toggleAll.textContent=e?"Seçimi kaldır":`Tümünü seç (${l(q.length)})`,M.toggleAll.disabled=!q.length||!!x.busy}else if("wl"===x.tab){const e=j(Object.values(x.whitelist));a=e.length?e.map(e=>`\n        <div class="ee-row ee-nosel" data-id="${r(e.id)}">\n          ${B(e)}\n          <div class="ee-info"><div class="ee-un"><span>${r(e.username)}</span>${e.verified?y:""}${e.private?k:""}</div><div class="ee-fn">${r(e.full_name)||"&nbsp;"}</div></div>\n          <button class="ee-act on" data-a="wl" title="Beyaz listeden çıkar"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg></button>\n          <a class="ee-act" href="https://www.instagram.com/${encodeURIComponent(e.username)}/" target="_blank" rel="noopener" title="Profili aç">${z}</a>\n        </div>`).join(""):O("⭐","Beyaz liste boş","Takipten çıkmak istemediğin hesapların yanındaki yıldıza bas. Beyaz listedekiler hiçbir zaman seçilmez ve listeden gizlenir.")}else{const e=j(x.history);a=e.length?e.slice(0,1e3).map(e=>`\n        <div class="ee-row ee-nosel">\n          ${B(e)}\n          <div class="ee-info"><div class="ee-un"><span>${r(e.username)}</span></div><div class="ee-fn">${r(e.full_name)||"&nbsp;"}</div></div>\n          <span class="ee-time">${c(e.t)}</span>\n          <a class="ee-act" href="https://www.instagram.com/${encodeURIComponent(e.username)}/" target="_blank" rel="noopener" title="Profili aç">${z}</a>\n        </div>`).join(""):O("🕓","Geçmiş boş","Takipten çıkardığın hesaplar tarih bilgisiyle burada tutulur (bu tarayıcıda, son 1000 kayıt).")}M.list.innerHTML=a,D()},D=()=>{E(".ee-seg button").forEach(e=>{const t=e.dataset.speed===x.speed;e.classList.toggle("on",t),e.setAttribute("aria-checked",t),e.disabled="unfollow"===x.busy}),M.speedDesc.textContent=n[x.speed].desc;const e=M.main;e.classList.remove("ee-danger","ee-stop"),e.disabled=!!x.busy&&x.stop,x.busy?(e.textContent="Durdur",e.classList.add("ee-stop")):x.selected.size?(e.textContent=l(x.selected.size)+" kişiyi takipten çık",e.classList.add("ee-danger")):e.textContent=x.scannedAt?"Yeniden tara":"Analizi başlat"},U=()=>{const e=x.viewer&&x.viewer.username?"@"+x.viewer.username:"",t=x.scannedAt?"Son tarama "+c(x.scannedAt):"Henüz taranmadı";M.sub.textContent=[e,t,"v2.0.0"].filter(Boolean).join(" · ")},H=async(e,t)=>{for(let a=e;a>0;a--){if(x.stop)return!1;I(t+" · "+Math.floor(a/60)+":"+String(a%60).padStart(2,"0")),await s(1e3)}return!x.stop},G=(e,t,a)=>{const n=document.createElement("a");n.href=URL.createObjectURL(new Blob([t],{type:a})),n.download=e,L.appendChild(n),n.click(),setTimeout(()=>{URL.revokeObjectURL(n.href),n.remove()},500)},P=()=>"non"===x.tab?q:"wl"===x.tab?Object.values(x.whitelist):x.history,K={minimize(){L.classList.add("ee-min")},restore(){L.classList.remove("ee-min")},full(){M.panel.classList.toggle("ee-full"),M.panel.style.left=M.panel.style.top=""},async close(){("unfollow"!==x.busy||await S({icon:"⏹️",title:"İşlem devam ediyor",html:"Kapatırsan takipten çıkarma işlemi durdurulur.",ok:"Durdur ve kapat",danger:!0}))&&(x.stop=!0,document.removeEventListener("keydown",F),L.remove(),C.remove())},main(){if(x.busy)return x.stop=!0,I("Durduruluyor…"),void(M.main.disabled=!0);x.selected.size?(async()=>{const e=x.users.filter(e=>x.selected.has(e.id)&&!x.whitelist[e.id]);if(!e.length)return;const t=n[x.speed],a="turbo"===x.speed&&e.length>50?"<br><br>⚠️ Turbo modda çok sayıda kişiyi hızlıca çıkarmak Instagram'ın <b>işlem engeli</b> (action block) uygulamasına yol açabilir.":"";if(!await S({icon:"👋",title:l(e.length)+" kişi takipten çıkarılsın mı?",danger:!0,ok:"Takipten çık",html:"Seçtiğin hesaplar <b>"+t.icon+" "+t.label+"</b> modunda ("+r(t.desc)+") takipten çıkarılacak. İstediğin an durdurabilirsin."+a}))return;x.busy="unfollow",x.stop=!1,R();let d=0,c=0,p=0;const u=e.length,g=()=>t.icon+" "+l(d+c)+" / "+l(u)+" · "+l(d)+" çıkarıldı"+(c?", "+l(c)+" başarısız":"");I(g(),0);for(let a=0;a<e.length&&!x.stop;a++){const n=e[a];if(x.whitelist[n.id]||!x.selected.has(n.id))continue;I(g()+" · @"+n.username,(d+c)/u*100);const r=await f.unfollow(n.id);if(r.ok)d++,$++,p=0,x.selected.delete(n.id),x.users=x.users.filter(e=>e.id!==n.id),x.followingCount=Math.max(0,x.followingCount-1),x.history.unshift({id:n.id,username:n.username,full_name:n.full_name,pic:n.pic,t:Date.now()}),x.history.length>1e3&&(x.history.length=1e3);else{if(r.limited){if(p++,p>2){I("⛔ Instagram limit uyguladı. Birkaç saat ara verip tekrar dene. "+g(),(d+c)/u*100),x.stop=!0;break}if(!await H(300*p,"⏳ Instagram limit uyguladı, otomatik bekleniyor"))break;a--;continue}if(r.auth){I("🔒 Oturum düştü. Instagram'a tekrar giriş yap.",(d+c)/u*100),x.stop=!0;break}c++,console.warn("[Unfollowers] @"+n.username+" çıkarılamadı:",r.reason)}i.set("history",x.history),a%10==0&&w();const l=M.list.scrollTop;if(R(),M.list.scrollTop=l,I(g(),(d+c)/u*100),a<e.length-1&&!x.stop)if(t.every&&d>0&&r.ok&&d%t.every===0){if(!await H(Math.round(t.rest/1e3),"☕ Güvenlik molası"))break}else await s(o(t.min,t.max))}i.set("history",x.history),w();const h=x.stop&&d+c<u;x.busy=null,x.stop=!1,/⛔|🔒/.test(M.status.textContent)||I((h?"⏹️ Durduruldu · ":"✅ Bitti · ")+l(d)+" kişi takipten çıkarıldı"+(c?", "+l(c)+" başarısız":"")+".",h?void 0:100),R(),L.classList.contains("ee-min")&&_("Unfollowers: "+l(d)+" kişi takipten çıkarıldı")})():(async()=>{if(!m)return void await S({icon:"🔒",title:"Oturum bulunamadı",html:"Önce Instagram hesabına giriş yap, sayfayı yenile ve aracı tekrar çalıştır.",cancel:null});x.busy="scan",x.stop=!1,x.selected.clear(),x.tab="non",I("Hesap bilgileri alınıyor…",null),R();const e=x.viewer||await f.viewerInfo(m);e&&(x.viewer=e,U());const t={total:e&&e.following_count,checkStop(){if(x.stop)throw new Error("STOP")},progress(e,a){const n=t.total||0;I(a+" · "+l(e)+(n?" / "+l(n):""),n?e/n*100:null)},async retry(e){for(let t=0;;t++)try{return await e()}catch(e){if(!(e instanceof u)||t>=3)throw e;if(!await H(60*(t+1),"⏳ Instagram yavaşlattı, bekleniyor"))throw new Error("STOP")}}};try{let a;try{a=await f.scanGraphQL(m,t)}catch(n){if("STOP"===n.message||n instanceof g)throw n;console.warn("[Unfollowers] GraphQL başarısız, REST yöntemine geçiliyor:",n),I("Alternatif yöntem deneniyor…",null),a=await f.scanREST(m,t,e)}x.users=a.nonFollowers,x.followingCount=a.following.length,x.scannedAt=Date.now(),w();const n=x.users.filter(e=>!x.whitelist[e.id]).length;I("✅ Tarama bitti · "+l(a.following.length)+" hesap kontrol edildi, "+l(n)+" kişi seni geri takip etmiyor.",100)}catch(e){"STOP"===e.message?I("Tarama durduruldu.",0):e instanceof g?I("🔒 Oturum doğrulanamadı. Instagram'a tekrar giriş yapıp sayfayı yenile.",0):e instanceof u?I("⚠️ Instagram geçici olarak sınırladı. Birkaç dakika sonra tekrar dene.",0):(console.error("[Unfollowers]",e),I("❌ Tarama başarısız: "+e.message,0))}finally{x.busy=null,U(),R()}})()},menu(){M.drop.classList.toggle("open")},more(){A+=500,R()},"toggle-all"(){const e=q.every(e=>x.selected.has(e.id));q.forEach(t=>e?x.selected.delete(t.id):x.selected.add(t.id)),R()},csv(){const e=P();if(!e.length)return _("Dışa aktarılacak kimse yok");const t=e=>'"'+String(e??"").replace(/"/g,'""')+'"',a=[["kullanici_adi","isim","onayli","gizli","profil"].join(",")].concat(e.map(e=>[t(e.username),t(e.full_name),e.verified?1:0,e.private?1:0,t("https://www.instagram.com/"+e.username+"/")].join(",")));G("unfollowers-"+x.tab+"-"+(new Date).toISOString().slice(0,10)+".csv","\ufeff"+a.join("\n"),"text/csv;charset=utf-8"),_(l(e.length)+" satır indirildi")},async copy(){const e=P();if(!e.length)return _("Kopyalanacak kimse yok");_(await(async e=>{try{return await navigator.clipboard.writeText(e),!0}catch(t){const a=document.createElement("textarea");a.value=e,a.style.cssText="position:fixed;opacity:0",L.appendChild(a),a.select();const n=document.execCommand("copy");return a.remove(),n}})(e.map(e=>"@"+e.username).join("\n"))?l(e.length)+" kullanıcı adı kopyalandı":"Kopyalanamadı")},"wl-export"(){const e=Object.values(x.whitelist);if(!e.length)return _("Beyaz liste boş");G("unfollowers-beyaz-liste.json",JSON.stringify(e,null,2),"application/json")},"wl-import"(){const e=document.createElement("input");e.type="file",e.accept=".json,application/json",e.onchange=async()=>{try{const t=JSON.parse(await e.files[0].text());let a=0;(Array.isArray(t)?t:[]).forEach(e=>{e&&e.id&&e.username&&(x.whitelist[String(e.id)]=p(Object.assign({},e,{profile_pic_url:e.pic})),a++)}),i.set("whitelist",x.whitelist),_(l(a)+" hesap beyaz listeye eklendi"),R()}catch(e){_("Dosya okunamadı")}},e.click()},async"clear-hist"(){await S({icon:"🗑️",title:"Geçmiş silinsin mi?",html:"Bu tarayıcıdaki takipten çıkarma geçmişi silinir. Instagram hesabın etkilenmez.",ok:"Sil",danger:!0})&&(x.history=[],i.set("history",[]),R())},async"clear-cache"(){x.busy||(x.users=[],x.scannedAt=0,x.followingCount=0,x.selected.clear(),m&&i.del("cache_"+m),I("Kayıtlı tarama silindi.",0),U(),R())}};let N;L.addEventListener("click",e=>{const t=e.target.closest(".ee-tab");if(t)return x.tab=t.dataset.tab,A=300,M.list.scrollTop=0,void R();const a=e.target.closest("[data-f]");if(a){const e=a.dataset.f;return x.filters[e]=!x.filters[e],a.classList.toggle("on",x.filters[e]),void R()}const n=e.target.closest("[data-speed]");if(n&&!x.busy)return x.speed=n.dataset.speed,i.set("speed",x.speed),void D();e.target.closest(".ee-menu")||M.drop.classList.remove("open");const r=e.target.closest("[data-a]");if(r&&"SELECT"!==r.tagName){const t=r.dataset.a;if("wl"===t){e.stopPropagation();const t=r.closest(".ee-row").dataset.id;if(x.whitelist[t])delete x.whitelist[t],_("Beyaz listeden çıkarıldı");else{const e=x.users.find(e=>e.id===t);e&&(x.whitelist[t]={id:e.id,username:e.username,full_name:e.full_name,pic:e.pic,verified:e.verified,private:e.private},x.selected.delete(t),_("⭐ @"+e.username+" beyaz listeye eklendi"))}return i.set("whitelist",x.whitelist),void R()}if(r.closest(".ee-drop")&&M.drop.classList.remove("open"),K[t])return void K[t]()}if(e.target.closest("a"))return;const o=e.target.closest(".ee-row:not(.ee-nosel)");if(o&&"unfollow"!==x.busy){const t=o.dataset.id,a=+o.dataset.i,n=!x.selected.has(t);if(e.shiftKey&&x.lastIndex>=0){const[e,t]=[Math.min(x.lastIndex,a),Math.max(x.lastIndex,a)];q.slice(e,t+1).forEach(e=>n?x.selected.add(e.id):x.selected.delete(e.id))}else n?x.selected.add(t):x.selected.delete(t);x.lastIndex=a;const i=M.list.scrollTop;R(),M.list.scrollTop=i}}),M.list.addEventListener("error",e=>{const t=e.target;if("IMG"!==t.tagName)return;const a=document.createElement("div");a.className="ee-av",a.style.background="hsl("+t.dataset.hue+" 45% 32%)",a.textContent=t.dataset.init,t.replaceWith(a)},!0),M.search.addEventListener("input",()=>{clearTimeout(N),N=setTimeout(()=>{x.query=M.search.value,A=300,x.lastIndex=-1,R()},120)}),M.sort.addEventListener("change",()=>{x.sort=M.sort.value,x.lastIndex=-1,R()});const F=e=>{"Escape"!==e.key||L.querySelector(".ee-modal")||(M.drop.classList.contains("open")?M.drop.classList.remove("open"):L.classList.contains("ee-min")||K.minimize())};document.addEventListener("keydown",F),(()=>{let e=null;M.head.addEventListener("pointerdown",t=>{if(0!==t.button||t.target.closest("button")||M.panel.classList.contains("ee-full")||window.innerWidth<=640)return;const a=M.panel.getBoundingClientRect();e={x:t.clientX,y:t.clientY,cx:a.left+a.width/2,cy:a.top+a.height/2},M.head.setPointerCapture(t.pointerId),M.head.style.cursor="grabbing"}),M.head.addEventListener("pointermove",t=>{e&&(M.panel.style.left=Math.max(80,Math.min(window.innerWidth-80,e.cx+t.clientX-e.x))+"px",M.panel.style.top=Math.max(40,Math.min(window.innerHeight-40,e.cy+t.clientY-e.y))+"px")});const t=()=>{e=null,M.head.style.cursor=""};M.head.addEventListener("pointerup",t),M.head.addEventListener("pointercancel",t),M.head.addEventListener("dblclick",e=>{e.target.closest("button")||K.full()})})(),window.addEventListener("beforeunload",e=>{"unfollow"===x.busy&&(e.preventDefault(),e.returnValue="")}),U(),R(),x.scannedAt&&I("Kayıtlı tarama yüklendi ("+c(x.scannedAt)+"). Güncel sonuç için yeniden tara.",100),m&&f.viewerInfo(m).then(e=>{e&&(x.viewer=e,U())})})();</script>
+<!-- TOOL:END -->
 
-        // Bookmarklet Setup
-        const bookmarkBtn = document.getElementById('bookmark-btn');
-        const rawCode = codeArea.value
-            .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1')
-            .replace(/\n/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-        const bookmarkletHref = 'javascript:' + encodeURIComponent(rawCode);
-        bookmarkBtn.href = bookmarkletHref;
-    </script>
+<script>
+(() => {
+  const src = document.getElementById('tool-src').textContent.trim();
+
+  /* Yer imi küçültülmüş sürümü kullanır (build.mjs üretir). Yalnızca URL'de anlam taşıyan
+     karakterler (% satır sonu #) kodlanır; böylece bağlantı Firefox'un 64 KB sınırının altında kalır. */
+  const min = (document.getElementById('tool-min') || {}).textContent || src;
+  const bookmarklet = 'javascript:' + min.trim().replace(/%/g, '%25').replace(/\r?\n/g, '%0A').replace(/#/g, '%23');
+
+  const bm = document.getElementById('bookmarklet');
+  bm.href = bookmarklet;
+
+  const toastEl = document.getElementById('toast');
+  let toastT;
+  const toast = (msg) => {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => toastEl.classList.remove('show'), 3200);
+  };
+
+  bm.addEventListener('click', (e) => {
+    e.preventDefault();
+    toast('👆 Tıklama yerine butonu yer imleri çubuğuna sürükle. Sonra Instagram\'da tıkla.');
+  });
+
+  const copy = async (text) => {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy'); ta.remove(); return ok;
+    }
+  };
+  document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => {
+    const isBm = b.dataset.copy === 'bookmarklet';
+    const ok = await copy(isBm ? bookmarklet : src);
+    toast(!ok ? 'Kopyalanamadı, tarayıcın panoya erişimi engelledi.' : isBm ? '🔗 Yer imi bağlantısı kopyalandı.' : '⚡ Kod kopyalandı! Instagram\'da konsola yapıştır.');
+  }));
+
+  const runDemo = () => {
+    window.EE_UNF_DEMO = true;
+    try { new Function(src)(); } finally { window.EE_UNF_DEMO = false; }
+  };
+  document.getElementById('demo-btn').addEventListener('click', runDemo);
+  document.getElementById('demo-btn-2').addEventListener('click', runDemo);
+
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach((t) => t.addEventListener('click', () => {
+    tabs.forEach((x) => {
+      const on = x === t;
+      x.setAttribute('aria-selected', on);
+      const pane = document.getElementById(x.dataset.pane);
+      pane.hidden = !on;
+      if (on) pane.classList.add('in');
+    });
+  }));
+  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) document.querySelector('[data-pane="p-mob"]').click();
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => entries.forEach((en) => {
+    if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+  }), { threshold: 0.12 }) : null;
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 3) * 70 + 'ms';
+    io ? io.observe(el) : el.classList.add('in');
+  });
+})();
+</script>
 </body>
-
 </html>

@@ -1,67 +1,106 @@
-# 🚀 EE Unfollowers - Instagram Analiz & Hızlı Çıkarma Aracı
+# 🦊 Unfollowers v2: Instagram Analiz ve Takipten Çıkarma Aracı
 
-![Project Status](https://img.shields.io/badge/status-active-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![Durum](https://img.shields.io/badge/durum-aktif-brightgreen)
+![Sürüm](https://img.shields.io/badge/s%C3%BCr%C3%BCm-2.0.0-orange)
+![Lisans](https://img.shields.io/badge/lisans-MIT-blue)
 
-Instagram'da sizi geri takip etmeyenleri (unfollowers) bulmanızı ve **3 farklı hız modunda (⚡ Turbo, 🚀 Hızlı, 🛡️ Güvenli)** hızlıca takipten çıkarmanızı sağlayan, tamamen tarayıcı tabanlı modern bir araç.
+Instagram'da seni geri takip etmeyenleri bulan, beyaz liste ve otomatik molalı hız modlarıyla güvenle takipten çıkarmanı sağlayan, tamamen tarayıcıda çalışan açık kaynak bir araç.
 
-**Canlı Demo:** [https://efekanerdogan.github.io/instagramunfollowers/](https://efekanerdogan.github.io/instagramunfollowers/)
+**Canlı site:** [efekanerdogan.github.io/instagramunfollowers](https://efekanerdogan.github.io/instagramunfollowers/). Kurmadan önce sayfadaki **Demoyu dene** butonuyla sahte verilerle deneyebilirsin.
 
 ---
 
-## 📸 Ekran Görüntüsü
+## 📸 Ekran Görüntüleri
 <img width="1918" height="918" alt="giriş" src="https://github.com/user-attachments/assets/6d17cb41-f6a1-410e-92e2-236a0edd4afd" />
 <img width="642" height="771" alt="uygulama" src="https://github.com/user-attachments/assets/83f0e230-7c97-4530-8ffb-7c500144f730" />
 
 ---
 
-## ✨ Özellikler
+## ✨ v2'deki Yenilikler
 
-Bu araç tamamen **Client-Side (İstemci Taraflı)** çalışır. Şifrenizi hiçbir yere kaydetmez, sunucuya göndermez. Her şey sizin tarayıcınızda gerçekleşir.
+| | Özellik | Açıklama |
+|---|---|---|
+| ⭐ | **Beyaz liste** | Yıldızladığın hesaplar asla seçilmez ve listeden gizlenir. JSON olarak dışa/içe aktarılabilir. |
+| ☕ | **Otomatik molalar** | Hızlı ve Güvenli modlar belirli aralıklarla mola verir. Instagram yavaşlatırsa (429 / action block) araç bekleyip kaldığı yerden devam eder; üst üste olursa durur. |
+| 🔁 | **Yedek tarama yöntemi** | GraphQL yöntemi çalışmazsa takipçi ve takip listelerini REST API ile karşılaştıran alternatif yönteme otomatik geçer. |
+| 📊 | **Gerçek ilerleme** | Takip sayısına göre yüzde ilerleme, durdurulabilir tarama. |
+| 🕓 | **Geçmiş** | Takipten çıkardığın hesaplar tarih bilgisiyle saklanır (son 1000). |
+| 📄 | **CSV dışa aktarma** | Listeyi Excel uyumlu CSV olarak indir veya kullanıcı adlarını kopyala. |
+| 💾 | **Kayıtlı tarama** | Paneli kapatıp açınca son tarama geri gelir; yeniden taramak zorunda kalmazsın. |
+| 🎛️ | **Sıralama ve toplu seçim** | A→Z, Z→A, onaylılar/gizliler önce sıralama; **Shift + tık** ile aralık seçimi. |
+| 📱 | **Mobil uyum** | Telefonda panel tam ekran açılır; sitede mobil kurulum adımları var. |
+| ➖ | **Küçült** | İşlem sürerken paneli köşedeki ilerleme balonuna küçültebilirsin. |
+| 🧪 | **Demo modu** | Sitede ağ isteği yapmadan, sahte verilerle paneli deneyebilirsin. |
 
-* ⚡ **3 Farklı Hız Seçeneği (YENİ!):** 
-  * **⚡ Turbo Mod (150-300ms):** 10x daha hızlı takipten çıkarma.
-  * **🚀 Hızlı Mod (300-600ms):** Önerilen, dengeli ve hızlı mod.
-  * **🛡️ Güvenli Mod (1000-1500ms):** Klasik, daha yavaş ve insansı gecikmelerle çıkarma modu.
-* 🕵️ **Detaylı Analiz:** Sizi takip etmeyen kullanıcıları saniyeler içinde tespit eder.
-* 🔍 **Akıllı Filtreleme:** Onaylı (Mavi Tik), Gizli veya Herkese Açık hesapları filtreleyebilirsiniz.
-* ⚡ **Pratik Kullanım:** İster masaüstünde "Sürükle-Bırak", ister konsola kopyalayarak kullanın.
-* 🎨 **Modern Arayüz:** Göz yormayan, şık Glassmorphism tasarımı ve ortam ışığı efektleri.
-
----
-
-## 🖥️ Masaüstü Kullanım (PC/Mac)
-
-En kolay yöntemdir. Kurulum gerektirmez.
-
-1. [Proje Sitesine](https://efekanerdogan.github.io/instagramunfollowers/) gidin.
-2. Sayfadaki **"🦊 Unfollowers"** butonunu tutun ve tarayıcınızın **Yer İşaretleri Çubuğuna (Bookmarks Bar)** sürükleyip bırakın.
-3. **Instagram.com**'a girin ve oturum açın.
-4. Yer işaretlerine eklediğiniz butona tıklayın. Panel Instagram üzerinde anında açılacaktır!
-5. Üst menüden **⚡ Turbo**, **🚀 Hızlı** veya **🛡️ Güvenli** hız seçeneklerinden dilediğinizi seçin.
-
-*(Alternatif olarak: Sitedeki "Kodu Kopyala" butonuna basarak Instagram'da F12 Konsoluna da yapıştırabilirsiniz.)*
+### Düzeltilen hatalar
+- **Güvenlik:** Kullanıcı adı ve isimler HTML olarak basılıyordu. Kötü niyetli bir "isim" instagram.com üzerinde kod çalıştırabilirdi (XSS). Artık tüm veriler kaçışlanıyor.
+- İşlem bitince **Durdur** butonu eski haline dönmüyor, sonraki işlemleri bozuyordu.
+- Tarama ilerleme çubuğu hep %50'de kalıyordu.
+- Panel stilleri `:root` değişkenleriyle Instagram'ın sayfasına sızıyordu. Artık tamamen `#ee-root` altında izole.
+- README'deki hız değerleri koddakilerle uyuşmuyordu.
+- Yer imi kodundaki yorum temizleme regex'i kırılgandı. Artık build adımında `terser` ile güvenle küçültülüyor.
 
 ---
 
-## ⚠️ Yasal Uyarı (Disclaimer)
+## 🖥️ Kullanım
 
-**Lütfen Dikkat:**
+### Yer imi (önerilen)
+1. Sitedeki **🦊 Unfollowers** butonunu yer imleri çubuğuna sürükle (çubuk yoksa `Ctrl/⌘ + Shift + B`).
+2. **instagram.com**'a gir ve oturum aç.
+3. Yer imine tıkla, **Analizi başlat**'a bas.
+4. Listeden seç, hız modunu belirle, **Takipten çık**'a bas.
 
-Bu proje yalnızca **eğitim ve kişisel analiz amaçlıdır**. 
+### Konsol
+Sitede **Konsol kodunu kopyala**'ya bas → Instagram'da `F12` → Console → yapıştır → `Enter`.
 
-* Bu araç Instagram'ın (Meta) resmi bir ürünü değildir ve Instagram ile hiçbir bağlantısı yoktur.
-* **Sorumluluk Reddi:** Bu aracın kullanımından doğabilecek hesap kısıtlamaları (action block) veya kapatılmalarından geliştirici sorumlu tutulamaz.
-* **Öneri:** Çok kısa sürede yüzlerce kişiyi takipten çıkmak Instagram algoritmalarının dikkatini çekebilir. İhtiyacınıza göre Hız Modlarını seçebilirsiniz.
+### Mobil (Chrome / Safari)
+1. Sitede **Yer imi bağlantısını kopyala**'ya bas.
+2. Herhangi bir sayfayı yer imlerine ekle, adını `unf` yap, adresini kopyaladığın metinle değiştir.
+3. Tarayıcıda instagram.com'u aç, adres çubuğuna `unf` yaz ve önerilen yer imine dokun.
+
+---
+
+## ⚡ Hız Modları
+
+| Mod | Kişi başı bekleme | Mola | Ne zaman? |
+|---|---|---|---|
+| ⚡ Turbo | 120–260 ms | yok | Birkaç düzine kişi |
+| 🚀 Hızlı *(varsayılan)* | 0,4–0,8 sn | her 40 kişide 30 sn | Çoğu kullanıcı |
+| 🛡️ Güvenli | 1,2–2,5 sn | her 15 kişide 90 sn | Yüzlerce kişilik temizlik |
+
+---
+
+## 🛠️ Geliştirme
+
+```
+tool.js      → Instagram'da açılan panelin kaynak kodu (asıl düzenlenecek dosya)
+index.html   → Tanıtım sayfası; tool.js build sırasında buraya gömülür
+build.mjs    → tool.js'i index.html'e gömer ve yer imi için küçültülmüş sürüm üretir
+```
+
+```bash
+npm install
+npm run build
+```
+
+`tool.js`'i değiştirdikten sonra `npm run build` çalıştır. `index.html` içindeki `TOOL:START` / `TOOL:END` arasını elle düzenleme. Panel arayüzünü Instagram'a girmeden test etmek için siteyi yerelde açıp **Demoyu dene**'ye basabilirsin:
+
+```bash
+python -m http.server 8000
+```
+
+---
+
+## ⚠️ Yasal Uyarı
+
+Bu proje yalnızca **eğitim ve kişisel kullanım** amaçlıdır.
+
+* Instagram (Meta) ile hiçbir bağlantısı yoktur.
+* Kullanımdan doğabilecek hesap kısıtlamalarından (action block) veya kapatılmalarından geliştirici sorumlu tutulamaz.
+* Kısa sürede yüzlerce kişiyi takipten çıkmak Instagram'ın dikkatini çekebilir. Büyük temizlikler için **Güvenli** modu kullan ve işlemi birkaç güne böl.
 
 ---
 
 ## 📄 Lisans
 
-Bu proje **MIT Lisansı** altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.
-
-**Özetle:**
-* ✅ **Kullanım:** Bu projeyi ücretsiz olarak indirebilir ve kullanabilirsiniz.
-* ✅ **Değiştirme:** Kodları istediğiniz gibi düzenleyebilir ve değiştirebilirsiniz.
-* ✅ **Dağıtım:** Projeyi (değiştirilmiş veya orijinal haliyle) paylaşabilirsiniz.
-* ⚠️ **Şart:** Projenin kopyalarında telif hakkı bildirimini (Copyright) korumanız gerekir.
+**MIT Lisansı.** Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsin.
