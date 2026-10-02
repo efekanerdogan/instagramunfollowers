@@ -10,27 +10,21 @@ Instagram'da seni geri takip etmeyenleri bulan, beyaz liste ve otomatik molalı 
 
 ---
 
-## 📸 Ekran Görüntüleri
-<img width="1918" height="918" alt="giriş" src="https://github.com/user-attachments/assets/6d17cb41-f6a1-410e-92e2-236a0edd4afd" />
-<img width="642" height="771" alt="uygulama" src="https://github.com/user-attachments/assets/83f0e230-7c97-4530-8ffb-7c500144f730" />
-
----
-
-## ✨ v2'deki Yenilikler
+## 🌱 v2'deki Yenilikler
 
 | | Özellik | Açıklama |
 |---|---|---|
-| ⭐ | **Beyaz liste** | Yıldızladığın hesaplar asla seçilmez ve listeden gizlenir. JSON olarak dışa/içe aktarılabilir. |
-| ☕ | **Otomatik molalar** | Hızlı ve Güvenli modlar belirli aralıklarla mola verir. Instagram yavaşlatırsa (429 / action block) araç bekleyip kaldığı yerden devam eder; üst üste olursa durur. |
-| 🔁 | **Yedek tarama yöntemi** | GraphQL yöntemi çalışmazsa takipçi ve takip listelerini REST API ile karşılaştıran alternatif yönteme otomatik geçer. |
-| 📊 | **Gerçek ilerleme** | Takip sayısına göre yüzde ilerleme, durdurulabilir tarama. |
-| 🕓 | **Geçmiş** | Takipten çıkardığın hesaplar tarih bilgisiyle saklanır (son 1000). |
-| 📄 | **CSV dışa aktarma** | Listeyi Excel uyumlu CSV olarak indir veya kullanıcı adlarını kopyala. |
-| 💾 | **Kayıtlı tarama** | Paneli kapatıp açınca son tarama geri gelir; yeniden taramak zorunda kalmazsın. |
-| 🎛️ | **Sıralama ve toplu seçim** | A→Z, Z→A, onaylılar/gizliler önce sıralama; **Shift + tık** ile aralık seçimi. |
-| 📱 | **Mobil uyum** | Telefonda panel tam ekran açılır; sitede mobil kurulum adımları var. |
-| ➖ | **Küçült** | İşlem sürerken paneli köşedeki ilerleme balonuna küçültebilirsin. |
-| 🧪 | **Demo modu** | Sitede ağ isteği yapmadan, sahte verilerle paneli deneyebilirsin. |
+| 💎 | **Beyaz liste** | Yıldızladığın hesaplar asla seçilmez ve listeden gizlenir. JSON olarak dışa/içe aktarılabilir. |
+| 🫖 | **Otomatik molalar** | Hızlı ve Güvenli modlar belirli aralıklarla mola verir. Instagram yavaşlatırsa (429 / action block) araç bekleyip kaldığı yerden devam eder; üst üste olursa durur. |
+| 🔀 | **Yedek tarama yöntemi** | GraphQL yöntemi çalışmazsa takipçi ve takip listelerini REST API ile karşılaştıran alternatif yönteme otomatik geçer. |
+| 🧮 | **Gerçek ilerleme** | Takip sayısına göre yüzde ilerleme, durdurulabilir tarama. |
+| 🗃️ | **Geçmiş** | Takipten çıkardığın hesaplar tarih bilgisiyle saklanır (son 1000). |
+| 🧾 | **CSV dışa aktarma** | Listeyi Excel uyumlu CSV olarak indir veya kullanıcı adlarını kopyala. |
+| 🗄️ | **Kayıtlı tarama** | Paneli kapatıp açınca son tarama geri gelir; yeniden taramak zorunda kalmazsın. |
+| 🧭 | **Sıralama ve toplu seçim** | A→Z, Z→A, onaylılar/gizliler önce sıralama; **Shift + tık** ile aralık seçimi. |
+| 🤳 | **Mobil uyum** | Telefonda panel tam ekran açılır; sitede mobil kurulum adımları var. |
+| 🔻 | **Küçült** | İşlem sürerken paneli köşedeki ilerleme balonuna küçültebilirsin. |
+| 🎭 | **Demo modu** | Sitede ağ isteği yapmadan, sahte verilerle paneli deneyebilirsin. |
 
 ### Düzeltilen hatalar
 - **Güvenlik:** Kullanıcı adı ve isimler HTML olarak basılıyordu. Kötü niyetli bir "isim" instagram.com üzerinde kod çalıştırabilirdi (XSS). Artık tüm veriler kaçışlanıyor.
@@ -42,7 +36,7 @@ Instagram'da seni geri takip etmeyenleri bulan, beyaz liste ve otomatik molalı 
 
 ---
 
-## 🖥️ Kullanım
+## 🖲️ Kullanım
 
 ### Yer imi (önerilen)
 1. Sitedeki **🦊 Unfollowers** butonunu yer imleri çubuğuna sürükle (çubuk yoksa `Ctrl/⌘ + Shift + B`).
@@ -60,17 +54,17 @@ Sitede **Konsol kodunu kopyala**'ya bas → Instagram'da `F12` → Console → y
 
 ---
 
-## ⚡ Hız Modları
+## 🐆 Hız Modları
 
 | Mod | Kişi başı bekleme | Mola | Ne zaman? |
 |---|---|---|---|
-| ⚡ Turbo | 120–260 ms | yok | Birkaç düzine kişi |
-| 🚀 Hızlı *(varsayılan)* | 0,4–0,8 sn | her 40 kişide 30 sn | Çoğu kullanıcı |
-| 🛡️ Güvenli | 1,2–2,5 sn | her 15 kişide 90 sn | Yüzlerce kişilik temizlik |
+| 🐆 Turbo | 120–260 ms | yok | Birkaç düzine kişi |
+| 🐇 Hızlı *(varsayılan)* | 0,4–0,8 sn | her 40 kişide 30 sn | Çoğu kullanıcı |
+| 🐢 Güvenli | 1,2–2,5 sn | her 15 kişide 90 sn | Yüzlerce kişilik temizlik |
 
 ---
 
-## 🛠️ Geliştirme
+## 🔩 Geliştirme
 
 ```
 tool.js      → Instagram'da açılan panelin kaynak kodu (asıl düzenlenecek dosya)
@@ -91,7 +85,7 @@ python -m http.server 8000
 
 ---
 
-## ⚠️ Yasal Uyarı
+## 🚧 Yasal Uyarı
 
 Bu proje yalnızca **eğitim ve kişisel kullanım** amaçlıdır.
 
@@ -101,6 +95,6 @@ Bu proje yalnızca **eğitim ve kişisel kullanım** amaçlıdır.
 
 ---
 
-## 📄 Lisans
+## 🧾 Lisans
 
 **MIT Lisansı.** Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsin.

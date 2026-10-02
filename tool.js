@@ -3,7 +3,7 @@
 /* 🦊 EE Unfollowers v2 — Instagram'da geri takip etmeyenleri bulur ve takipten çıkarır.
    Tamamen tarayıcıda çalışır; hiçbir veri üçüncü bir sunucuya gönderilmez. */
 
-const VERSION = '2.0.0';
+const VERSION = '2.0.2';
 const APP_ID = '936619743392459';
 const QUERY_HASH = '3dec7e2c57367ef3da3d987d89f9dbc8';
 const DEMO = window.EE_UNF_DEMO === true;
@@ -17,9 +17,9 @@ if (existing) {
 }
 
 const SPEEDS = {
-  turbo: { icon: '⚡', label: 'Turbo', min: 120, max: 260, every: 0, rest: 0, desc: '120–260 ms · mola yok · yüksek risk' },
-  fast: { icon: '🚀', label: 'Hızlı', min: 400, max: 800, every: 40, rest: 30000, desc: '0,4–0,8 sn · her 40 kişide 30 sn mola' },
-  safe: { icon: '🛡️', label: 'Güvenli', min: 1200, max: 2500, every: 15, rest: 90000, desc: '1,2–2,5 sn · her 15 kişide 90 sn mola' }
+  turbo: { icon: '🐆', label: 'Turbo', min: 120, max: 260, every: 0, rest: 0, desc: '120–260 ms · mola yok · yüksek risk' },
+  fast: { icon: '🐇', label: 'Hızlı', min: 400, max: 800, every: 40, rest: 30000, desc: '0,4–0,8 sn · her 40 kişide 30 sn mola' },
+  safe: { icon: '🐢', label: 'Güvenli', min: 1200, max: 2500, every: 15, rest: 90000, desc: '1,2–2,5 sn · her 15 kişide 90 sn mola' }
 };
 
 /* ---------- yardımcılar ---------- */
@@ -133,8 +133,9 @@ const API = {
       console.info('[Unfollowers] ' + ep.split('/').slice(0, -2).join('/') + ' → HTTP ' + res.status + (data.message ? ' · ' + data.message : '') + (data.status ? ' · ' + data.status : ''));
       if (res.status === 429 || data.spam || data.message === 'feedback_required') return { ok: false, limited: true };
       if (res.status === 401 || data.message === 'login_required') return { ok: false, auth: true };
-      if (res.ok && data.status !== 'fail') return { ok: true };
-      last = { ok: false, reason: 'HTTP ' + res.status + (data.message ? ' ' + data.message : '') };
+      const fs = data.friendship_status;
+      if (res.ok && data.status === 'ok' && !(fs && fs.following)) return { ok: true };
+      last = { ok: false, reason: 'HTTP ' + res.status + ' (' + (data.message || data.status || 'beklenmeyen yanıt') + ')' };
     }
     return last;
   }
@@ -354,7 +355,7 @@ const toast = (msg) => {
   setTimeout(() => t.remove(), 2700);
 };
 
-const modal = ({ icon = '⚠️', title, html, ok = 'Tamam', cancel = 'Vazgeç', danger = false }) => new Promise((resolve) => {
+const modal = ({ icon = '🚧', title, html, ok = 'Tamam', cancel = 'Vazgeç', danger = false }) => new Promise((resolve) => {
   const m = document.createElement('div');
   m.className = 'ee-modal';
   m.innerHTML = '<div class="ee-box" role="dialog" aria-modal="true"><div class="ee-ico">' + icon + '</div><h3>' + esc(title) + '</h3><p>' + html + '</p><div class="ee-btns">' +
@@ -409,19 +410,19 @@ root.innerHTML = `
       <button class="ee-hbtn" data-a="menu" title="Diğer işlemler">${I.more}</button>
       <div class="ee-drop">
         <button data-a="csv">⬇️ Listeyi CSV olarak indir</button>
-        <button data-a="copy">📋 Kullanıcı adlarını kopyala</button>
+        <button data-a="copy">🗒️ Kullanıcı adlarını kopyala</button>
         <hr>
-        <button data-a="wl-export">📤 Beyaz listeyi dışa aktar</button>
-        <button data-a="wl-import">📥 Beyaz liste içe aktar</button>
+        <button data-a="wl-export">🛫 Beyaz listeyi dışa aktar</button>
+        <button data-a="wl-import">🛬 Beyaz liste içe aktar</button>
         <hr>
-        <button data-a="clear-hist" class="ee-red">🗑️ Geçmişi temizle</button>
-        <button data-a="clear-cache" class="ee-red">♻️ Kayıtlı taramayı sil</button>
+        <button data-a="clear-hist" class="ee-red">🧹 Geçmişi temizle</button>
+        <button data-a="clear-cache" class="ee-red">🧼 Kayıtlı taramayı sil</button>
       </div>
     </div>
     <div class="ee-chips ee-filter-row" style="width:100%">
       <button class="ee-chip on" data-f="verified">${I.ver} Onaylı</button>
       <button class="ee-chip on" data-f="private">${I.lock} Gizli</button>
-      <button class="ee-chip on" data-f="public">🌐 Herkese açık</button>
+      <button class="ee-chip on" data-f="public">🗺️ Herkese açık</button>
       <span class="ee-spacer"></span>
       <button class="ee-link" data-a="toggle-all">Tümünü seç</button>
     </div>
@@ -471,7 +472,7 @@ const avatar = (u) => {
   const hue = [...u.username].reduce((a, c) => a + c.charCodeAt(0), 0) % 360;
   const init = esc((u.username || '?').replace(/[^a-z0-9]/gi, '').charAt(0) || '?');
   return u.pic
-    ? `<img class="ee-av" src="${esc(u.pic)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-init="${init}" data-hue="${hue}">`
+    ? `<img class="ee-av" src="${esc(u.pic)}" alt="" loading="lazy" data-init="${init}" data-hue="${hue}">`
     : `<div class="ee-av" style="background:hsl(${hue} 45% 32%)">${init}</div>`;
 };
 
@@ -517,9 +518,9 @@ const render = () => {
   let html = '';
   if (S.tab === 'non') {
     currentVisible = visibleUsers();
-    if (!S.scannedAt) html = empty('🔍', S.busy === 'scan' ? 'Taranıyor…' : 'Henüz analiz yapılmadı', S.busy === 'scan' ? 'Takip listen sayfa sayfa okunuyor. Bu, takip ettiğin kişi sayısına göre biraz sürebilir.' : 'Aşağıdaki <b>Analizi başlat</b> butonuna bas. Takip ettiğin herkes kontrol edilir ve seni geri takip etmeyenler burada listelenir.');
-    else if (!S.users.length) html = empty('🎉', 'Herkes seni geri takip ediyor', 'Takip ettiğin hesapların tamamı seni de takip ediyor.');
-    else if (!currentVisible.length) html = empty('🫥', 'Sonuç yok', 'Arama veya filtrelere uyan kullanıcı bulunamadı.');
+    if (!S.scannedAt) html = empty('🔭', S.busy === 'scan' ? 'Taranıyor…' : 'Henüz analiz yapılmadı', S.busy === 'scan' ? 'Takip listen sayfa sayfa okunuyor. Bu, takip ettiğin kişi sayısına göre biraz sürebilir.' : 'Aşağıdaki <b>Analizi başlat</b> butonuna bas. Takip ettiğin herkes kontrol edilir ve seni geri takip etmeyenler burada listelenir.');
+    else if (!S.users.length) html = empty('🏝️', 'Herkes seni geri takip ediyor', 'Takip ettiğin hesapların tamamı seni de takip ediyor.');
+    else if (!currentVisible.length) html = empty('🌫️', 'Sonuç yok', 'Arama veya filtrelere uyan kullanıcı bulunamadı.');
     else {
       html = currentVisible.slice(0, renderLimit).map((u, i) => `
         <div class="ee-row${S.selected.has(u.id) ? ' sel' : ''}" data-id="${esc(u.id)}" data-i="${i}">
@@ -537,7 +538,7 @@ const render = () => {
   } else if (S.tab === 'wl') {
     const wl = searchFilter(Object.values(S.whitelist));
     html = !wl.length
-      ? empty('⭐', 'Beyaz liste boş', 'Takipten çıkmak istemediğin hesapların yanındaki yıldıza bas. Beyaz listedekiler hiçbir zaman seçilmez ve listeden gizlenir.')
+      ? empty('💎', 'Beyaz liste boş', 'Takipten çıkmak istemediğin hesapların yanındaki yıldıza bas. Beyaz listedekiler hiçbir zaman seçilmez ve listeden gizlenir.')
       : wl.map((u) => `
         <div class="ee-row ee-nosel" data-id="${esc(u.id)}">
           ${avatar(u)}
@@ -548,7 +549,7 @@ const render = () => {
   } else {
     const h = searchFilter(S.history);
     html = !h.length
-      ? empty('🕓', 'Geçmiş boş', 'Takipten çıkardığın hesaplar tarih bilgisiyle burada tutulur (bu tarayıcıda, son 1000 kayıt).')
+      ? empty('🗃️', 'Geçmiş boş', 'Takipten çıkardığın hesaplar tarih bilgisiyle burada tutulur (bu tarayıcıda, son 1000 kayıt).')
       : h.slice(0, 1000).map((u) => `
         <div class="ee-row ee-nosel">
           ${avatar(u)}
@@ -590,11 +591,11 @@ const waitCountdown = async (sec, label) => {
 
 const scan = async () => {
   if (!viewerId) {
-    await modal({ icon: '🔒', title: 'Oturum bulunamadı', html: 'Önce Instagram hesabına giriş yap, sayfayı yenile ve aracı tekrar çalıştır.', cancel: null });
+    await modal({ icon: '🗝️', title: 'Oturum bulunamadı', html: 'Önce Instagram hesabına giriş yap, sayfayı yenile ve aracı tekrar çalıştır.', cancel: null });
     return;
   }
   S.busy = 'scan'; S.stop = false; S.selected.clear(); S.tab = 'non';
-  console.info('[Unfollowers] tarama başladı, kullanıcı id: ' + viewerId);
+  console.info('[Unfollowers] v' + VERSION + ' · tarama başladı, kullanıcı id: ' + viewerId);
   setStatus('Takip listesi isteniyor…', null);
   render();
   const ctx = {
@@ -609,7 +610,7 @@ const scan = async () => {
         try { return await fn(); }
         catch (e) {
           if (!(e instanceof RateLimitError) || attempt >= 3) throw e;
-          const ok = await waitCountdown(60 * (attempt + 1), '⏳ Instagram yavaşlattı, bekleniyor');
+          const ok = await waitCountdown(60 * (attempt + 1), '🕰️ Instagram yavaşlattı, bekleniyor');
           if (!ok) throw new Error('STOP');
         }
       }
@@ -629,12 +630,12 @@ const scan = async () => {
     S.scannedAt = Date.now();
     saveCache();
     const n = S.users.filter((u) => !S.whitelist[u.id]).length;
-    setStatus('✅ Tarama bitti · ' + fmt(result.following.length) + ' hesap kontrol edildi, ' + fmt(n) + ' kişi seni geri takip etmiyor.', 100);
+    setStatus('☑️ Tarama bitti · ' + fmt(result.following.length) + ' hesap kontrol edildi, ' + fmt(n) + ' kişi seni geri takip etmiyor.', 100);
   } catch (e) {
     if (e.message === 'STOP') setStatus('Tarama durduruldu.', 0);
-    else if (e instanceof AuthError) setStatus('🔒 Oturum doğrulanamadı. Instagram\'a tekrar giriş yapıp sayfayı yenile.', 0);
-    else if (e instanceof RateLimitError) setStatus('⚠️ Instagram geçici olarak sınırladı. Birkaç dakika sonra tekrar dene.', 0);
-    else { console.error('[Unfollowers]', e); setStatus('❌ Tarama başarısız: ' + e.message, 0); }
+    else if (e instanceof AuthError) setStatus('🗝️ Oturum doğrulanamadı. Instagram\'a tekrar giriş yapıp sayfayı yenile.', 0);
+    else if (e instanceof RateLimitError) setStatus('🚧 Instagram geçici olarak sınırladı. Birkaç dakika sonra tekrar dene.', 0);
+    else { console.error('[Unfollowers]', e); setStatus('✖️ Tarama başarısız: ' + e.message, 0); }
   } finally {
     S.busy = null;
     updateSub();
@@ -647,9 +648,9 @@ const runUnfollow = async () => {
   if (!queue.length) return;
   const sp = SPEEDS[S.speed];
   const turboWarn = S.speed === 'turbo' && queue.length > 50
-    ? '<br><br>⚠️ Turbo modda çok sayıda kişiyi hızlıca çıkarmak Instagram\'ın <b>işlem engeli</b> (action block) uygulamasına yol açabilir.' : '';
+    ? '<br><br>🚧 Turbo modda çok sayıda kişiyi hızlıca çıkarmak Instagram\'ın <b>işlem engeli</b> (action block) uygulamasına yol açabilir.' : '';
   const ok = await modal({
-    icon: '👋', title: fmt(queue.length) + ' kişi takipten çıkarılsın mı?', danger: true, ok: 'Takipten çık',
+    icon: '🚪', title: fmt(queue.length) + ' kişi takipten çıkarılsın mı?', danger: true, ok: 'Takipten çık',
     html: 'Seçtiğin hesaplar <b>' + sp.icon + ' ' + sp.label + '</b> modunda (' + esc(sp.desc) + ') takipten çıkarılacak. İstediğin an durdurabilirsin.' + turboWarn
   });
   if (!ok) return;
@@ -676,19 +677,19 @@ const runUnfollow = async () => {
       if (S.history.length > 1000) S.history.length = 1000;
     } else if (r.limited) {
       limitHits++;
-      if (limitHits > 2) { setStatus('⛔ Instagram limit uyguladı. Birkaç saat ara verip tekrar dene. ' + label(), ((done + failed) / total) * 100); S.stop = true; break; }
-      const goOn = await waitCountdown(300 * limitHits, '⏳ Instagram limit uyguladı, otomatik bekleniyor');
+      if (limitHits > 2) { setStatus('🛑 Instagram limit uyguladı. Birkaç saat ara verip tekrar dene. ' + label(), ((done + failed) / total) * 100); S.stop = true; break; }
+      const goOn = await waitCountdown(300 * limitHits, '🕰️ Instagram limit uyguladı, otomatik bekleniyor');
       if (!goOn) break;
       i--;
       continue;
     } else if (r.auth) {
-      setStatus('🔒 Oturum düştü. Instagram\'a tekrar giriş yap.', ((done + failed) / total) * 100);
+      setStatus('🗝️ Oturum düştü. Instagram\'a tekrar giriş yap.', ((done + failed) / total) * 100);
       S.stop = true;
       break;
     } else {
       failed++; failStreak++; lastReason = r.reason || 'bilinmeyen hata';
       console.warn('[Unfollowers] @' + u.username + ' çıkarılamadı:', lastReason);
-      if (failStreak >= 3) { setStatus('❌ Üst üste 3 istek başarısız (' + lastReason + '). İşlem durduruldu.', ((done + failed) / total) * 100); S.stop = true; break; }
+      if (failStreak >= 3) { setStatus('✖️ Üst üste 3 istek başarısız (' + lastReason + '). İşlem durduruldu.', ((done + failed) / total) * 100); S.stop = true; break; }
     }
     store.set('history', S.history);
     if (i % 10 === 0) saveCache();
@@ -698,7 +699,7 @@ const runUnfollow = async () => {
     setStatus(label(), ((done + failed) / total) * 100);
     if (i < queue.length - 1 && !S.stop) {
       if (sp.every && done > 0 && r.ok && done % sp.every === 0) {
-        if (!(await waitCountdown(Math.round(sp.rest / 1000), '☕ Güvenlik molası'))) break;
+        if (!(await waitCountdown(Math.round(sp.rest / 1000), '🫖 Güvenlik molası'))) break;
       } else await sleep(rand(sp.min, sp.max));
     }
   }
@@ -706,7 +707,7 @@ const runUnfollow = async () => {
   saveCache();
   const stopped = S.stop && done + failed < total;
   S.busy = null; S.stop = false;
-  if (!/⛔|🔒|❌/.test(UI.status.textContent)) setStatus((stopped ? '⏹️ Durduruldu · ' : '✅ Bitti · ') + fmt(done) + ' kişi takipten çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '') + '.', stopped ? undefined : 100);
+  if (!/🛑|🗝️|✖️/.test(UI.status.textContent)) setStatus((stopped ? '🧊 Durduruldu · ' : '☑️ Bitti · ') + fmt(done) + ' kişi takipten çıkarıldı' + (failed ? ', ' + fmt(failed) + ' başarısız' : '') + '.', stopped ? undefined : 100);
   render();
   if (root.classList.contains('ee-min')) toast('Unfollowers: ' + fmt(done) + ' kişi takipten çıkarıldı');
 };
@@ -737,7 +738,7 @@ const actions = {
   restore() { root.classList.remove('ee-min'); },
   full() { UI.panel.classList.toggle('ee-full'); UI.panel.style.left = UI.panel.style.top = ''; },
   async close() {
-    if (S.busy === 'unfollow' && !(await modal({ icon: '⏹️', title: 'İşlem devam ediyor', html: 'Kapatırsan takipten çıkarma işlemi durdurulur.', ok: 'Durdur ve kapat', danger: true }))) return;
+    if (S.busy === 'unfollow' && !(await modal({ icon: '🧊', title: 'İşlem devam ediyor', html: 'Kapatırsan takipten çıkarma işlemi durdurulur.', ok: 'Durdur ve kapat', danger: true }))) return;
     S.stop = true;
     document.removeEventListener('keydown', onKey);
     root.remove(); style.remove();
@@ -787,7 +788,7 @@ const actions = {
     inp.click();
   },
   async 'clear-hist'() {
-    if (!(await modal({ icon: '🗑️', title: 'Geçmiş silinsin mi?', html: 'Bu tarayıcıdaki takipten çıkarma geçmişi silinir. Instagram hesabın etkilenmez.', ok: 'Sil', danger: true }))) return;
+    if (!(await modal({ icon: '🧹', title: 'Geçmiş silinsin mi?', html: 'Bu tarayıcıdaki takipten çıkarma geçmişi silinir. Instagram hesabın etkilenmez.', ok: 'Sil', danger: true }))) return;
     S.history = []; store.set('history', []); render();
   },
   async 'clear-cache'() {
@@ -815,7 +816,7 @@ root.addEventListener('click', (e) => {
       e.stopPropagation();
       const id = act.closest('.ee-row').dataset.id;
       if (S.whitelist[id]) { delete S.whitelist[id]; toast('Beyaz listeden çıkarıldı'); }
-      else { const u = S.users.find((x) => x.id === id); if (u) { S.whitelist[id] = { id: u.id, username: u.username, full_name: u.full_name, pic: u.pic, verified: u.verified, private: u.private }; S.selected.delete(id); toast('⭐ @' + u.username + ' beyaz listeye eklendi'); } }
+      else { const u = S.users.find((x) => x.id === id); if (u) { S.whitelist[id] = { id: u.id, username: u.username, full_name: u.full_name, pic: u.pic, verified: u.verified, private: u.private }; S.selected.delete(id); toast('💎 @' + u.username + ' beyaz listeye eklendi'); } }
       store.set('whitelist', S.whitelist);
       render();
       return;
