@@ -60,11 +60,14 @@ const igHeaders = () => {
 };
 
 const getJSON = async (url) => {
+  const short = url.split('?')[0];
   const res = await fetch(url, { headers: igHeaders(), credentials: 'include' });
+  console.info('[Unfollowers] ' + short + ' → HTTP ' + res.status);
   if (res.status === 429) throw new RateLimitError('429');
   if (res.status === 401 || res.status === 403) throw new AuthError(String(res.status));
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const data = await res.json();
+  if (!res.ok) throw new Error(short + ' → HTTP ' + res.status);
+  let data;
+  try { data = await res.json(); } catch (e) { throw new Error(short + ' → JSON olmayan yanıt'); }
   if (data && data.message === 'login_required') throw new AuthError('login_required');
   if (data && (data.spam || data.message === 'feedback_required')) throw new RateLimitError('spam');
   return data;
@@ -585,7 +588,8 @@ const scan = async () => {
     return;
   }
   S.busy = 'scan'; S.stop = false; S.selected.clear(); S.tab = 'non';
-  setStatus('Hesap bilgileri alınıyor…', null);
+  console.info('[Unfollowers] tarama başladı, kullanıcı id: ' + viewerId);
+  setStatus('Takip listesi isteniyor…', null);
   render();
   const ctx = {
     total: 0,
@@ -611,7 +615,7 @@ const scan = async () => {
     catch (e) {
       if (e.message === 'STOP' || e instanceof AuthError) throw e;
       console.warn('[Unfollowers] GraphQL başarısız, REST yöntemine geçiliyor:', e);
-      setStatus('Alternatif yöntem deneniyor…', null);
+      setStatus('1. yöntem başarısız (' + e.message + '), 2. yöntem deneniyor…', null);
       result = await API.scanREST(viewerId, ctx);
     }
     S.users = result.nonFollowers;
